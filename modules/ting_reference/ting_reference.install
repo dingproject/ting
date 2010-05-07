@@ -1,0 +1,40 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Implementation of hook_install().
+ */
+function tingfield_install() {
+  drupal_load('module', 'content');
+  content_notify('install', 'tingfield');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function tingfield_uninstall() {
+  drupal_load('module', 'content');
+  content_notify('uninstall', 'tingfield');
+}
+
+/**
+ * Implementation of hook_enable().
+ *
+ * Notify content module when this module is enabled.
+ */
+function tingfield_enable() {
+  drupal_load('module', 'content');
+  content_notify('enable', 'tingfield');
+}
+
+/**
+ * Implementation of hook_disable().
+ *
+ * Notify content module when this module is disabled.
+ */
+function tingfield_disable() {
+  drupal_load('module', 'content');
+  content_notify('disable', 'tingfield');
+}
+

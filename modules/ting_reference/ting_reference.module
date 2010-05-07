@@ -1,0 +1,338 @@
+<?php
+// $Id: ting_reference.module,v 1.91.2.36 2009/07/18 01:18:07 markuspetrux Exp $
+
+/**
+ * @file
+ * Defines Ting object reference field type.
+ */
+
+/**
+ * Implementation of hook_theme().
+ */
+function ting_reference_theme() {
+  return array(
+    'ting_reference_formatter_default' => array('arguments' => array('element' => NULL)),
+    'ting_reference_preview' => array(
+      'arguments' => array('collection' => NULL),
+      'template' => 'ting_reference_preview'
+    ),
+  
+  );
+}
+
+
+/**
+ * Implementation of hook_menu().
+ */
+function ting_reference_menu() {
+  $items = array();
+
+  $items['ting_reference/autocomplete/collection/js'] = array(
+    'title' => 'Ting reference collection autocomplete',
+    'description' => 'Returns a list of collections to use for autocompletion',
+    'access arguments' => array('search content'),
+    'page callback' => 'ting_reference_collection_autocomplete_js',
+    'type' => MENU_CALLBACK,
+    'file' => 'ting_reference.pages.inc',
+  );
+  $items['ting_reference/autocomplete/object/js'] = array(
+    'title' => 'Ting reference object autocomplete',
+    'description' => 'Returns a list of objects to use for autocompletion',
+    'access arguments' => array('search content'),
+    'page callback' => 'ting_reference_object_autocomplete_js',
+    'type' => MENU_CALLBACK,
+    'file' => 'ting_reference.pages.inc',
+  );
+  $items['ting_reference/preview/js/%/%'] = array(
+    'title' => 'Ting reference collection',
+    'description' => 'Returns a Ting collection as a javascript object',
+    'access arguments' => array('search content'),
+    'page callback' => 'ting_reference_collection_js',
+    'page arguments' => array(3, 4),
+    'type' => MENU_CALLBACK,
+    'file' => 'ting_reference.pages.inc',
+  );
+  
+  return $items;
+}
+
+/**
+ * Implementation of hook_field_info().
+ */
+function ting_reference_field_info() {
+  return array(
+    'ting_reference' => array(
+      'label' => t('Ting reference'),
+      'description' => t('Store a reference to a Ting object.'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_field_settings().
+ */
+function ting_reference_field_settings($op, $field) {
+  switch ($op) {
+    case 'database columns':
+     return array(
+       'ting_object_id' => array('type' => 'varchar', 'length' => 50, 'not null' => TRUE, 'index' => TRUE),
+       'ting_ref_type' => array('type' => 'varchar', 'length' => 20, 'not null' => TRUE),
+       'description' => array('type' => 'text'),
+     );
+  }
+}
+
+/**
+ * Implementation of hook_field().
+ */
+function ting_reference_field($op, &$node, $field, &$items, $teaser, $page) {
+  switch ($op) {
+    case 'validate':
+      if (is_array($items)) {
+        foreach ($items as $delta => $item) {
+          $error_element = isset($item['_error_element']) ? $item['_error_element'] : '';
+          $ting_object_id = $item['ting_object_id'];
+
+          if ($ting_object_id) {
+            if ($ting_object_id && !preg_match('/^\w+:\d+$/', $ting_object_id)) {
+              form_set_error($error_element, t('%name: Invalid object id: %object_id.', array('%name' => t($field['widget']['label']), '%object_id' => $ting_object_id)));
+            }
+
+            module_load_include('client.inc', 'ting');
+            try {
+              $object = ting_get_object_by_id($ting_object_id);
+            }
+            catch (TingClientException $e) {
+              // If the specified object id does not exist, an exception is throw.
+            }
+            if (!$object) {
+              form_set_error($error_element, t('%name: Object id not found.', array('%name' => t($field['widget']['label']))));
+            }
+          }
+        }
+      }
+      return $items;
+  }
+}
+
+/**
+ * Implementation of hook_content_is_empty().
+ */
+function ting_reference_content_is_empty($item, $field) {
+  return empty($item['ting_object_id']) && empty($item['description']);
+}
+
+/**
+ * Implementation of hook_field_formatter_info().
+ */
+function ting_reference_field_formatter_info() {
+  return array(
+    'default' => array(
+      'label' => t('Default'),
+      'field types' => array('ting_reference'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+    ),
+  );
+}
+
+/**
+ * Theme function for 'default' userreference field formatter.
+ */
+function theme_ting_reference_formatter_default($element) {
+  $collection = _ting_reference_get_collection($element['#item']['ting_ref_type'], $element['#item']['ting_object_id'], $element['#item']['description']);
+  if (!$collection) {
+    return t('Object not found.');
+  }
+
+  return theme('ting_search_collection', $collection);
+}
+
+/**
+ * Implementation of hook_widget_info().
+ */
+function ting_reference_widget_info() {
+  return array(
+    'ting_reference_default' => array(
+      'label' => t('Default Ting reference widget'),
+      'field types' => array('ting_reference'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+      'callbacks' => array(
+        'default value' => CONTENT_CALLBACK_NONE,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_widget().
+ */
+function ting_reference_widget(&$form, &$form_state, $field, $items, $delta = 0) {
+  _ting_reference_add_css_js();
+
+  $element['#prefix'] = '<div class="form-item form-ting-reference">';
+  $element['#suffix'] = '</div>';
+
+  $ting_object_id = isset($items[$delta]['ting_object_id']) ? $items[$delta]['ting_object_id'] : '';
+  $ting_ref_type = !empty($items[$delta]['ting_ref_type']) ? $items[$delta]['ting_ref_type'] : 'collection';
+
+  $element['ting_ref_type'] = array (
+    '#type' => 'radios',
+    '#title' => 'Reference type',
+    '#default_value' => $ting_ref_type,
+    '#options' => array('collection' => t('Ting collection'), 'object' => t('Ting object')),
+    '#attributes' => array('class' => 'ting-reference-type-radio'),
+	);
+
+  $element['search'] = array (
+    '#type' => 'textfield',
+    '#title' => t('Search'),
+    '#maxlength' => NULL,
+    '#attributes' => array('class' => 'form-autocomplete ting-reference-autocomplete')
+  );
+  $collection = _ting_reference_get_collection($ting_ref_type, $ting_object_id);
+  $element['preview'] = array (
+    '#value' => '<div class="ting-reference-preview">' . ($collection ? theme('ting_reference_preview', $collection) : t('Object not found.')) . '</div>',
+  );
+  $element['reset'] = array (
+    '#type' => 'button',
+    '#value' => t('Reset'),
+  	'#attributes' => array('class' => 'ting-reference-reset'),
+  );
+  $element['ting_object_id'] = array (
+    '#type' => 'hidden',
+    '#title' => 'Ting object id',
+    '#default_value' => $ting_object_id,
+  	'#attributes' => array('class' => 'ting-object-id')
+  );
+  $element['description'] = array (
+    '#type' => 'textarea',
+    '#title' => 'Description',
+    '#rows' => 2,
+    '#default_value' => isset($items[$delta]['description']) ? $items[$delta]['description'] : '',
+  );
+  return $element;
+}
+
+/**
+ * Add the CSS and JS required by ting_reference_widget().
+ */
+function _ting_reference_add_css_js() {
+  static $assetsLoaded;
+
+  if (!isset($assetsLoaded)) {
+    $basePath = drupal_get_path('module', 'ting');
+    //Added modified version of jQuery autocomplete as default plugin uses q parameter
+    drupal_add_js($basePath .'/js/jquery-autocomplete-1.0.2-mod/jquery.autocomplete.min.js', 'module', 'footer', TRUE);
+    drupal_add_css($basePath .'/js/jquery-autocomplete-1.0.2-mod/jquery.autocomplete.css', 'module');
+
+    $path = drupal_get_path('module', 'ting_reference');
+    drupal_add_js($path .'/js/ting_reference.js', 'module', 'footer', TRUE);
+    drupal_add_js(array(
+      'tingReference' => array(
+        'autocomplete' => array(
+          'collection' => url('ting_reference/autocomplete/collection/js'), 
+          'object' => url('ting_reference/autocomplete/object/js'),
+        ),
+        'previewUrl' => url('ting_reference/preview/js'),
+      ),
+    ), 'setting', 'footer', TRUE);
+    drupal_add_css($path .'/css/ting_reference.css', 'module');
+
+    $assetsLoaded = true;
+  }
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * This is a workaround for a limition in Drupal's AHAH support. CSS and JS is
+ * not added to fields inserted via AHAH but assumes that the parent page
+ * already contains at least one element that includes the CSS/JS.
+ */
+function ting_reference_form_alter(&$form, $form_state, $form_id) {
+  if ($form['#id'] == 'node-form') {
+    foreach ($form['#field_info'] as $name => $field) {
+      if ($field['type'] == 'flexifield') {
+        _ting_reference_add_css_js();
+      }
+    }
+  }
+}
+
+/**
+ * @param $ref_type
+ *   Either "object" or "collection":
+ * @param $object_id
+ *   A Ting collection or object id.
+ * @return
+ *   A TingClientObjectCollection instance, or NULL.
+ */
+function _ting_reference_get_collection($ref_type, $object_id, $description = FALSE) {
+  module_load_include('client.inc', 'ting');
+
+  if ($ref_type == 'object') {
+    $object = ting_get_object_by_id($object_id);
+    if ($object) {
+      // FIXME: We currently use the collection template for displaying the object.
+      $collection = new TingClientObjectCollection(array($object));
+      $collection = ting_add_collection_info($collection);
+    }
+  }
+  else {
+    $collection = ting_get_collection_by_id($object_id);
+  }
+  // For now we reuse the existing search result template and just replace the
+  // description with the one supplied by the editor.
+  if ($description) {
+    $collection->abstract = $description;
+  }
+  return $collection;
+}
+
+/**
+ * Returns all nodes with references to the specified object or collection.
+ *
+ * @param $object_or_collection
+ *   A TingClientObject or a TingClientObjectCollection instances.
+ */
+function ting_reference_nodes($object_or_collection) {
+  if ($object_or_collection instanceof TingClientObject) {
+    $object_ids = array($object_or_collection->id);
+  }
+  else {
+    $object_ids = array();
+    foreach ($object_or_collection->objects as $object) {
+      $object_ids[] = $object->id;
+    }
+  }
+
+  if ($object_ids) {
+    $field_names = array();
+    foreach (content_fields() as $field_name => $field) {
+      if ($field['type'] == 'ting_reference') {
+        $field_names[] = $field_name;
+      }
+    }
+
+    $nids = array();
+    foreach ($field_names as $field_name) {
+      $info = content_database_info(content_fields($field_name));
+      $query = "SELECT nid FROM {" . $info['table'] . "}
+        WHERE " . $info['columns']['ting_object_id']['column'] . " IN (" . db_placeholders($object_ids, 'varchar') . ")";
+      if ($object_or_collection instanceof TingClientObject) {
+        $query .= " AND " . $info['columns']['ting_ref_type']['column'] . " = 'object'";
+      }
+      $result = db_query($query, $object_ids);
+      while ($ref = db_fetch_object($result)) {
+        $nids[] = $ref->nid;
+      }
+    }
+  }
+
+  $nodes = array();
+  foreach (array_unique($nids) as $nid) {
+    $nodes[] = node_load($nid);
+  }
+	return $nodes;
+}
+

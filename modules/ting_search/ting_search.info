@@ -1,0 +1,13 @@
+; $Id$
+name = Ting search
+description = Displays search results from the Ting database.
+package = Ding!
+core = 6.x
+dependencies[] = atom_api
+dependencies[] = jquery_ui
+dependencies[] = jquery_ui_theme
+dependencies[] = search
+dependencies[] = ting
+dependencies[] = ting_covers
+dependencies[] = transliteration
+

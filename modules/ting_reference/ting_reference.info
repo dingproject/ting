@@ -1,0 +1,7 @@
+; $Id$
+name = Ting object reference
+description = Defines a CCK field type for referencing a Ting object.
+dependencies[] = content
+package = Ding!
+core = 6.x
+

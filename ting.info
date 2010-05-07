@@ -1,0 +1,7 @@
+; $Id$
+name = Ting integration
+description = Integrates Drupal with the Ting search system.
+package = Ding!
+core = 6.x
+dependencies[] = search
+

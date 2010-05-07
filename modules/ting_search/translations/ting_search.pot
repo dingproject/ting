@@ -1,0 +1,145 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  ting_result_pager.tpl.php: n/a
+#  ting_search_collection.tpl.php: n/a
+#  ting_search_result_page.tpl.php: n/a
+#  ting_search.module: n/a
+#  ting_search.info: n/a
+#  plugins/content_types/result.inc: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2009-09-04 16:40+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ting_result_pager.tpl.php:2
+msgid "Previous"
+msgstr ""
+
+#: ting_result_pager.tpl.php:10
+msgid "Next"
+msgstr ""
+
+#: ting_search_collection.tpl.php:9
+msgid "By %creator_name%"
+msgstr ""
+
+#: ting_search_collection.tpl.php:14
+msgid "(%publication_date%)"
+msgstr ""
+
+#: ting_search_collection.tpl.php:36
+msgid "Subjects:"
+msgstr ""
+
+#: ting_search_result_page.tpl.php:12
+msgid "Materials"
+msgstr ""
+
+#: ting_search_result_page.tpl.php:13
+msgid "Website"
+msgstr ""
+
+#: ting_search_result_page.tpl.php:23
+msgid "Searching"
+msgstr ""
+
+#: ting_search.module:113
+msgid "Ting search box – for page header"
+msgstr ""
+
+#: ting_search.module:119;228
+msgid "Search"
+msgstr ""
+
+#: ting_search.module:187
+msgid "Show more facet terms"
+msgstr ""
+
+#: ting_search.module:188
+msgid "No results found"
+msgstr ""
+
+#: ting_search.module:189
+msgid "Sorry, we could not find any results for your search. Please try again with different keywords or ask a librarian."
+msgstr ""
+
+#: ting_search.module:220
+msgid "Enter your search terms here"
+msgstr ""
+
+#: ting_search.module:232
+msgid "For example:"
+msgstr ""
+
+#: ting_search.module:57 ting_search.info:0
+msgid "Ting search"
+msgstr ""
+
+#: ting_search.module:58
+msgid "Provides a redirect to the Panels search page, if applicable, otherwise 404."
+msgstr ""
+
+#: ting_search.module:66 plugins/content_types/result.inc:16
+msgid "Ting search results"
+msgstr ""
+
+#: ting_search.module:67
+msgid "Lists facets and search results from the Ting database as HTML or JSON."
+msgstr ""
+
+#: ting_search.module:74
+msgid "Content search AJAX page callback"
+msgstr ""
+
+#: ting_search.module:81
+msgid "Display a collection of objects from the Ting database"
+msgstr ""
+
+#: ting_search.module:88
+msgid "Display a single object from the Ting database"
+msgstr ""
+
+#: ting_search.module:95
+msgid "Display a photo of a Ting object"
+msgstr ""
+
+#: ting_search.module:0
+msgid "ting_search"
+msgstr ""
+
+#: ting_search.info:0
+msgid "Displays search results from the Ting database."
+msgstr ""
+
+#: ting_search.info:0
+msgid "Ding!"
+msgstr ""
+
+#: plugins/content_types/result.inc:18
+msgid "The search results for a search against the Ting system"
+msgstr ""
+
+#: plugins/content_types/result.inc:19
+msgid "Search keys"
+msgstr ""
+
+#: plugins/content_types/result.inc:20
+msgid "Ting"
+msgstr ""
+
+#: plugins/content_types/result.inc:51
+msgid "“@s”: Ting search results"
+msgstr ""
+

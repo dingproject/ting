@@ -1,0 +1,7 @@
+; $Id$
+name = Ting search autocomplete
+description = Enables autocompletion for the Ting search box.
+package = Ding!
+core = 6.x
+dependencies[] = ting_search
+

@@ -1,0 +1,9 @@
+; $Id$
+name = Ting search carousel
+description = Show Ting search results in a carousel
+package = Ding!
+core = 6.x
+dependencies[] = ting
+dependencies[] = ting_search
+dependencies[] = imagecache_canvasactions
+dependencies[] = jquery_ui

@@ -1,0 +1,7 @@
+; $Id$
+name = Ting covers
+description = Displays covers for Ting objects and collections
+package = Ding!
+core = 6.x
+dependencies[] = imagecache
+dependencies[] = ting

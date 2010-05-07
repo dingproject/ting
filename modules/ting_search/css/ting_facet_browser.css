@@ -1,0 +1,58 @@
+#ting-facet-browser { width: 653px; position: relative; }
+#ting-facet-browser li * { font-size: 10px; font-weight: normal; }
+#ting-facet-browser li li { float: none; height: auto; width: auto; color: #006a87; }
+#ting-facet-browser li h4, 
+#ting-facet-browser li li { padding: 0 20px; line-height: 20px; background-repeat: repeat-x; background-position: top left; border-width: 0 1px; border-style: none solid; }
+#ting-facet-browser li li:hover { text-decoration: underline; cursor: pointer; }
+#ting-facet-browser li h4 { background-image: url(../img/facetbrowser-header-background.png); background-color: #c8d2cf; border-color: transparent #c6cecc transparent #ebefee; }
+#ting-facet-browser li.first h4, 
+#ting-facet-browser li.first li { border-left-width: 0; }
+#ting-facet-browser li.last h4, 
+#ting-facet-browser li.last li { border-right-width: 0; }
+#ting-facet-browser li.selected { background: #282327 !important; border-color: #282327 !important; }
+#ting-facet-browser li.selected,
+#ting-facet-browser li.selected * { color: #fff !important; }
+#ting-facet-browser li li.odd { border-color: transparent #eee transparent transparent; background: none transparent; }
+#ting-facet-browser li li.odd.hidden { border-color: transparent #eee transparent transparent !important; background: none transparent !important; }
+#ting-facet-browser li li.even { background-image: url(../img/facetbrowser-alternate-background.png); background-color: #f3f5f5; border-color: transparent #e4e5e5 transparent #f9fafa; }
+#ting-facet-browser li li.even.hidden { background-image: url(../img/facetbrowser-alternate-background.png) !important; background-color: #f3f5f5; border-color: transparent #e4e5e5 transparent #f9fafa !important; }
+#ting-facet-browser li li.hidden { text-indent: -9999px; }
+#ting-facet-browser li li.hidden:hover { cursor: default; }
+#ting-facet-browser .facets .name { padding-right: 0.2em; }
+
+#ting-facet-browser .resize { position: absolute; left: 314px; bottom: -13px; display: block; width: 24px; height: 24px; background: url(../img/buttons-small.png) no-repeat; text-indent: -9999px; z-index: 9999; }
+#ting-facet-browser .resize.expand { background-position: 0 -72px; }
+#ting-facet-browser .resize.contract { background-position: 0 -48px; }
+#ting-facet-browser .resize.disabled { background-position: -72px -72px; }
+
+#ting-facet-browser .resize,
+#ting-facet-browser .resize:active { outline: 0 none; }
+
+
+/* =====================================
+ Facetbrowser jcarousel theme
+/*--------------------------------------*/
+.jcarousel-skin-ding-facet-browser { margin: 0 0 0 0; width: 652px; }
+.jcarousel-skin-ding-facet-browser .jcarousel-container {width: 652px; margin: 0 auto; }
+.jcarousel-skin-ding-facet-browser .jcarousel-item { width: 163px; height: auto; }
+
+.jcarousel-skin-ding-facet-browser .jcarousel-container-horizontal {}
+.jcarousel-skin-ding-facet-browser .jcarousel-clip-horizontal {width: 652px; height: 100px; }
+
+.jcarousel-skin-ding-facet-browser .jcarousel-next-horizontal { position: absolute; top: 48px; right: -12px; width: 24px; height: 24px; cursor: pointer; background: transparent url(../img/buttons-small.png) no-repeat 0 -24px;}
+	.jcarousel-skin-ding-facet-browser .jcarousel-next-horizontal:hover { background-position: -24px -24px;}
+	.jcarousel-skin-ding-facet-browser .jcarousel-next-horizontal:active { background-position: -48px -24px;}
+	.jcarousel-skin-ding-facet-browser .jcarousel-next-disabled-horizontal,
+	.jcarousel-skin-ding-facet-browser .jcarousel-next-disabled-horizontal:hover,
+	.jcarousel-skin-ding-facet-browser .jcarousel-next-disabled-horizontal:active { cursor: default; background-position: -72px -24px; }
+
+.jcarousel-skin-ding-facet-browser .jcarousel-prev-horizontal { position: absolute; top: 48px; left: -12px; width: 24px; height: 24px; cursor: pointer; background: transparent url(../img/buttons-small.png) no-repeat 0 0; }
+	.jcarousel-skin-ding-facet-browser .jcarousel-prev-horizontal:hover { background-position: -24px 0; }
+	.jcarousel-skin-ding-facet-browser .jcarousel-prev-horizontal:active { background-position: -48px 0; }
+	.jcarousel-skin-ding-facet-browser .jcarousel-prev-disabled-horizontal,
+	.jcarousel-skin-ding-facet-browser .jcarousel-prev-disabled-horizontal:hover,
+	.jcarousel-skin-ding-facet-browser .jcarousel-prev-disabled-horizontal:active { cursor: default; background-position: -72px 0; }
+
+/** In IE7 facet list items are not clickable
+		and doesn't react	on hover. This should fix this. **/
+*:first-child+html #ting-facet-browser li { zoom: 1 } 
