@@ -8,10 +8,10 @@
 
 // Ting client has a ton of includes. Let's load them.
 $includes = array(
-  'ting-dbc-php5-client/lib/TingClient.php',
-  'ting-dbc-php5-client/lib/adapter/http/TingClientDrupal6HttpRequestAdapter.php',
-  'ting-dbc-php5-client/lib/request/rest-json/RestJsonTingClientRequestFactory.php',
-  'ting-dbc-php5-client/lib/log/TingClientDrupalWatchDogLogger.php',
+  'ting-client/lib/TingClient.php',
+  'ting-client/lib/adapter/http/TingClientDrupal6HttpRequestAdapter.php',
+  'ting-client/lib/request/rest-json/RestJsonTingClientRequestFactory.php',
+  'ting-client/lib/log/TingClientDrupalWatchDogLogger.php',
   'addi-client/AdditionalInformationService.php'
 );
 
