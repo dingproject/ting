@@ -1,0 +1,21 @@
+# Miscelleleaneous IDE-crud
+*.esproj
+*.kpf
+*.tmproj
+.cache
+.project
+.settings
+
+# Mac OS X cruft
+.DS_Store
+._*
+
+# CVS folders
+CVS
+
+# Patch files
+*.patch
+
+# The client libraries.
+lib/ting-client
+
