@@ -1,6 +1,6 @@
 /* panel rules */
 /*here we gogo */
-.jcarousel-skin-ting-search-carousel { margin-left: 220px; width:740px; }
+.jcarousel-skin-ting-search-carousel { margin-left: 260px; width:700px; }
 .jcarousel-skin-ting-search-carousel .jcarousel-container{ width: 672px; height:200px; margin:0 auto; }
 .jcarousel-skin-ting-search-carousel .jcarousel-item { width: 112px; height: 180px; padding: 20px 0; overflow: hidden; }
 
@@ -8,14 +8,14 @@
 .jcarousel-skin-ting-search-carousel .jcarousel-container-horizontal {}
 .jcarousel-skin-ting-search-carousel .jcarousel-clip-horizontal { width: 672px; height:200px; }
 
-.jcarousel-skin-ting-search-carousel .jcarousel-next-horizontal {position: absolute; top: 75px; right: -50px; width: 35px; height: 35px; cursor: pointer; background: transparent url(../images/buttons.png) no-repeat 0 -35px;}
+.jcarousel-skin-ting-search-carousel .jcarousel-next-horizontal {position: absolute; top: 75px; right: -30px; width: 35px; height: 35px; cursor: pointer; background: transparent url(../images/buttons.png) no-repeat 0 -35px;}
 	.jcarousel-skin-ting-search-carousel .jcarousel-next-horizontal:hover {background-position: -35px -35px;}
 	.jcarousel-skin-ting-search-carousel .jcarousel-next-horizontal:active {background-position: -70px -35px;}
 	.jcarousel-skin-ting-search-carousel .jcarousel-next-disabled-horizontal,
 	.jcarousel-skin-ting-search-carousel .jcarousel-next-disabled-horizontal:hover,
 	.jcarousel-skin-ting-search-carousel .jcarousel-next-disabled-horizontal:active {cursor: default; background-position: -105px -35px;}
 
-.jcarousel-skin-ting-search-carousel .jcarousel-prev-horizontal {position: absolute; top: 75px; left: -272px; width: 35px; height: 35px; cursor: pointer; background: transparent url(../images/buttons.png) no-repeat 0 0;}
+.jcarousel-skin-ting-search-carousel .jcarousel-prev-horizontal {position: absolute; top: 75px; left: -292px; width: 35px; height: 35px; cursor: pointer; background: transparent url(../images/buttons.png) no-repeat 0 0;}
 	.jcarousel-skin-ting-search-carousel .jcarousel-prev-horizontal:hover {background-position: -35px 0;}
 	.jcarousel-skin-ting-search-carousel .jcarousel-prev-horizontal:active {background-position: -70px 0;}
 	.jcarousel-skin-ting-search-carousel .jcarousel-prev-disabled-horizontal,
