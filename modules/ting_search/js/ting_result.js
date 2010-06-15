@@ -77,7 +77,7 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
         $pager.find(i).click(function() {
           Drupal.updatePageUrl(page);
           Drupal.doUrlSearch(facetBrowserElement, searchResultElement);
-          jQuery.scrollTo($('#ting-search-summary').get(0), 500, 'swing');
+          jQuery.scrollTo($('#ting-search-results').get(0));
           return false;
         });
       });
@@ -85,7 +85,7 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
       $($pager).find('ul a').click(function() {
         Drupal.updatePageUrl($(this).text());
         Drupal.doUrlSearch(facetBrowserElement, searchResultElement);
-        jQuery.scrollTo($('#ting-search-summary').get(0), 500, 'swing');
+        jQuery.scrollTo($('#ting-search-results').get(0));
         return false;
       });
 
