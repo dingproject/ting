@@ -194,6 +194,10 @@ function ting_search_add_js() {
   drupal_add_js($path . '/js/jquery.url/jquery.url.js', 'module', 'footer', TRUE);
   //drupal_add_js($path . '/js/jquery.url/jquery.url.packed.js', 'module', 'footer', TRUE);
 
+  //Add jQuery ScrollTo plugin
+  drupal_add_js($path . '/js/jquery.scrollTo/jquery.scrollTo.js', 'module', 'footer', TRUE);
+  //drupal_add_js($path . '/js/jquery.scrollTo/jquery.scrollTo-min.js', 'module', 'footer', TRUE);
+  
   // jQuery UI tabs
   jquery_ui_add('ui.tabs');
   jquery_ui_theme_load();

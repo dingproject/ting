@@ -37,6 +37,15 @@ function ting_covers_menu() {
     'file' => 'ting_covers.pages.inc',
   );
   
+  $items['admin/settings/ting/covers'] = array(
+    'title' => 'Covers',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ting_covers_admin_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'ting_covers.admin.inc',
+  );
+
   return $items;
 }
 
@@ -114,6 +123,27 @@ function ting_covers_faust_url($faust_number, $presetname) {
  * Redirect to default image.
  */
 function ting_covers_goto_default($preset) {
-  return drupal_goto(imagecache_create_url($preset, drupal_get_path('module', 'ting_covers') . '/img/default.gif'));
+  $default_image = ting_covers_default_image();
+  $filepath = ($default_image) ? $default_image->filepath : drupal_get_path('module', 'ting_covers') . '/img/default.gif';
+
+  return drupal_goto(imagecache_create_url($preset, $filepath));
+}
+
+/**
+ * Get the current default image.
+ *
+ * @return
+ *    File object for the image file or FALSE if not set or failure.
+ */
+function ting_covers_default_image() {
+  $fid = variable_get('ting_covers_default_image_fid', FALSE);
+  if ($fid) {
+    // Load file object from database.
+    if ($file = db_fetch_object(db_query('SELECT * FROM {files} WHERE fid = %d', $fid))) {
+      return $file;
+    }
+  }
+
+  return FALSE;
 }
 
