@@ -170,10 +170,12 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
 	$searchResult = ting_execute($request);
 
 	//Decorate search result with additional information
-	foreach ($searchResult->collections as &$collection) {
-		$collection = ting_add_collection_info($collection);
-		if (isset($options['enrich']) && $options['enrich']) {
-			$collection = ting_add_additional_info($collection);
+	if (is_array($searchResult->collections)) {
+		foreach ($searchResult->collections as &$collection) {
+			$collection = ting_add_collection_info($collection);
+			if (isset($options['enrich']) && $options['enrich']) {
+				$collection = ting_add_additional_info($collection);
+			}
 		}
 	}
 
