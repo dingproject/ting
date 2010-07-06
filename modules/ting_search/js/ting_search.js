@@ -85,7 +85,17 @@ Drupal.tingSearch.getContentData = function(url, keys, show) {
 
       // If the show parameter is specified, show our results.
       if (show) {
-        $("#content-result").show("fast");
+    	 
+        $("#content-result").show("fast", function() {
+        	//jQuery.show adds style="display:block" after transition.
+        	//This conflicts with jQuery.tabs as it overrides styles from 
+        	//classes and makes content results appear in other tabs even 
+        	//if that tab is not selected. 
+        	//Strip the entire style attribute to fix.
+        	//Note: This may cause problems if other code adds inline styles
+        	//without causing problems
+        	$(this).removeAttr('style');
+        });
       }
     }
   });
