@@ -13,13 +13,15 @@ function ting_reference_collection_autocomplete_js() {
 	if ($string && (strlen($string) > 0))
 	{
 		$searchResult = ting_do_search($string, 1, 10, array('facets' => array()));
-    foreach ($searchResult->collections as $collection) {
-      $items[$collection->id] = t('!author: !title (!manifestations)', array(
-        '!author' => $collection->creators_string,
-        '!title' => $collection->title,
-        '!manifestations' => format_plural(count($collection->objects), '1 manifestation', '@count manifestations'),
-      ));
-    }
+		if (isset($searchResult->collections) && is_array($searchResult->collections)) {
+	    foreach ($searchResult->collections as $collection) {
+	      $items[$collection->id] = t('!author: !title (!manifestations)', array(
+	        '!author' => $collection->creators_string,
+	        '!title' => $collection->title,
+	        '!manifestations' => format_plural(count($collection->objects), '1 manifestation', '@count manifestations'),
+	      ));
+	    }
+	  }
 	}
 	
 	echo ting_reference_autocomplete_format_items($items);
