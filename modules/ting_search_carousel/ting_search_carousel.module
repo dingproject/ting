@@ -178,3 +178,50 @@ function ting_search_carousel_search_element_process($element, $form_state) {
 function ting_search_carousel_search_element_validate($element, &$form_state) {
   return $form;
 }
+
+/**
+ * Implementation of hook_imagecache_default_presets()
+ */
+function ting_search_carousel_imagecache_default_presets() {
+  $presets = array();
+  $presets['ting_search_carousel'] = array (
+    'presetname' => 'ting_search_carousel',
+    'actions' => 
+    array (
+      0 => 
+      array (
+        'weight' => '0',
+        'module' => 'imagecache',
+        'action' => 'imagecache_scale',
+        'data' => 
+        array (
+          'width' => 112,
+          'height' => 140,
+          'upscale' => 0,
+        ),
+      ),
+      1 => 
+      array (
+        'weight' => '1',
+        'module' => 'imagecache_canvasactions',
+        'action' => 'canvasactions_definecanvas',
+        'data' => 
+        array (
+          'ecaxt' => 
+          array (
+            'width' => '112',
+            'height' => '140',
+            'xpos' => 'center',
+            'ypos' => 'center',
+          ),
+          'RGB' => 
+          array (
+            'HEX' => '918F91',
+          ),
+          'under' => true,
+        ),
+      ),
+    ),
+  );
+  return $presets;
+}
