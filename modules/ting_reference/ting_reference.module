@@ -1,5 +1,5 @@
 <?php
-// $Id: ting_reference.module,v 1.91.2.36 2009/07/18 01:18:07 markuspetrux Exp $
+// $Id$
 
 /**
  * @file
@@ -16,7 +16,6 @@ function ting_reference_theme() {
       'arguments' => array('collection' => NULL),
       'template' => 'ting_reference_preview'
     ),
-  
   );
 }
 
@@ -75,8 +74,8 @@ function ting_reference_field_settings($op, $field) {
   switch ($op) {
     case 'database columns':
      return array(
-       'ting_object_id' => array('type' => 'varchar', 'length' => 50, 'not null' => TRUE, 'index' => TRUE),
-       'ting_ref_type' => array('type' => 'varchar', 'length' => 20, 'not null' => TRUE),
+       'ting_object_id' => array('type' => 'varchar', 'length' => 50, 'index' => TRUE),
+       'ting_ref_type' => array('type' => 'varchar', 'length' => 20),
        'description' => array('type' => 'text'),
      );
   }
@@ -111,7 +110,7 @@ function ting_reference_field($op, &$node, $field, &$items, $teaser, $page) {
           }
         }
       }
-      return $items;
+      break;
   }
 }
 
@@ -119,7 +118,7 @@ function ting_reference_field($op, &$node, $field, &$items, $teaser, $page) {
  * Implementation of hook_content_is_empty().
  */
 function ting_reference_content_is_empty($item, $field) {
-  return empty($item['ting_object_id']) && empty($item['description']);
+  return (empty($item['ting_object_id']) && empty($item['description']));
 }
 
 /**
@@ -181,7 +180,7 @@ function ting_reference_widget(&$form, &$form_state, $field, $items, $delta = 0)
     '#default_value' => $ting_ref_type,
     '#options' => array('collection' => t('Ting collection'), 'object' => t('Ting object')),
     '#attributes' => array('class' => 'ting-reference-type-radio'),
-	);
+  );
 
   $element['search'] = array (
     '#type' => 'textfield',
@@ -196,13 +195,13 @@ function ting_reference_widget(&$form, &$form_state, $field, $items, $delta = 0)
   $element['reset'] = array (
     '#type' => 'button',
     '#value' => t('Reset'),
-  	'#attributes' => array('class' => 'ting-reference-reset'),
+    '#attributes' => array('class' => 'ting-reference-reset'),
   );
   $element['ting_object_id'] = array (
     '#type' => 'hidden',
     '#title' => 'Ting object id',
     '#default_value' => $ting_object_id,
-  	'#attributes' => array('class' => 'ting-object-id')
+    '#attributes' => array('class' => 'ting-object-id')
   );
   $element['description'] = array (
     '#type' => 'textarea',
@@ -333,6 +332,6 @@ function ting_reference_nodes($object_or_collection) {
   foreach (array_unique($nids) as $nid) {
     $nodes[] = node_load($nid);
   }
-	return $nodes;
+  return $nodes;
 }
 

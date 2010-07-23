@@ -5,7 +5,7 @@
  * @file
  * Implementation of hook_install().
  */
-function tingfield_install() {
+function ting_reference_install() {
   drupal_load('module', 'content');
   content_notify('install', 'tingfield');
 }
@@ -13,7 +13,7 @@ function tingfield_install() {
 /**
  * Implementation of hook_uninstall().
  */
-function tingfield_uninstall() {
+function ting_reference_uninstall() {
   drupal_load('module', 'content');
   content_notify('uninstall', 'tingfield');
 }
@@ -23,7 +23,7 @@ function tingfield_uninstall() {
  *
  * Notify content module when this module is enabled.
  */
-function tingfield_enable() {
+function ting_reference_enable() {
   drupal_load('module', 'content');
   content_notify('enable', 'tingfield');
 }
@@ -33,8 +33,41 @@ function tingfield_enable() {
  *
  * Notify content module when this module is disabled.
  */
-function tingfield_disable() {
+function ting_reference_disable() {
   drupal_load('module', 'content');
   content_notify('disable', 'tingfield');
+}
+
+/**
+ * Implementation of hook_update_N().
+ *
+ * Make our CCK field table values nullable, since CCK insists on
+ * inserting a column consisting only of NULLs when there is no data in
+ * a field.
+ */
+function ting_reference_update_6001(&$sandbox) {
+  $ret = array();
+  $tables = array();
+
+  // Get the table metadata for each ting_reference field instance.
+  foreach (content_fields() as $field_name => $field) {
+    if ($field['type'] == 'ting_reference') {
+      $db_info = content_database_info($field);
+
+      db_change_field($ret, $db_info['table'],
+        $db_info['columns']['ting_object_id']['column'],
+        $db_info['columns']['ting_object_id']['column'],
+        array('type' => 'varchar', 'length' => 50, 'index' => TRUE)
+      );
+
+      db_change_field($ret, $db_info['table'],
+        $db_info['columns']['ting_ref_type']['column'],
+        $db_info['columns']['ting_ref_type']['column'],
+        array('type' => 'varchar', 'length' => 20)
+      );
+    }
+  }
+
+  return $ret;
 }
 
