@@ -34,6 +34,7 @@ function ting_reference_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'ting_reference.pages.inc',
   );
+
   $items['ting_reference/autocomplete/object/js'] = array(
     'title' => 'Ting reference object autocomplete',
     'description' => 'Returns a list of objects to use for autocompletion',
@@ -42,6 +43,7 @@ function ting_reference_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'ting_reference.pages.inc',
   );
+
   $items['ting_reference/preview/js/%/%'] = array(
     'title' => 'Ting reference collection',
     'description' => 'Returns a Ting collection as a javascript object',
@@ -138,6 +140,11 @@ function ting_reference_field_formatter_info() {
  * Theme function for 'default' userreference field formatter.
  */
 function theme_ting_reference_formatter_default($element) {
+  // Don’t render empty fields.
+  if (ting_reference_content_is_empty($element['#item'], array())) {
+    return;
+  }
+
   $collection = _ting_reference_get_collection($element['#item']['ting_ref_type'], $element['#item']['ting_object_id'], $element['#item']['description']);
   if (!$collection) {
     return t('Object not found.');
