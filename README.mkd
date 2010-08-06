@@ -1,0 +1,9 @@
+Ting module for Drupal
+======================
+
+Implements the brønd.TING API for searching the databases of 
+[DBC Open Search](http://oss.dbc.dk/plone/software/open-search) and its
+related services to enable search and display of content from brønd.TING.
+
+Part of [TING.concept](http://ting.dk/).
+
