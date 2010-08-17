@@ -5,15 +5,16 @@
  * @file
  * Template to render a Ting collection of books.
  */
+
+$picture = FALSE;
+
 ?>
   <li>
-
+    <?php if ($picture): ?>
     <div class="picture">
-      <?php $image_url = ting_covers_collection_url($collection->objects[0], '80_x'); ?>
-      <?php if ($image_url) { ?>
-        <?php print l(theme('image', $image_url, '', '', null, false), $collection->url, array('html' => true)); ?>
-      <?php } ?>
+      <?php print $picture; ?>
     </div>
+    <?php endif; ?>
 
     <div class="record">
       <div class="types">
@@ -57,5 +58,5 @@
       <?php endif; ?>
 
     </div>
-
   </li>
+
