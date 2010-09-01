@@ -36,7 +36,7 @@ function ting_search_theme() {
       'function' => 'ting_search_facet_browser'
     ),
     'ting_collection' => array(
-      'arguments' => array('collection' => NULL),
+      'arguments' => array('collection' => NULL, 'query_args' => NULL),
       'template' => 'ting_collection',
       'file' => 'ting_search.theme.inc',
     ),
@@ -275,16 +275,56 @@ function ting_search_form_submit($form, &$form_state) {
  * Return a sorted array of ting collection objects
  */
 function template_preprocess_ting_collection(&$variables) {
-  // preprocess the collection object here!
+	// preprocess the collection object here!
   // group by type and language
   $collection = $variables["collection"];
 
   $sorted = array();
-  foreach ($collection->objects as $object) {
-    $sorted[$object->type][] = $object;
+  
+  // If we know what query lead to the collection then we can use this for sorting
+  if ($query_args = $variables['query_args']) {
+  	if ($entry = $query_args['entry']) {
+	    // Build the query for the collection in the search result
+		  $query = '';
+	
+		  //Wrap base query
+		  $query .= (isset($query_args['query'])) ? '('.$query_args['query'].')' : '';
+		
+		  //Extend query with selected facets
+		  if (isset($query_args['facets'])) {
+		    foreach ($query_args['facets'] as $name => $value) {
+		      $facetArray[] = $name.'="'.$value.'"';
+		    }		
+		    $query .= ' AND '.implode(' AND ', $facetArray);
+		  }
+	  	
+		  // Get the corresponding entry in the search result 
+		  $result = ting_do_search($query, $entry, 1, array('facets' => array()));
+	    
+		  //Determine the order of object types based on the order of objects
+		  //in the search result
+		  if ($search_collection = array_shift($result->collections)) {
+		  	foreach ($search_collection->objects as $object) {
+		  		$sorted[$object->type] = array();
+		  	}
+		  }
+		  
+		  //Put all objects from original collection into the ordered object type buckets.
+		  //Types not referenced in the search result placed last
+		  foreach ($collection->objects as $object) {
+		  	$sorted[$object->type][] = $object;
+		  }
+  	}
   }
-  // By coincidence, the default type, "Bog", appears alphabetically first.
-  ksort($sorted);
+  
+  //Default to standard sorting
+  if (sizeof($sorted) == 0) {
+	  foreach ($collection->objects as $object) {
+	    $sorted[$object->type][] = $object;
+	  }
+	  // By coincidence, the default type, "Bog", appears alphabetically first.
+	  ksort($sorted);
+  }
 
   $variables["sorted_collection"] = $sorted;
 }
@@ -373,4 +413,26 @@ function ting_search_imagecache_default_presets() {
 	);
 	
 	return $presets;
+}
+
+/**
+ * Parse a string containing search query arguments into an array
+ * @return array Array of search query arguments
+ */
+function _ting_search_parse_query_args($query_string) {
+	$query_args = array();
+	
+	$query_elements = explode(';', $query_string);
+	foreach ($query_elements as &$e) {
+		$e = explode(':', $e, 2);
+		if (strpos($e[1], ':') !== FALSE) {
+      $query_args[$e[0]] = array();
+      $e_args = explode(':', $e[1], 2);
+      $query_args[$e[0]][$e_args[0]] = $e_args[1];
+		} else {
+			$query_args[$e[0]] = $e[1];
+		}
+	}
+	
+	return $query_args;
 }

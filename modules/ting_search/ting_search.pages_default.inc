@@ -315,7 +315,7 @@ function ting_search_default_page_manager_pages() {
 	$page->task = 'page';
 	$page->admin_title = 'Ting collection view';
 	$page->admin_description = 'Provides a page displaying a Ting collection.';
-	$page->path = 'ting/collection/%collection_id';
+	$page->path = 'ting/collection/%collection_id/!query_args';
 	$page->access = array();
 	$page->menu = array();
 	$page->arguments = array(
@@ -324,6 +324,14 @@ function ting_search_default_page_manager_pages() {
 	    'identifier' => 'Ting collection',
 	    'name' => 'collection_id',
 	    'settings' => array(),
+	  ),
+	  'query_args' => array(
+	    'id' => 1,
+	    'identifier' => 'Query arguments',
+	    'name' => 'string',
+	    'settings' => array(
+	      'use_tail' => 0,
+	    ),
 	  ),
 	);
 	$page->conf = array();
@@ -345,15 +353,24 @@ function ting_search_default_page_manager_pages() {
 	  'relationships' => array(),
 	);
 	$display = new panels_display;
+	$display->api_version = 1;
 	$display->layout = 'twocol_left_stacked';
 	$display->layout_settings = array();
-	$display->panel_settings = array();
+	$display->panel_settings = array(
+	  'style_settings' => array(
+	    'default' => NULL,
+	    'top' => NULL,
+	    'left' => NULL,
+	    'right' => NULL,
+	    'bottom' => NULL,
+	  ),
+	);
 	$display->cache = array();
 	$display->title = '%collection_id:title_full';
-	$display->hide_title = FALSE;
 	$display->content = array();
 	$display->panels = array();
 	  $pane = new stdClass;
+	  $pane->api_version = 1;
 	  $pane->pid = 'new-1';
 	  $pane->panel = 'left';
 	  $pane->type = 'collection_view';
@@ -361,18 +378,24 @@ function ting_search_default_page_manager_pages() {
 	  $pane->shown = TRUE;
 	  $pane->access = array();
 	  $pane->configuration = array(
-	    'context' => 'argument_collection_id_1',
+	    'context' => array(
+	      0 => 'argument_collection_id_1',
+	      1 => 'argument_string_1',
+	    ),
 	    'override_title' => 0,
 	    'override_title_text' => '',
 	  );
 	  $pane->cache = array();
-	  $pane->style = array();
+	  $pane->style = array(
+	    'settings' => NULL,
+	  );
 	  $pane->css = array();
 	  $pane->extras = array();
 	  $pane->position = 0;
 	  $display->content['new-1'] = $pane;
 	  $display->panels['left'][0] = 'new-1';
 	  $pane = new stdClass;
+	  $pane->api_version = 1;
 	  $pane->pid = 'new-2';
 	  $pane->panel = 'left';
 	  $pane->type = 'recommendation_list';
@@ -381,20 +404,23 @@ function ting_search_default_page_manager_pages() {
 	  $pane->access = array();
 	  $pane->configuration = array(
 	    'context' => array(
-	      '0' => 'empty',
-	      '1' => 'argument_collection_id_1',
+	      0 => 'empty',
+	      1 => 'argument_collection_id_1',
 	    ),
 	    'override_title' => 1,
 	    'override_title_text' => 'Andre der har lånt',
 	  );
 	  $pane->cache = array();
-	  $pane->style = array();
+	  $pane->style = array(
+	    'settings' => NULL,
+	  );
 	  $pane->css = array();
 	  $pane->extras = array();
 	  $pane->position = 1;
 	  $display->content['new-2'] = $pane;
 	  $display->panels['left'][1] = 'new-2';
 	  $pane = new stdClass;
+	  $pane->api_version = 1;
 	  $pane->pid = 'new-3';
 	  $pane->panel = 'right';
 	  $pane->type = 'relevant';
@@ -403,20 +429,24 @@ function ting_search_default_page_manager_pages() {
 	  $pane->access = array();
 	  $pane->configuration = array(
 	    'context' => array(
-	      '0' => 'empty',
-	      '1' => 'empty',
-	      '2' => 'empty',
+	      0 => 'empty',
+	      1 => 'empty',
+	      2 => 'empty',
 	    ),
 	    'override_title' => 0,
 	    'override_title_text' => '',
 	  );
 	  $pane->cache = array();
-	  $pane->style = array();
+	  $pane->style = array(
+	    'settings' => NULL,
+	  );
 	  $pane->css = array();
 	  $pane->extras = array();
 	  $pane->position = 0;
 	  $display->content['new-3'] = $pane;
 	  $display->panels['right'][0] = 'new-3';
+	$display->hide_title = PANELS_TITLE_FIXED;
+	$display->title_pane = 'new-1';
 	$handler->conf['display'] = $display;
 	$page->default_handlers[$handler->name] = $handler;
   $pages['ting_collection_view'] = $page;
