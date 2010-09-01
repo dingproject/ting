@@ -5,9 +5,6 @@
  * @file
  * Template to render a Ting collection of books.
  */
-
-$picture = FALSE;
-
 ?>
   <li>
     <?php if ($picture): ?>
