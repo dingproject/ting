@@ -12,6 +12,14 @@ function ting_menu() {
   $path = drupal_get_path('module', 'ting') . '/includes';
   $items = array();
 
+  $items['ting/object/redirect'] = array(
+    'title' => 'Redirect to object based on local ID (links from bibliotek.dk).',
+    'page callback' => 'ting_search_pages_object_redirect',
+    'access arguments' => array('search content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'ting_search.pages.inc',
+  );
+  
   $items['admin/settings/ting'] = array(
     'title' => 'Ting search',
     'page callback' => 'drupal_get_form',
@@ -30,21 +38,30 @@ function ting_menu() {
 }
 
 /**
- * Implementation of hook_search().
+ * Implementation of hook_theme().
  */
-function ting_search($op = 'search', $keys = null) {
-  switch ($op) {
-    case 'name':
-      return t('Ting');
-
-    case 'status':
-    case 'admin':
-    case 'search':
-      // We're not providing any sort of admin interface or actual
-      // search results, since this is just a dummy module to get the
-      // search/ting URL.
-      return array();
-  }
+function ting_theme() {
+  return array(
+    'ting_collection' => array(
+      'arguments' => array('collection' => NULL, 'query_args' => NULL),
+      'template' => 'ting_collection',
+      'file' => 'ting_search.theme.inc',
+    ),
+    'ting_object' => array(
+      'arguments' => array('object' => NULL),
+      'template' => 'ting_object',
+    ),
+    'ting_object_title' => array(
+      'arguments' => array('object' => NULL, 'display_image' => NULL),
+      'template' => 'ting-object-title',
+    ),
+    // Render periodicals as objects. Library system modules should
+    // Override this to use another template
+    'ting_periodical' => array(
+      'arguments' => array('object' => NULL),
+      'template' => 'ting_object',
+    ),
+  );
 }
 
 /**
@@ -58,3 +75,144 @@ function ting_ctools_plugin_directory($module, $plugin) {
   }
 }
 
+
+/**
+ * Template preprocessor for collections of ting objects.
+ */
+function template_preprocess_ting_collection(&$variables) {
+  // Preprocess the collection object here!
+
+  $collection = $variables["collection"];
+
+  // Allow modules to add action buttons to collections
+  $variables['buttons'] = module_invoke_all('ting_collection_buttons', $collection);
+
+  $sorted = array();
+  
+  // If we know what query lead to the collection then we can use this for sorting
+  if ($query_args = $variables['query_args']) {
+    if ($entry = $query_args['entry']) {
+      // Build the query for the collection in the search result
+      $query = '';
+  
+      //Wrap base query
+      $query .= (isset($query_args['query'])) ? '('.$query_args['query'].')' : '';
+    
+      //Extend query with selected facets
+      if (isset($query_args['facets'])) {
+        foreach ($query_args['facets'] as $name => $value) {
+          $facetArray[] = $name.'="'.$value.'"';
+        }   
+        $query .= ' AND '.implode(' AND ', $facetArray);
+      }
+      
+      // Get the corresponding entry in the search result 
+      $result = ting_do_search($query, $entry, 1, array('facets' => array()));
+      
+      //Determine the order of object types based on the order of objects
+      //in the search result
+      if ($search_collection = array_shift($result->collections)) {
+        foreach ($search_collection->objects as $object) {
+          $sorted[$object->type] = array();
+        }
+      }
+      
+      //Put all objects from original collection into the ordered object type buckets.
+      //Types not referenced in the search result placed last
+      foreach ($collection->objects as $object) {
+        $sorted[$object->type][] = $object;
+      }
+    }
+  }
+  
+  //Default to standard sorting
+  if (sizeof($sorted) == 0) {
+    foreach ($collection->objects as $object) {
+      $sorted[$object->type][] = $object;
+    }
+    // By coincidence, the default type, "Bog", appears alphabetically first.
+    ksort($sorted);
+  }
+
+  $variables["sorted_collection"] = $sorted;
+}
+
+/**
+ * Template preprocessor for ting objects.
+ */
+function template_preprocess_ting_object(&$variables) {
+  $object = $variables['object'];
+  
+  // Allow modules to add action buttons to objects
+  $variables['buttons'] = module_invoke_all('ting_object_buttons', $collection);
+}
+
+
+/**
+ * Implementation of hook_imagecache_default_presets()
+ */
+function ting_imagecache_default_presets() {
+  $presets = array();
+  
+  $presets['180_x'] = array (
+    'presetname' => '180_x',
+    'actions' => 
+    array (
+      0 => 
+      array (
+        'weight' => '0',
+        'module' => 'imagecache',
+        'action' => 'imagecache_scale',
+        'data' => 
+        array (
+          'width' => '180',
+          'height' => '',
+          'upscale' => 0,
+        ),
+      ),
+    ),
+  );
+  
+  $presets['80_x'] = array (
+    'presetname' => '80_x',
+    'actions' => 
+    array (
+      0 => 
+      array (
+        'weight' => '0',
+        'module' => 'imagecache',
+        'action' => 'imagecache_scale',
+        'data' => 
+        array (
+          'width' => '80',
+          'height' => '',
+          'upscale' => 1,
+        ),
+      ),
+    )
+  );
+  
+  return $presets;
+}
+
+/**
+ * Parse a string containing search query arguments into an array
+ * @return array Array of search query arguments
+ */
+function _ting_search_parse_query_args($query_string) {
+  $query_args = array();
+  
+  $query_elements = explode(';', $query_string);
+  foreach ($query_elements as &$e) {
+    $e = explode(':', $e, 2);
+    if (strpos($e[1], ':') !== FALSE) {
+      $query_args[$e[0]] = array();
+      $e_args = explode(':', $e[1], 2);
+      $query_args[$e[0]][$e_args[0]] = $e_args[1];
+    } else {
+      $query_args[$e[0]] = $e[1];
+    }
+  }
+  
+  return $query_args;
+}

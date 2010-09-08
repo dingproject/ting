@@ -18,19 +18,6 @@ function ting_search_pages_redirect() {
 }
 
 /**
- * Redirect to object view based on local ID (used by bibliotek.dk).
- */
-function ting_search_pages_object_redirect($local_id) {
-  module_load_include('client.inc', 'ting');
-
-  $object = ting_get_object_by_local_id($local_id);
-  if (!$object) {
-    return drupal_not_found();
-  }
-  drupal_goto($object->url);
-}
-
-/**
  * JSON callback to search Ting.
  */
 function ting_search_pages_ting_js() {
@@ -76,14 +63,14 @@ function ting_search_pages_ting_js() {
       'collectionCount' => (integer) $searchResult->numTotalCollections,
       'result_html' => '',
       'facets' => $searchResult->facets,
-      'alma_ids' => array(),
+      'local_ids' => array(),
     );
 
     foreach ($searchResult->collections as &$collection) {
       $result['result_html'] .= theme('ting_search_collection', $collection);
 
       foreach ($collection->objects as $object) {
-        $result['alma_ids'][] = $object->localId;
+        $result['local_ids'][] = $object->localId;
       }
     }
   }
