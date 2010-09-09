@@ -75,8 +75,8 @@
             </div>
           
 	          <?php if ($buttons) :?>
-	            <div class="buttons">
-	              <?php print theme('item_list', $buttons) ?>
+	            <div class="ting-object-buttons">
+	              <?php print theme('item_list', $buttons, NULL, 'ul', array('class' => 'buttons')) ?>
 	            </div>
 	          <?php endif; ?>
           

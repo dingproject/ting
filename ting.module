@@ -84,9 +84,12 @@ function template_preprocess_ting_collection(&$variables) {
 
   $collection = $variables["collection"];
 
-  // Allow modules to add action buttons to collections
-  $variables['buttons'] = module_invoke_all('ting_collection_buttons', $collection);
-
+  // Allow modules to add action buttons to collection objects
+  $variables['buttons'] = array();
+  foreach ($collection->objects as $object) {
+    $variables['buttons'][$object->id] = module_invoke_all('ting_object_buttons', $object);
+  }
+  
   $sorted = array();
   
   // If we know what query lead to the collection then we can use this for sorting
@@ -142,9 +145,9 @@ function template_preprocess_ting_collection(&$variables) {
  */
 function template_preprocess_ting_object(&$variables) {
   $object = $variables['object'];
-  
+
   // Allow modules to add action buttons to objects
-  $variables['buttons'] = module_invoke_all('ting_object_buttons', $collection);
+  $variables['buttons'] = module_invoke_all('ting_object_buttons', $object);
 }
 
 
