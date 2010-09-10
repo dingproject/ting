@@ -85,6 +85,68 @@ function ting_ctools_plugin_directory($module, $plugin) {
 }
 
 /**
+ * Implementation of hook_imagecache_default_presets()
+ */
+function ting_imagecache_default_presets() {
+  $presets = array();
+  
+  $presets['180_x'] = array (
+    'presetname' => '180_x',
+    'actions' => 
+    array (
+      0 => 
+      array (
+        'weight' => '0',
+        'module' => 'imagecache',
+        'action' => 'imagecache_scale',
+        'data' => 
+        array (
+          'width' => '180',
+          'height' => '',
+          'upscale' => 0,
+        ),
+      ),
+    ),
+  );
+  
+  $presets['80_x'] = array (
+    'presetname' => '80_x',
+    'actions' => 
+    array (
+      0 => 
+      array (
+        'weight' => '0',
+        'module' => 'imagecache',
+        'action' => 'imagecache_scale',
+        'data' => 
+        array (
+          'width' => '80',
+          'height' => '',
+          'upscale' => 1,
+        ),
+      ),
+    )
+  );
+  
+  return $presets;
+}
+
+/**
+ * Implementation of hook_ting_add_js().
+ */
+function ting_ting_add_js($type) {
+	// Add button helper on collection and object views if the required jQuery UI modules are loaded
+	// These are not requirements to avoid unecessary dependencies in ting module
+	if (in_array($type, array('ting_collection_view', 'ting_object_view'))) {
+		if (module_exists('jquery_ui') && module_exists('jquery_ui_theme')) {
+	    jquery_ui_add('ui.dialog');
+	    jquery_ui_theme_load();
+	    drupal_add_js(drupal_get_path('module', 'ting') . '/js/ting.buttons.js');
+		}
+	}
+}
+
+/**
  * Template preprocessor for collections of ting objects.
  */
 function template_preprocess_ting_collection(&$variables) {
@@ -156,54 +218,6 @@ function template_preprocess_ting_object(&$variables) {
 
   // Allow modules to add action buttons to objects
   $variables['buttons'] = module_invoke_all('ting_object_buttons', $object);
-}
-
-
-/**
- * Implementation of hook_imagecache_default_presets()
- */
-function ting_imagecache_default_presets() {
-  $presets = array();
-  
-  $presets['180_x'] = array (
-    'presetname' => '180_x',
-    'actions' => 
-    array (
-      0 => 
-      array (
-        'weight' => '0',
-        'module' => 'imagecache',
-        'action' => 'imagecache_scale',
-        'data' => 
-        array (
-          'width' => '180',
-          'height' => '',
-          'upscale' => 0,
-        ),
-      ),
-    ),
-  );
-  
-  $presets['80_x'] = array (
-    'presetname' => '80_x',
-    'actions' => 
-    array (
-      0 => 
-      array (
-        'weight' => '0',
-        'module' => 'imagecache',
-        'action' => 'imagecache_scale',
-        'data' => 
-        array (
-          'width' => '80',
-          'height' => '',
-          'upscale' => 1,
-        ),
-      ),
-    )
-  );
-  
-  return $presets;
 }
 
 /**
