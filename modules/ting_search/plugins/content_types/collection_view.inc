@@ -17,7 +17,9 @@ function ting_search_collection_view_ctools_content_types() {
     'title' => t('Ting collection view'),
     'single' => TRUE,
     'description' => t('Provides the full display of a Ting collection.'),
-    'required context' => new ctools_context_optional(t('Ting collection'), 'ting_collection'),
+    'required context' => array(new ctools_context_optional(t('Ting collection'), 'ting_collection'),
+                                new ctools_context_optional(t('Query arguments'), 'string'),
+                                ),
     'category' => t('Ting'),
   );
 }
@@ -27,8 +29,11 @@ function ting_search_collection_view_ctools_content_types() {
  */
 function ting_search_collection_view_content_type_render($subtype, $conf, $panel_args, $context) {
   $block = new stdClass();
-  $collection = isset($context->data) ? drupal_clone($context->data) : NULL;
-
+  
+  $collection = isset($context[0]->data) ? drupal_clone($context[0]->data) : NULL;
+  
+  $query_args = isset($context[1]->data) ? _ting_search_parse_query_args($context[1]->data) : NULL;
+  
   if ($collection instanceOf TingClientObjectCollection) {
     // When viewing a Ting collection, redirect a single-item collection to
     // the object view for the item in question.
@@ -40,7 +45,7 @@ function ting_search_collection_view_content_type_render($subtype, $conf, $panel
     if (function_exists('alma_add_js')) {
       alma_add_js('ting_collection_view');
     }
-    $block->content = theme('ting_collection', $collection);
+    $block->content = theme('ting_collection', $collection, $query_args);
   }
 
   return $block;
@@ -50,7 +55,7 @@ function ting_search_collection_view_content_type_render($subtype, $conf, $panel
  * Return the pane titles.
  */
 function ting_search_collection_view_content_type_admin_title($subtype, $conf, $context) {
-  return t('“@s”: Ting collection view', array('@s' => $context->identifier));
+  return t('“@s1, @s2”: Ting collection view', array('@s1' => $context[0]->identifier, '@s2' => $context[1]->identifier));
 }
 
 /**

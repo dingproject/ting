@@ -59,12 +59,11 @@ function ting_search_pages_ting_js() {
 
     $query .= ' AND '.implode(' AND ', $facetArray);
   }
-
-  $options = array(
-    'allObjects' => TRUE,
-  );
-
-  $options['sort'] = (isset($_GET['sort'])) ? $_GET['sort'] : 'rank_general';
+  
+  //Set sort method
+  if (isset($_GET['sort'])) {
+    $options['sort'] = $_GET['sort'];
+  }
 
   try {
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
