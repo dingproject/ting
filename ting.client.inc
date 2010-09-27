@@ -125,7 +125,7 @@ function ting_get_collection_by_id($object_id, $enrich = FALSE) {
  */
 function ting_search_sort_options() {
   return array(
-    '' => t('Relevance'),
+    'rank_general' => t('Relevance'),
     'title_ascending' => t('Title – A → Z'),
     'title_descending' => t('Title – Z → A'),
     'creator_ascending' => t('Author – A → Z'),

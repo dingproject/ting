@@ -64,9 +64,7 @@ function ting_search_pages_ting_js() {
     'allObjects' => TRUE,
   );
 
-  if (isset($_GET['sort'])) {
-    $options['sort'] = $_GET['sort'];
-  }
+  $options['sort'] = (isset($_GET['sort'])) ? $_GET['sort'] : 'rank_general';
 
   try {
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
