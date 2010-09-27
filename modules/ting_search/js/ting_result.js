@@ -14,7 +14,30 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
     var $element = $(element);
     $element.find('ul,ol').html(result.result_html);
     Drupal.tingSearch.updateSummary($('#ting-search-summary'), result);
-
+    
+    // Append information the current query and where the current
+    // result appears in this to each link
+    // Build a string containing the query elements: Keys and selected facets 
+    var vars = Drupal.getAnchorVars();
+    vars.query = Drupal.settings.tingSearch.keys;
+    var var_string = '';
+    for (key in vars) {
+      if (key != 'page') { //Ignore page number - entry number is calculated later
+        var_string += encodeURIComponent(key + ':' + vars[key] + ';');
+      }
+    }
+		
+    var entries = $element.find('.record a.title');
+    entries.each(function(i) {
+      // Calculate where the current item appears in the result
+      var page = (vars.page) ? vars.page : 1;
+      var entry = (entries.length * (page - 1)) + (i + 1);
+      var entry_string = encodeURIComponent('entry:'+entry);
+      
+      //Append query and entry information to the 
+      $(this).attr('href', $(this).attr('href')+'/'+var_string+entry_string);			
+		});
+		
     // If possible, look up availability from Alma.
     if (Drupal.hasOwnProperty('almaAvailability')) {
       Drupal.almaAvailability.id_list = result.alma_ids;

@@ -162,7 +162,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
 	$request->setNumResults($resultsPerPage);
 	
 	$request = (!isset($options['supportingTypes']) || !$options['supportingTypes']) ? ting_remove_supporting_types($request) : $request;
-	$request->setFacets((isset($options['facets'])) ? $options['facets'] : array('facet.subject', 'facet.creator', 'facet.type', 'facet.language', 'facet.date'));
+	$request->setFacets((isset($options['facets'])) ? $options['facets'] : array('facet.subject', 'facet.creator', 'facet.type', 'facet.category', 'facet.language', 'facet.date', 'facet.acSource'));
 	$request->setNumFacets((isset($options['numFacets'])) ? $options['numFacets'] : ((sizeof($request->getFacets()) == 0) ? 0 : 10));
   $request->setSort((isset($options['sort']) && $options['sort']) ? $options['sort'] : 'rank_general');
   $request->setAllObjects(isset($options['allObjects']) ? $options['allObjects'] : FALSE);
@@ -286,10 +286,7 @@ function ting_get_request_factory() {
 function ting_add_collection_info(TingClientObjectCollection $collection) {
   $types = array();
   $subject_count = array();
-  $common_object = NULL;
-  // Sort by type and language with most probable results first, then use the
-  // abstract of the first object with an abtract.
-  usort($collection->objects, 'ting_compare_objects');
+
   foreach ($collection->objects as $object) {
     $object = ting_add_object_info($object);
     $types[] = $object->type;
@@ -299,17 +296,14 @@ function ting_add_collection_info(TingClientObjectCollection $collection) {
       }
       $subject_count[$subject]++;
     }
-    if (!$common_object && $object->abstract) {
-      $common_object = $object;
-    }
   }
   $collection->types = array_unique($types);
+  
   asort($subject_count);
   // All subjects from all objects with the most common ones first.
   $collection->subjects = array_keys($subject_count);
-  if (!$common_object) {
-    $common_object = $collection->objects[0];
-  }
+  
+  $common_object = $collection->objects[0];
 
   $collection->id = $common_object->id;
   $collection->title = $common_object->title;
@@ -317,9 +311,8 @@ function ting_add_collection_info(TingClientObjectCollection $collection) {
   $collection->creators = $common_object->creators;
   $collection->creators_string = $common_object->creators_string;
   $collection->date = $common_object->date;
-
-  // For single-object collections, we skip the collection page.
-  $collection->url = count($collection->objects) == 1 ? $collection->objects[0]->url : url('ting/collection/' . $collection->id, array('absolute' => true));
+  
+  $collection->url = url('ting/collection/' . $collection->id, array('absolute' => true));
 
   return $collection;
 }
@@ -439,45 +432,6 @@ function ting_get_additional_info($faust_numbers) {
   }
 
   return array();
-}
-
-/**
- * Callback for usort().
- *
- * Sorts objects according to "ORDER BY language_value, type_value", with
- * language_value being Danish=1, English=2, Other=3, and type_value being
- * Book=1, DVD=2, Other=3.
- */
-function ting_compare_objects($o1, $o2) {
-  $criteria = array(
-    array(array('dc:language', 'dcterms:ISO639-2'), array('dan', 'eng')),
-    array(array('dc:type', 'dkdcplus:BibDK-Type'), array('Bog', 'DVD')),
-  );
-  foreach ($criteria as $criterion) {
-    list($keys, $values) = $criterion;
-    list($key1, $key2) = $keys;
-    $i1 = !empty($o1->record[$key1][$key2]) ? array_search($o1->record[$key1][$key2][0], $values) : FALSE;
-    $i2 = !empty($o2->record[$key1][$key2]) ? array_search($o2->record[$key1][$key2][0], $values) : FALSE;
-    if ($i1 !== FALSE && $i2 !== FALSE) {
-      // Both objects has one of the specified values for this criteria (e.g.
-      // when comparing "Bog" to "DVD").
-      if ($i1 != $i2) {
-        // The values were identical; move on to next criteria.
-        return $i1 - $i2;
-      }
-    }
-    elseif ($i1 !== FALSE) {
-      // Only the first object has one of the specified values (e.g. when
-      // comparing "Bog" to "VHS").
-      return -1;
-    }
-    elseif ($i2 !== FALSE) {
-      // Only the last object has one of the specified values (e.g. when
-      // comparing "Bog" to "Bog").
-      return 1;
-    }
-  }
-  return 0;
 }
 
 function ting_add_agency(TingClientAgentRequest $request) {
