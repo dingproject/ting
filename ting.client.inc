@@ -191,6 +191,7 @@ function ting_do_scan($query, $numResults = 10) {
 	$request = ting_get_request_factory()->getScanRequest();
 	$request->setField('phrase.anyIndexes');
 	$request->setLower($query);
+  $request = ting_add_agency($request);
 	$request->setNumResults($numResults);
 	return ting_execute($request);
 }
