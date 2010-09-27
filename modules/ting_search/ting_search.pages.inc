@@ -83,12 +83,14 @@ function ting_search_pages_ting_js() {
       'alma_ids' => array(),
     );
 
-    foreach ($searchResult->collections as &$collection) {
-      $result['result_html'] .= theme('ting_search_collection', $collection);
-
-      foreach ($collection->objects as $object) {
-        $result['alma_ids'][] = $object->localId;
-      }
+    if (isset($searchResult->collections)) {
+	    foreach ($searchResult->collections as &$collection) {
+	      $result['result_html'] .= theme('ting_search_collection', $collection);
+	
+	      foreach ($collection->objects as $object) {
+	        $result['alma_ids'][] = $object->localId;
+	      }
+	    }
     }
   }
   catch (TingClientException $e) {
