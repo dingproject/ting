@@ -29,11 +29,6 @@ function ting_availability_menu() {
  * Implementation of hook_ting_add_js().
  */
 function ting_availability_ting_add_js($type) {
-  // $organisation = module_invoke_all('ding_library_get_organisation');
-  // if (count($organisation) > 0) {
-  //   drupal_add_js(array('ting_availability' => array('organisation' => $organisation)), 'setting');
-  // }
-
   $path = drupal_get_path('module', 'ting_availability') . '/js';
 
   switch ($type) {
@@ -55,37 +50,20 @@ function ting_availability_ting_add_js($type) {
  * Implementation of hook_requirements().
  */
 function ting_availability_requirements($phase) {
-  $ret = array();
+  $requrements = array();
 
   if ($phase == 'runtime') {
-    // Check whether any modules will report item availability.
-    $item_modules = module_implements('ting_availability_item');
-    $details_modules = module_implements('ting_availability_item_details');
-    $organisation_modules = module_implements('ding_library_get_organisation');
+    $reservation_provider = ding_provider_description('availability');
 
-    if (count(array_merge($item_modules, $details_modules, $organisation_modules)) == 0) {
-      // Not all hooks are supported. Report a warning.
-      $warning = array();
-      $warning['title'] = t('Ting availability');
-      $warning['severity'] = REQUIREMENT_WARNING;
-
-      $description = '';
-      if (count($item_modules) == 0) {
-        $description .= t('No enabled modules support reporting item availability. ');
-      }
-      if (count($details_modules) == 0) {
-        $description .= t('No enabled modules support reporting item availability details. ');
-      }
-      if (count($organisation_modules) == 0) {
-        $description .= t('No enabled modules support reporting organisation structure. Holdings will not be displayed. ');
-      }
-      $warning['description'] = $description;
-
-      $ret[] = $warning;
-    }
+    $requrements['ding_availability'] = array(
+      'title' => t('Ding availability'),
+      'severity' => $reservation_provider ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
+      'value' => $reservation_provider,
+      'description' => $reservation_provider ? t('OK'): t('No reservation provider active.'),
+    );
   }
 
-  return $ret;
+  return $requrements;
 }
 
 /**
@@ -95,14 +73,11 @@ function ting_availability_requirements($phase) {
  *    Input string, one or more library system item IDs, comma-separated.
  */
 function ting_availability_item_page($input) {
-  $data = module_invoke_all('ting_availability_item', $input);
-
-  // Make sure we return an array if something goes wrong.
-  $data = (is_array($data)) ? $data : array();
+  $items = ding_provider_invoke('availability', 'items', explode(',', $provider_id));
 
   // We are returning JavaScript, so tell the browser.
   drupal_set_header('Content-Type: application/json; charset=utf-8');
-  echo json_encode($data);
+  echo json_encode($items);
   return;
 }
 
