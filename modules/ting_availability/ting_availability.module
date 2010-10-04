@@ -15,7 +15,7 @@ function ting_availability_menu() {
   );
 
   $items['ting/availability/item/%/details'] = array(
-    'title' => 'Get Alma details',
+    'title' => 'Get item availability details',
     'description' => 'Get all details for items. Availability, location, etc.',
     'page callback' => 'ting_availability_item_details_page',
     'page arguments' => array(3),
@@ -29,62 +29,62 @@ function ting_availability_menu() {
  * Implementation of hook_ting_add_js().
  */
 function ting_availability_ting_add_js($type) {
-	$organisation = module_invoke_all('ding_library_get_organisation');
-	if (count($organisation) > 0) {
-  	drupal_add_js(array('ting_availability' => array('organisation' => $organisation)), 'setting');
-	}
-	
+  // $organisation = module_invoke_all('ding_library_get_organisation');
+  // if (count($organisation) > 0) {
+  //   drupal_add_js(array('ting_availability' => array('organisation' => $organisation)), 'setting');
+  // }
+
   $path = drupal_get_path('module', 'ting_availability') . '/js';
-  
+
   switch ($type) {
-		case 'ting_object_view':
+    case 'ting_object_view':
       drupal_add_js($path . '/ting.availability.js', 'module', 'footer', TRUE);
       drupal_add_js($path . '/ting.availability.ting_object_view.js', 'module', 'footer', TRUE);
-			break;
-		case 'ting_collection_view':
+      break;
+    case 'ting_collection_view':
       drupal_add_js($path . '/ting.availability.js', 'module', 'footer', TRUE);
       drupal_add_js('$(function(){Drupal.tingAvailability.get_details(Drupal.tingAvailability.updateStatus)});', 'inline', 'footer', TRUE);
-			break;
-  	case 'ting_search_view':
+      break;
+    case 'ting_search_view':
       drupal_add_js($path . '/ting.availability.js', 'module', 'footer', TRUE);
-			break;
-	}
+      break;
+  }
 }
 
 /**
  * Implementation of hook_requirements().
  */
 function ting_availability_requirements($phase) {
-	$ret = array();
-	
+  $ret = array();
+
   if ($phase == 'runtime') {
-  	// Check whether any modules will report item availability.
-  	$item_modules = module_implements('ting_availability_item');
-  	$details_modules = module_implements('ting_availability_item_details');
+    // Check whether any modules will report item availability.
+    $item_modules = module_implements('ting_availability_item');
+    $details_modules = module_implements('ting_availability_item_details');
     $organisation_modules = module_implements('ding_library_get_organisation');
-  	
-  	if (count(array_merge($item_modules, $details_modules, $organisation_modules)) == 0) {
-  		// Not all hooks are supported. Report a warning.
-  		$warning = array();
-  		$warning['title'] = t('Ting availability');
-  		$warning['severity'] = REQUIREMENT_WARNING;
-  		
-  		$description = '';
-  		if (count($item_modules) == 0) {
-  			$description .= t('No enabled modules support reporting item availability. ');
-  		}
-  		if (count($details_modules) == 0) {
+
+    if (count(array_merge($item_modules, $details_modules, $organisation_modules)) == 0) {
+      // Not all hooks are supported. Report a warning.
+      $warning = array();
+      $warning['title'] = t('Ting availability');
+      $warning['severity'] = REQUIREMENT_WARNING;
+
+      $description = '';
+      if (count($item_modules) == 0) {
+        $description .= t('No enabled modules support reporting item availability. ');
+      }
+      if (count($details_modules) == 0) {
         $description .= t('No enabled modules support reporting item availability details. ');
-  		}
+      }
       if (count($organisation_modules) == 0) {
         $description .= t('No enabled modules support reporting organisation structure. Holdings will not be displayed. ');
       }
-  		$warning['description'] = $description;
+      $warning['description'] = $description;
 
-  		$ret[] = $warning;
-  	}
+      $ret[] = $warning;
+    }
   }
-  
+
   return $ret;
 }
 
@@ -96,9 +96,9 @@ function ting_availability_requirements($phase) {
  */
 function ting_availability_item_page($input) {
   $data = module_invoke_all('ting_availability_item', $input);
-  
+
   // Make sure we return an array if something goes wrong.
-  $data = (is_array($data)) ? $data : array();  
+  $data = (is_array($data)) ? $data : array();
 
   // We are returning JavaScript, so tell the browser.
   drupal_set_header('Content-Type: application/json; charset=utf-8');
@@ -112,11 +112,12 @@ function ting_availability_item_page($input) {
  * @param string $input
  *    Input string, one or more library system item IDs, comma-separated.
  */
-function ting_availability_item_details_page($input) {
-  $data = module_invoke_all('ting_availability_item_details', $input);
+function ting_availability_item_details_page($provider_id) {
+  // $data = module_invoke_all('ting_availability_item_details', $provider_id);
 
-  $items = (!empty($data['records'])) ? $data['records'] : array();
+  // $items = (!empty($data['records'])) ? $data['records'] : array();
 
+  $items = ding_provider_invoke('availability', 'details', explode(',', $provider_id));
   // We are returning JavaScript, so tell the browser.
   drupal_set_header('Content-Type: application/json; charset=utf-8');
   echo json_encode($items);

@@ -71,13 +71,13 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
       .find('ul.ding-cart-buttons > li > a')
         .addClass('disabled');
     }
-    else if (itemData.available_count > 0) {
+    else if (itemData.available) {
       $item.find('.ting-status')
         .addClass('available')
         .removeClass('waiting')
         .text(Drupal.t('available'));
     }
-    else if (itemData.reservation === 0) {
+    else if (itemData.reservable) {
       $item.find('.ting-status')
         .addClass('unavailable')
         .removeClass('waiting')
@@ -92,38 +92,3 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
     }
   });
 };
-
-/**
- * Format a holding as readable text.
- */
-Drupal.tingAvailability.formatHolding = function (item, holding) {
-  if (!Drupal.settings.ting_availability.organisation) {
-    return '';
-  }
-	
-  var locations = [Drupal.settings.ting_availability.organisation.branches[holding.branch_id]], output;
-
-  // Take each location type ID and look it up in our department data.
-  // If a match is found, add it to the locations array.
-  $.each(['department', 'location', 'sublocation', 'collection'], function (index, location_type) {
-    var location_id = holding[location_type + '_id'], location_name;
-
-    if (location_id) {
-      location_name = Drupal.settings.ting_availability.organisation[location_type + 's'][location_id];
-    }
-
-    if (location_name) {
-      locations.push(location_name);
-    }
-  });
-
-  output = locations.join(' → ');
-
-  // Shelf mark includes a '>', so we add it after joining with arrows.
-  if (holding.shelf_mark) {
-    output += (holding.shelf_mark);
-  }
-
-  return output;
-};
-

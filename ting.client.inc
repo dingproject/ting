@@ -33,7 +33,6 @@ foreach ($includes as $include) {
  */
 function ting_get_object_by_id($object_id, $enrich = FALSE) {
   static $cache = array();
-
   if (isset($cache[$object_id])) {
     $object = $cache[$object_id];
   }
@@ -136,7 +135,7 @@ function ting_search_sort_options() {
 }
 
 /**
- * Performs a search agains the 
+ * Performs a search agains the
  *
  * @param string $query
  *    The search query
@@ -160,7 +159,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
 	$request = ting_add_agency($request);
 	$request->setStart($resultsPerPage * ($page - 1) + 1);
 	$request->setNumResults($resultsPerPage);
-  
+
 	$request = (!isset($options['supportingTypes']) || !$options['supportingTypes']) ? ting_remove_supporting_types($request) : $request;
 	$request->setFacets((isset($options['facets'])) ? $options['facets'] : array('facet.subject', 'facet.creator', 'facet.type', 'facet.category', 'facet.language', 'facet.date', 'facet.acSource'));
 	$request->setNumFacets((isset($options['numFacets'])) ? $options['numFacets'] : ((sizeof($request->getFacets()) == 0) ? 0 : 10));
@@ -221,9 +220,9 @@ function ting_get_object_recommendations($isbn, $numResults = 10) {
 
 /**
  * Perform a request against Ting and perform error handling if necessary
- * 
+ *
  * @param $request The request
- * @return mixed Result of the request or false if an error occurs 
+ * @return mixed Result of the request or false if an error occurs
  */
 function ting_execute($request) {
 	try {
@@ -235,8 +234,8 @@ function ting_execute($request) {
 }
 
 /**
- * Retrieves an initialized Ting client with appropriate request adapter and logger 
- * 
+ * Retrieves an initialized Ting client with appropriate request adapter and logger
+ *
  * @return TingClient
  */
 function ting_get_client() {
@@ -253,7 +252,7 @@ function ting_get_client() {
 
 /**
  * Retrieves an initialized Ting client request factory.
- * 
+ *
  * @return TingClientRequestFactory
  */
 function ting_get_request_factory() {
@@ -267,7 +266,7 @@ function ting_get_request_factory() {
 														'collection' => 'ting_search_url',
 														'spell' => 'ting_spell_url',
 														'recommendation' => 'ting_recommendation_server');
-			
+
 		$urls = array();
 		foreach ($urlVariables as $name => $setting)
 		{
@@ -298,11 +297,11 @@ function ting_add_collection_info(TingClientObjectCollection $collection) {
     }
   }
   $collection->types = array_unique($types);
-  
+
   asort($subject_count);
   // All subjects from all objects with the most common ones first.
   $collection->subjects = array_keys($subject_count);
-  
+
   $common_object = $collection->objects[0];
 
   $collection->id = $common_object->id;
@@ -311,7 +310,7 @@ function ting_add_collection_info(TingClientObjectCollection $collection) {
   $collection->creators = $common_object->creators;
   $collection->creators_string = $common_object->creators_string;
   $collection->date = $common_object->date;
-  
+
   $collection->url = url('ting/collection/' . $collection->id, array('absolute' => true));
 
   return $collection;
@@ -371,7 +370,7 @@ function ting_add_additional_info($collection) {
       $faust_numbers[] = $object->localId;
     }
   }
-	
+
   if (sizeof($faust_numbers) > 0) {
     foreach (ting_get_additional_info($faust_numbers) as $faust_number => $ai) {
       foreach ($objects as &$object) {
@@ -448,7 +447,7 @@ function ting_remove_supporting_types(TingClientSearchRequest $request) {
 	{
 		$type = 'facet.type='.$type;
 	}
-	
+
 	$request->setQuery($request->getQuery().' NOT ('.implode(' OR ', $supportingTypes).')');
 	return $request;
 }

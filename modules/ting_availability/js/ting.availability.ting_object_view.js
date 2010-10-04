@@ -25,9 +25,9 @@ Drupal.behaviors.tingAvailabilityTingObjectView = function () {
           // This because available_count is really the number available
           // for reservation, and doesn't count things that can be
           // loaned, but not reserved (14 day loans, etc.).
-          if (holdingData.total_count > holdingData.checked_out_count) {
-            container.append('<li>' + Drupal.tingAvailability.formatHolding(itemData, holdingData)  + '</li>');
-          }
+          // if (holdingData.total_count > holdingData.checked_out_count) {
+            container.append('<li>' + holdingData  + '</li>');
+            //}
         });
         // If holding is empty remove container
         if (itemData.holdings.length === 0) {
