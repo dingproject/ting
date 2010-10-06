@@ -300,19 +300,24 @@ function template_preprocess_ting_collection(&$variables) {
 	  	
 		  // Get the corresponding entry in the search result 
 		  $result = ting_do_search($query, $entry, 1, array('facets' => array()));
-	    
+
 		  //Determine the order of object types based on the order of objects
 		  //in the search result
+		  //Add types and objects from the sorting search result (if any) first and original request last.
+		  $collections = array($collection);
 		  if ($search_collection = array_shift($result->collections)) {
-		  	foreach ($search_collection->objects as $object) {
-		  		$sorted[$object->type] = array();
-		  	}
+		  	array_unshift($collections, $search_collection);
 		  }
 		  
-		  //Put all objects from original collection into the ordered object type buckets.
-		  //Types not referenced in the search result placed last
-		  foreach ($collection->objects as $object) {
-		  	$sorted[$object->type][] = $object;
+		  foreach ($collections as $collection) {
+		  	foreach ($collection->objects as $object) {
+		  		if (!isset($sorted[$object->type])) {
+		  			$sorted[$object->type] = array();
+		  		}
+		  		//Some objects appear in both collections and are thus added twice. 
+		  		//In this case the existing value is overriden but the order remains. 
+		  		$sorted[$object->type][$object->id] = $object;
+		  	}
 		  }
   	}
   }
