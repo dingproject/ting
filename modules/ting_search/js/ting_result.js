@@ -14,10 +14,10 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
     var $element = $(element);
     $element.find('ul,ol').html(result.result_html);
     Drupal.tingSearch.updateSummary($('#ting-search-summary'), result);
-    
+
     // Append information the current query and where the current
     // result appears in this to each link
-    // Build a string containing the query elements: Keys and selected facets 
+    // Build a string containing the query elements: Keys and selected facets
     var vars = Drupal.getAnchorVars();
     vars.query = Drupal.settings.tingSearch.keys;
     var var_string = '';
@@ -26,29 +26,29 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
         var_string += encodeURIComponent(key + ':' + vars[key] + ';');
       }
     }
-		
+
     var entries = $element.find('.record a.title');
     entries.each(function(i) {
       // Calculate where the current item appears in the result
       var page = (vars.page) ? vars.page : 1;
       var entry = (entries.length * (page - 1)) + (i + 1);
       var entry_string = encodeURIComponent('entry:'+entry);
-      
-      //Append query and entry information to the 
-      $(this).attr('href', $(this).attr('href')+'/'+var_string+entry_string);			
+
+      //Append query and entry information to the
+      $(this).attr('href', $(this).attr('href')+'/'+var_string+entry_string);
 		});
-		
-    // If possible, look up availability from Alma.
-    if (Drupal.hasOwnProperty('almaAvailability')) {
-      Drupal.almaAvailability.id_list = result.alma_ids;
-      Drupal.almaAvailability.get_availability(function (data, textStatus) {
+
+    // If possible, look up availability from backend provider.
+    if (Drupal.hasOwnProperty('tingAvailability')) {
+      Drupal.tingAvailability.id_list = result.local_ids;
+      Drupal.tingAvailability.get_availability(function (data, textStatus) {
         if (!data) { return; }
         var $list = $element.find('ul.ting-search-collection-types');
 
-        // For each Alma ID, find the associated type indicators and set
-        // their status according to the data from Alma.
-        $.each(data, function (almaID, available) {
-          var $type = $list.find('.ting-object-' + almaID);
+        // For each ID, find the associated type indicators and set
+        // their status according to the data from the provider.
+        $.each(data, function (providerID, available) {
+          var $type = $list.find('.ting-object-' + providerID);
           // If it already has the available class, don't touch it.
           if (!$type.hasClass('available')) {
             if (available) {
