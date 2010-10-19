@@ -53,13 +53,13 @@ function ting_availability_requirements($phase) {
   $requrements = array();
 
   if ($phase == 'runtime') {
-    $reservation_provider = ding_provider_description('availability');
+    $availability_provider = ding_provider_description('availability');
 
     $requrements['ding_availability'] = array(
       'title' => t('Ding availability'),
-      'severity' => $reservation_provider ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
-      'value' => $reservation_provider,
-      'description' => $reservation_provider ? t('OK'): t('No reservation provider active.'),
+      'severity' => $availability_provider ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
+      'value' => $availability_provider,
+      'description' => $availability_provider ? t('OK'): t('No availability provider active.'),
     );
   }
 
@@ -88,10 +88,6 @@ function ting_availability_item_page($provider_id) {
  *    Input string, one or more library system item IDs, comma-separated.
  */
 function ting_availability_item_details_page($provider_id) {
-  // $data = module_invoke_all('ting_availability_item_details', $provider_id);
-
-  // $items = (!empty($data['records'])) ? $data['records'] : array();
-
   $items = ding_provider_invoke('availability', 'details', explode(',', $provider_id));
   // We are returning JavaScript, so tell the browser.
   drupal_set_header('Content-Type: application/json; charset=utf-8');

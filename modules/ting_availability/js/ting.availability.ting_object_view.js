@@ -19,15 +19,7 @@ Drupal.behaviors.tingAvailabilityTingObjectView = function () {
 
         // Find holdings, unique by library name.
         $.each(itemData.holdings, function (holdingIndex, holdingData) {
-          // If the total count for the library is bigger than the
-          // number that library has checked out, it is interpreted as
-          // if the item is available.
-          // This because available_count is really the number available
-          // for reservation, and doesn't count things that can be
-          // loaned, but not reserved (14 day loans, etc.).
-          // if (holdingData.total_count > holdingData.checked_out_count) {
             container.append('<li>' + holdingData  + '</li>');
-            //}
         });
         // If holding is empty remove container
         if (itemData.holdings.length === 0) {
