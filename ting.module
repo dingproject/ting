@@ -19,7 +19,7 @@ function ting_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'ting_search.pages.inc',
   );
-  
+
   $items['admin/settings/ting'] = array(
     'title' => 'Ting search',
     'page callback' => 'drupal_get_form',
@@ -35,6 +35,29 @@ function ting_menu() {
   );
 
   return $items;
+}
+
+/**
+ * Menu loader function.
+ */
+function ting_id_load($id) {
+  module_load_include('client.inc', 'ting');
+  return ting_get_object_by_id($id);
+}
+
+/**
+ * Menu loader function.
+ */
+function ting_local_id_load($id) {
+  module_load_include('client.inc', 'ting');
+  return ting_get_object_by_local_id($id);
+}
+
+/**
+ * Add additional information to a ting object.
+ */
+function ting_enrich_object(&$object) {
+  $object = array_shift(ting_add_additional_info(array($object)));
 }
 
 /**
@@ -89,17 +112,17 @@ function ting_ctools_plugin_directory($module, $plugin) {
  */
 function ting_imagecache_default_presets() {
   $presets = array();
-  
+
   $presets['180_x'] = array (
     'presetname' => '180_x',
-    'actions' => 
+    'actions' =>
     array (
-      0 => 
+      0 =>
       array (
         'weight' => '0',
         'module' => 'imagecache',
         'action' => 'imagecache_scale',
-        'data' => 
+        'data' =>
         array (
           'width' => '180',
           'height' => '',
@@ -108,17 +131,17 @@ function ting_imagecache_default_presets() {
       ),
     ),
   );
-  
+
   $presets['80_x'] = array (
     'presetname' => '80_x',
-    'actions' => 
+    'actions' =>
     array (
-      0 => 
+      0 =>
       array (
         'weight' => '0',
         'module' => 'imagecache',
         'action' => 'imagecache_scale',
-        'data' => 
+        'data' =>
         array (
           'width' => '80',
           'height' => '',
@@ -127,7 +150,7 @@ function ting_imagecache_default_presets() {
       ),
     )
   );
-  
+
   return $presets;
 }
 
@@ -159,29 +182,29 @@ function template_preprocess_ting_collection(&$variables) {
   foreach ($collection->objects as $object) {
     $variables['buttons'][$object->id] = module_invoke_all('ting_object_buttons', $object);
   }
-  
+
   $sorted = array();
-  
+
   // If we know what query lead to the collection then we can use this for sorting
   if ($query_args = $variables['query_args']) {
     if ($entry = $query_args['entry']) {
       // Build the query for the collection in the search result
       $query = '';
-  
+
       //Wrap base query
       $query .= (isset($query_args['query'])) ? '('.$query_args['query'].')' : '';
-    
+
       //Extend query with selected facets
       if (isset($query_args['facets'])) {
         foreach ($query_args['facets'] as $name => $value) {
           $facetArray[] = $name.'="'.$value.'"';
-        }   
+        }
         $query .= ' AND '.implode(' AND ', $facetArray);
       }
-      
-      // Get the corresponding entry in the search result 
+
+      // Get the corresponding entry in the search result
       $result = ting_do_search($query, $entry, 1, array('facets' => array()));
-      
+
       //Determine the order of object types based on the order of objects
       //in the search result
       if ($search_collection = array_shift($result->collections)) {
@@ -189,7 +212,7 @@ function template_preprocess_ting_collection(&$variables) {
           $sorted[$object->type] = array();
         }
       }
-      
+
       //Put all objects from original collection into the ordered object type buckets.
       //Types not referenced in the search result placed last
       foreach ($collection->objects as $object) {
@@ -197,7 +220,7 @@ function template_preprocess_ting_collection(&$variables) {
       }
     }
   }
-  
+
   //Default to standard sorting
   if (sizeof($sorted) == 0) {
     foreach ($collection->objects as $object) {
@@ -226,7 +249,7 @@ function template_preprocess_ting_object(&$variables) {
  */
 function _ting_search_parse_query_args($query_string) {
   $query_args = array();
-  
+
   $query_elements = explode(';', $query_string);
   foreach ($query_elements as &$e) {
     $e = explode(':', $e, 2);
@@ -238,6 +261,6 @@ function _ting_search_parse_query_args($query_string) {
       $query_args[$e[0]] = $e[1];
     }
   }
-  
+
   return $query_args;
 }
