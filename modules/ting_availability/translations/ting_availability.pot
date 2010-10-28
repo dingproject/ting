@@ -1,0 +1,78 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  js/ting.availability.js: n/a
+#  ting_availability.info: n/a
+#  ting_availability.module: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2010-10-28 13:16+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: js/ting.availability.js:0
+msgid "not reservable"
+msgstr ""
+
+#: js/ting.availability.js:0
+msgid "available"
+msgstr ""
+
+#: js/ting.availability.js:0
+msgid "unavailable"
+msgstr ""
+
+#: js/ting.availability.js:0
+msgid "reserved"
+msgstr ""
+
+#: ting_availability.info:0
+msgid "Ting availability"
+msgstr ""
+
+#: ting_availability.info:0
+msgid "Displays availability information for Ting objects and collections if the library system supports this"
+msgstr ""
+
+#: ting_availability.info:0
+msgid "Ding!"
+msgstr ""
+
+#: ting_availability.module:59
+msgid "Ding availability"
+msgstr ""
+
+#: ting_availability.module:62
+msgid "OK"
+msgstr ""
+
+#: ting_availability.module:62
+msgid "No availability provider active."
+msgstr ""
+
+#: ting_availability.module:10
+msgid "Get item availability"
+msgstr ""
+
+#: ting_availability.module:11
+msgid "Get item availability for items."
+msgstr ""
+
+#: ting_availability.module:18
+msgid "Get item availability details"
+msgstr ""
+
+#: ting_availability.module:19
+msgid "Get all details for items. Availability, location, etc."
+msgstr ""
+

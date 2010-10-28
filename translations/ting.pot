@@ -1,0 +1,442 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  ting_collection.tpl.php: n/a
+#  ting_object.tpl.php: n/a
+#  plugins/content_types/object_view.inc: n/a
+#  plugins/content_types/periodical_view.inc: n/a
+#  plugins/access/ting_object_type.inc: n/a
+#  plugins/contexts/ting_object.inc: n/a
+#  plugins/arguments/object_id.inc: n/a
+#  plugins/content_types/collection_view.inc: n/a
+#  plugins/contexts/ting_collection.inc: n/a
+#  plugins/arguments/collection_id.inc: n/a
+#  js/ting.buttons.js: n/a
+#  includes/ting.admin.inc: n/a
+#  ting.module: n/a
+#  ting.info: n/a
+#  ting.client.inc: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2010-10-28 13:16+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ting_collection.tpl.php:30;93 ting_object.tpl.php:59
+msgid "by"
+msgstr ""
+
+#: ting_collection.tpl.php:45
+msgid "Terms:"
+msgstr ""
+
+#: ting_collection.tpl.php:57
+msgid "Go to material:"
+msgstr ""
+
+#: ting_collection.tpl.php:96 ting_object.tpl.php:102
+msgid "Language"
+msgstr ""
+
+#: ting_collection.tpl.php:104
+msgid "More information"
+msgstr ""
+
+#: ting_object.tpl.php:73;226
+msgid "waiting for data"
+msgstr ""
+
+#: ting_object.tpl.php:92
+msgid "Type"
+msgstr ""
+
+#: ting_object.tpl.php:94
+msgid "Format"
+msgstr ""
+
+#: ting_object.tpl.php:97
+msgid "Available in"
+msgstr ""
+
+#: ting_object.tpl.php:105
+msgid "Speech"
+msgstr ""
+
+#: ting_object.tpl.php:108
+msgid "Subtitles"
+msgstr ""
+
+#: ting_object.tpl.php:112
+msgid "Genre"
+msgstr ""
+
+#: ting_object.tpl.php:115
+msgid "Subjects"
+msgstr ""
+
+#: ting_object.tpl.php:118
+msgid "Classification"
+msgstr ""
+
+#: ting_object.tpl.php:125
+msgid "Reader"
+msgstr ""
+
+#: ting_object.tpl.php:128
+msgid "Actor"
+msgstr ""
+
+#: ting_object.tpl.php:131
+msgid "Musician"
+msgstr ""
+
+#: ting_object.tpl.php:135
+msgid "Contains"
+msgstr ""
+
+#: ting_object.tpl.php:139
+msgid "Referenced by"
+msgstr ""
+
+#: ting_object.tpl.php:145
+msgid "Description"
+msgstr ""
+
+#: ting_object.tpl.php:150
+msgid "Original title"
+msgstr ""
+
+#: ting_object.tpl.php:153
+msgid "Previous title"
+msgstr ""
+
+#: ting_object.tpl.php:156
+msgid "Later title"
+msgstr ""
+
+#: ting_object.tpl.php:160
+msgid "ISBN no."
+msgstr ""
+
+#: ting_object.tpl.php:169
+msgid "Host publication"
+msgstr ""
+
+#: ting_object.tpl.php:175
+msgid "Version"
+msgstr ""
+
+#: ting_object.tpl.php:181
+msgid "Extent"
+msgstr ""
+
+#: ting_object.tpl.php:184
+msgid "Publisher"
+msgstr ""
+
+#: ting_object.tpl.php:187
+msgid "Rights"
+msgstr ""
+
+#: ting_object.tpl.php:197
+msgid "Also available as: "
+msgstr ""
+
+#: plugins/content_types/object_view.inc:17
+msgid "Ting object view"
+msgstr ""
+
+#: plugins/content_types/object_view.inc:19
+msgid "Provides the full display of a Ting object."
+msgstr ""
+
+#: plugins/content_types/object_view.inc:20 plugins/content_types/periodical_view.inc:20 plugins/access/ting_object_type.inc:21 plugins/contexts/ting_object.inc:17 plugins/arguments/object_id.inc:15
+msgid "Ting object"
+msgstr ""
+
+#: plugins/content_types/object_view.inc:21 plugins/content_types/collection_view.inc:23 plugins/content_types/periodical_view.inc:21
+msgid "Ting"
+msgstr ""
+
+#: plugins/content_types/object_view.inc:46
+msgid "“@s”: Ting object view"
+msgstr ""
+
+#: plugins/content_types/collection_view.inc:17
+msgid "Ting collection view"
+msgstr ""
+
+#: plugins/content_types/collection_view.inc:19
+msgid "Provides the full display of a Ting collection."
+msgstr ""
+
+#: plugins/content_types/collection_view.inc:20 plugins/contexts/ting_collection.inc:16 plugins/arguments/collection_id.inc:15
+msgid "Ting collection"
+msgstr ""
+
+#: plugins/content_types/collection_view.inc:21
+msgid "Query arguments"
+msgstr ""
+
+#: plugins/content_types/collection_view.inc:57
+msgid "“@s1, @s2”: Ting collection view"
+msgstr ""
+
+#: plugins/content_types/periodical_view.inc:17
+msgid "Ting periodical view"
+msgstr ""
+
+#: plugins/content_types/periodical_view.inc:19
+msgid "Provides the full display of a Ting object of the periodical type."
+msgstr ""
+
+#: plugins/content_types/periodical_view.inc:46
+msgid "“@s”: Ting periodical view"
+msgstr ""
+
+#: plugins/access/ting_object_type.inc:15;51
+msgid "Ting object type"
+msgstr ""
+
+#: plugins/access/ting_object_type.inc:16
+msgid "Control access by Ting object type."
+msgstr ""
+
+#: plugins/access/ting_object_type.inc:54
+msgid "Periodical magazine"
+msgstr ""
+
+#: plugins/access/ting_object_type.inc:55
+msgid "Periodical"
+msgstr ""
+
+#: plugins/access/ting_object_type.inc:56
+msgid "Yearbook"
+msgstr ""
+
+#: plugins/access/ting_object_type.inc:59
+msgid "Pick the allowed object types."
+msgstr ""
+
+#: plugins/access/ting_object_type.inc:68
+msgid "@identifier must be @type"
+msgstr ""
+
+#: plugins/contexts/ting_object.inc:18
+msgid "An object from the Ting database – books, CD-ROMs, magazines, etc."
+msgstr ""
+
+#: plugins/contexts/ting_object.inc:27
+msgid "Enter the object ID for this context"
+msgstr ""
+
+#: plugins/contexts/ting_object.inc:56 plugins/contexts/ting_collection.inc:53
+msgid "@title by @author"
+msgstr ""
+
+#: plugins/contexts/ting_object.inc:79
+msgid "Object title and author names"
+msgstr ""
+
+#: plugins/contexts/ting_collection.inc:17
+msgid "An collection of objects from the Ting database."
+msgstr ""
+
+#: plugins/contexts/ting_collection.inc:26
+msgid "Enter the collection ID for this context"
+msgstr ""
+
+#: plugins/contexts/ting_collection.inc:73
+msgid "Collection title and author names"
+msgstr ""
+
+#: plugins/arguments/object_id.inc:17
+msgid "Creates a Ting object context from a object ID argument."
+msgstr ""
+
+#: plugins/arguments/object_id.inc:21
+msgid "Enter the object ID for this argument"
+msgstr ""
+
+#: plugins/arguments/collection_id.inc:17
+msgid "Creates a Ting collection context from a collection ID argument."
+msgstr ""
+
+#: plugins/arguments/collection_id.inc:21
+msgid "Enter the collection ID for this argument"
+msgstr ""
+
+#: js/ting.buttons.js:0
+msgid "Close"
+msgstr ""
+
+#: js/ting.buttons.js:0
+msgid "An error occurred."
+msgstr ""
+
+#: includes/ting.admin.inc:12
+msgid "Ting service settings"
+msgstr ""
+
+#: includes/ting.admin.inc:17
+msgid "Library code"
+msgstr ""
+
+#: includes/ting.admin.inc:18
+msgid "The 6-digit code representing the library organization"
+msgstr ""
+
+#: includes/ting.admin.inc:23
+msgid "Search service URL"
+msgstr ""
+
+#: includes/ting.admin.inc:24
+msgid "URL to the Ting search webservice, e.g. http://opensearch.addi.dk/0.14/"
+msgstr ""
+
+#: includes/ting.admin.inc:30
+msgid "Scan service URL"
+msgstr ""
+
+#: includes/ting.admin.inc:31
+msgid "URL to the Ting scan webservice, e.g. http://openscan.addi.dk/1.5/"
+msgstr ""
+
+#: includes/ting.admin.inc:37
+msgid "Spell service URL"
+msgstr ""
+
+#: includes/ting.admin.inc:38
+msgid "URL to the Ting spell webservice, e.g. http://openspell.addi.dk/1.2/"
+msgstr ""
+
+#: includes/ting.admin.inc:44
+msgid "Recommendation service URL"
+msgstr ""
+
+#: includes/ting.admin.inc:45
+msgid "URL to the Ting recommendation webservice (Andre der har lånt...) , e.g. http://openadhl.addi.dk/1.1/"
+msgstr ""
+
+#: includes/ting.admin.inc:51;91
+msgid "Enable logging"
+msgstr ""
+
+#: includes/ting.admin.inc:57
+msgid "Additional Information settings"
+msgstr ""
+
+#: includes/ting.admin.inc:58
+msgid "The Additional Information service is used to retrieve cover images and other information about objects. <a href=\"http://www.danbib.dk/index.php?doc=forsideservice\">More information about the service (in Danish)</a>"
+msgstr ""
+
+#: includes/ting.admin.inc:63
+msgid "Service URL"
+msgstr ""
+
+#: includes/ting.admin.inc:64
+msgid "URL to the Additional Information webservice, e.g. http://forside.addi.dk/addi.wsdl"
+msgstr ""
+
+#: includes/ting.admin.inc:70
+msgid "Username"
+msgstr ""
+
+#: includes/ting.admin.inc:71
+msgid "Username for the Additional information webservice"
+msgstr ""
+
+#: includes/ting.admin.inc:77
+msgid "Group"
+msgstr ""
+
+#: includes/ting.admin.inc:78
+msgid "User group for the Additional information webservice"
+msgstr ""
+
+#: includes/ting.admin.inc:84
+msgid "Password"
+msgstr ""
+
+#: includes/ting.admin.inc:85
+msgid "Password for the Additional information webservice"
+msgstr ""
+
+#: includes/ting.admin.inc:97
+msgid "Proxy service"
+msgstr ""
+
+#: includes/ting.admin.inc:98
+msgid "Restricted-access resources referenced by Ting may be accessed through the library's proxy server"
+msgstr ""
+
+#: includes/ting.admin.inc:105
+msgid "E.g. <em>http://proxy.example.com/?url=</em>."
+msgstr ""
+
+#: includes/ting.admin.inc:113
+msgid "Enter one hostname per line, e.g. <em>magazine.example.com</em>. Do not include the <em>http://</em> prefix."
+msgstr ""
+
+#: ting.module:16
+msgid "Redirect to object based on local ID (links from bibliotek.dk)."
+msgstr ""
+
+#: ting.module:24
+msgid "Ting search"
+msgstr ""
+
+#: ting.module:33
+msgid "Ting access"
+msgstr ""
+
+#: ting.info:0
+msgid "Ting integration"
+msgstr ""
+
+#: ting.info:0
+msgid "Integrates Drupal with the Ting search system."
+msgstr ""
+
+#: ting.info:0
+msgid "Ding!"
+msgstr ""
+
+#: ting.client.inc:127
+msgid "Relevance"
+msgstr ""
+
+#: ting.client.inc:128
+msgid "Title – A → Z"
+msgstr ""
+
+#: ting.client.inc:129
+msgid "Title – Z → A"
+msgstr ""
+
+#: ting.client.inc:130
+msgid "Author – A → Z"
+msgstr ""
+
+#: ting.client.inc:131
+msgid "Author – Z → A"
+msgstr ""
+
+#: ting.client.inc:132
+msgid "Year of publication – newest first"
+msgstr ""
+
+#: ting.client.inc:133
+msgid "Year of publication – oldest first"
+msgstr ""
+
