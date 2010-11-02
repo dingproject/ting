@@ -3,18 +3,20 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
-#  ting_result_pager.tpl.php: n/a
-#  ting_search_collection.tpl.php: n/a
+#  ting_result.tpl.php: n/a
 #  ting_search_result_page.tpl.php: n/a
+#  ting_search.pages.inc: n/a
 #  ting_search.module: n/a
-#  ting_search.info: n/a
 #  plugins/content_types/result.inc: n/a
+#  ting_search.info: n/a
+#  ting_search_collection.tpl.php: n/a
+#  ting_result_pager.tpl.php: n/a
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2009-09-04 16:40+0200\n"
+"POT-Creation-Date: 2010-10-28 13:16+0200\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -23,23 +25,129 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ting_result_pager.tpl.php:2
-msgid "Previous"
+#: ting_result.tpl.php:4
+msgid "Sorted by"
 msgstr ""
 
-#: ting_result_pager.tpl.php:10
-msgid "Next"
+#: ting_result.tpl.php:12 ting_search_result_page.tpl.php:22
+msgid "Showing !firstResult-!lastResult of !count results"
 msgstr ""
 
-#: ting_search_collection.tpl.php:9
+#: ting_search.pages.inc:183
+msgid "“@title” search results feed"
+msgstr ""
+
+#: ting_search.pages.inc:195;267
+msgid "First @max of @count items found."
+msgstr ""
+
+#: ting_search.pages.inc:201;273
+msgid "No items found."
+msgstr ""
+
+#: ting_search.pages.inc:255
+msgid "“@title” content search results feed"
+msgstr ""
+
+#: ting_search.pages.inc:198;270
+msgid "One item found"
+msgid_plural "@count items found."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ting_search.module:103 plugins/content_types/result.inc:21
+msgid "Ting"
+msgstr ""
+
+#: ting_search.module:122
+msgid "Ting search box – for page header"
+msgstr ""
+
+#: ting_search.module:130;245
+msgid "Search"
+msgstr ""
+
+#: ting_search.module:206
+msgid "Show more facet terms"
+msgstr ""
+
+#: ting_search.module:207
+msgid "No results found"
+msgstr ""
+
+#: ting_search.module:208
+msgid "Sorry, we could not find any results for your search. Please try again with different keywords or ask a librarian."
+msgstr ""
+
+#: ting_search.module:237
+msgid "Enter your search terms here"
+msgstr ""
+
+#: ting_search.module:249
+msgid "For example:"
+msgstr ""
+
+#: ting_search.module:48 ting_search.info:0
+msgid "Ting search"
+msgstr ""
+
+#: ting_search.module:49
+msgid "Provides a redirect to the Panels search page, if applicable, otherwise 404."
+msgstr ""
+
+#: ting_search.module:57 plugins/content_types/result.inc:17
+msgid "Ting search results"
+msgstr ""
+
+#: ting_search.module:58
+msgid "Lists facets and search results from the Ting database as HTML or JSON."
+msgstr ""
+
+#: ting_search.module:66
+msgid "Content search AJAX page callback"
+msgstr ""
+
+#: ting_search.module:74;84
+msgid "Ting search feed"
+msgstr ""
+
+#: ting_search.module:75
+msgid "Provides an Atom feed of Ting search results"
+msgstr ""
+
+#: ting_search.module:85
+msgid "Provides an Atom feed of content search results"
+msgstr ""
+
+#: plugins/content_types/result.inc:19
+msgid "The search results for a search against the Ting system"
+msgstr ""
+
+#: plugins/content_types/result.inc:20
+msgid "Search keys"
+msgstr ""
+
+#: plugins/content_types/result.inc:35
+msgid "Search feed for “@keys”"
+msgstr ""
+
+#: plugins/content_types/result.inc:36
+msgid "Content search feed for “@keys”"
+msgstr ""
+
+#: plugins/content_types/result.inc:65
+msgid "“@s”: Ting search results"
+msgstr ""
+
+#: ting_search_collection.tpl.php:28
 msgid "By %creator_name%"
 msgstr ""
 
-#: ting_search_collection.tpl.php:14
+#: ting_search_collection.tpl.php:33
 msgid "(%publication_date%)"
 msgstr ""
 
-#: ting_search_collection.tpl.php:36
+#: ting_search_collection.tpl.php:48
 msgid "Subjects:"
 msgstr ""
 
@@ -51,72 +159,8 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-#: ting_search_result_page.tpl.php:23
+#: ting_search_result_page.tpl.php:33
 msgid "Searching"
-msgstr ""
-
-#: ting_search.module:113
-msgid "Ting search box – for page header"
-msgstr ""
-
-#: ting_search.module:119;228
-msgid "Search"
-msgstr ""
-
-#: ting_search.module:187
-msgid "Show more facet terms"
-msgstr ""
-
-#: ting_search.module:188
-msgid "No results found"
-msgstr ""
-
-#: ting_search.module:189
-msgid "Sorry, we could not find any results for your search. Please try again with different keywords or ask a librarian."
-msgstr ""
-
-#: ting_search.module:220
-msgid "Enter your search terms here"
-msgstr ""
-
-#: ting_search.module:232
-msgid "For example:"
-msgstr ""
-
-#: ting_search.module:57 ting_search.info:0
-msgid "Ting search"
-msgstr ""
-
-#: ting_search.module:58
-msgid "Provides a redirect to the Panels search page, if applicable, otherwise 404."
-msgstr ""
-
-#: ting_search.module:66 plugins/content_types/result.inc:16
-msgid "Ting search results"
-msgstr ""
-
-#: ting_search.module:67
-msgid "Lists facets and search results from the Ting database as HTML or JSON."
-msgstr ""
-
-#: ting_search.module:74
-msgid "Content search AJAX page callback"
-msgstr ""
-
-#: ting_search.module:81
-msgid "Display a collection of objects from the Ting database"
-msgstr ""
-
-#: ting_search.module:88
-msgid "Display a single object from the Ting database"
-msgstr ""
-
-#: ting_search.module:95
-msgid "Display a photo of a Ting object"
-msgstr ""
-
-#: ting_search.module:0
-msgid "ting_search"
 msgstr ""
 
 #: ting_search.info:0
@@ -127,19 +171,15 @@ msgstr ""
 msgid "Ding!"
 msgstr ""
 
-#: plugins/content_types/result.inc:18
-msgid "The search results for a search against the Ting system"
+#: ting_result_pager.tpl.php:10
+msgid "Previous"
 msgstr ""
 
-#: plugins/content_types/result.inc:19
-msgid "Search keys"
+#: ting_result_pager.tpl.php:11
+msgid "First"
 msgstr ""
 
-#: plugins/content_types/result.inc:20
-msgid "Ting"
-msgstr ""
-
-#: plugins/content_types/result.inc:51
-msgid "“@s”: Ting search results"
+#: ting_result_pager.tpl.php:12
+msgid "Next"
 msgstr ""
 

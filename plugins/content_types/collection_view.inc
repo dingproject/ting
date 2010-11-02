@@ -12,7 +12,7 @@
  * This is only required to make CTools know that we're providing 
  * multiple types here (since we have no single => TRUE in the array).
  */
-function ting_search_collection_view_ctools_content_types() {
+function ting_collection_view_ctools_content_types() {
   return array(
     'title' => t('Ting collection view'),
     'single' => TRUE,
@@ -27,7 +27,7 @@ function ting_search_collection_view_ctools_content_types() {
 /**
  * Return the pane contents.
  */
-function ting_search_collection_view_content_type_render($subtype, $conf, $panel_args, $context) {
+function ting_collection_view_content_type_render($subtype, $conf, $panel_args, $context) {
   $block = new stdClass();
   
   $collection = isset($context[0]->data) ? drupal_clone($context[0]->data) : NULL;
@@ -40,11 +40,10 @@ function ting_search_collection_view_content_type_render($subtype, $conf, $panel
     if (count($collection->objects) == 1 && arg(0) == 'ting' && arg(1) == 'collection') {
       return drupal_goto('ting/object/' . $collection->objects[0]->id);
     }
+    
+    // Allow modules to add javascript handlers to the view
+    module_invoke_all('ting_add_js', 'ting_collection_view');
 
-    // If alma.module is present, use its JavaScript behaviors.
-    if (function_exists('alma_add_js')) {
-      alma_add_js('ting_collection_view');
-    }
     $block->content = theme('ting_collection', $collection, $query_args);
   }
 
@@ -54,7 +53,7 @@ function ting_search_collection_view_content_type_render($subtype, $conf, $panel
 /**
  * Return the pane titles.
  */
-function ting_search_collection_view_content_type_admin_title($subtype, $conf, $context) {
+function ting_collection_view_content_type_admin_title($subtype, $conf, $context) {
   return t('“@s1, @s2”: Ting collection view', array('@s1' => $context[0]->identifier, '@s2' => $context[1]->identifier));
 }
 
@@ -64,7 +63,7 @@ function ting_search_collection_view_content_type_admin_title($subtype, $conf, $
  * We're not actually doing anything here, but we need to have this hook 
  * for this content type to work.
  */
-function ting_search_collection_view_content_type_edit_form(&$form, &$form_state) {
+function ting_collection_view_content_type_edit_form(&$form, &$form_state) {
   return $form;
 }
 

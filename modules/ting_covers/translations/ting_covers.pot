@@ -1,0 +1,82 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  ting_covers.info: n/a
+#  ting_covers.admin.inc: n/a
+#  ting_covers.module: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2010-10-28 13:16+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ting_covers.info:0
+msgid "Ting covers"
+msgstr ""
+
+#: ting_covers.info:0
+msgid "Displays covers for Ting objects and collections"
+msgstr ""
+
+#: ting_covers.info:0
+msgid "Ding!"
+msgstr ""
+
+#: ting_covers.admin.inc:14
+msgid "Default cover image"
+msgstr ""
+
+#: ting_covers.admin.inc:21
+msgid "Your current default image:"
+msgstr ""
+
+#: ting_covers.admin.inc:29
+msgid "You currently have no default image. You can upload one below."
+msgstr ""
+
+#: ting_covers.admin.inc:35
+msgid "Upload new"
+msgstr ""
+
+#: ting_covers.admin.inc:36
+msgid "Upload a new default image. This should be of a reasonable size, and preferably in PNG or JPEG format."
+msgstr ""
+
+#: ting_covers.admin.inc:41
+msgid "Upload"
+msgstr ""
+
+#: ting_covers.admin.inc:88
+msgid "Failed to write the uploaded file to ting/covers in the site’s files folder."
+msgstr ""
+
+#: ting_covers.admin.inc:92
+msgid "Error validating file upload. Please upload an image in PNG or JPEG format."
+msgstr ""
+
+#: ting_covers.module:16
+msgid "Display the cover for a Ting object"
+msgstr ""
+
+#: ting_covers.module:24
+msgid "Display the cover for a Ting collection"
+msgstr ""
+
+#: ting_covers.module:32
+msgid "Display the cover for a FAUST number"
+msgstr ""
+
+#: ting_covers.module:41
+msgid "Covers"
+msgstr ""
+

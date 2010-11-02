@@ -104,15 +104,17 @@
                 <?php print l(t('More information'), $tingClientObject->url, array('attributes' => array('class' => 'more-link')) ); ?>
   						</div>
               <?php if ($tingClientObject->type != 'Netdokument') { ?>
-                <div class="alma-status waiting">Afventer data…</div>
+                <div class="ting-status waiting">Afventer data…</div>
               <?php } ?>
   					</div>
 
           </div>
-
-					<div class="cart">
-            <?php print theme('alma_cart_reservation_buttons', $tingClientObject); ?>
-					</div>
+          
+          <?php if ($buttons[$tingClientObject->id]) :?>
+						<div class="ting-object-buttons">
+	            <?php print theme('item_list', $buttons[$tingClientObject->id], NULL, 'ul', array('class' => 'buttons')) ?>
+						</div>
+					<?php endif; ?>
 
 				</div>
 

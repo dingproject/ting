@@ -264,6 +264,72 @@ function ting_search_form_submit($form, &$form_state) {
 }
 
 /**
+<<<<<<< HEAD
+ * Return a sorted array of ting collection objects
+ */
+function template_preprocess_ting_collection(&$variables) {
+	// preprocess the collection object here!
+  // group by type and language
+  $collection = $variables["collection"];
+
+  $sorted = array();
+  
+  // If we know what query lead to the collection then we can use this for sorting
+  if ($query_args = $variables['query_args']) {
+  	if ($entry = $query_args['entry']) {
+	    // Build the query for the collection in the search result
+		  $query = '';
+	
+		  //Wrap base query
+		  $query .= (isset($query_args['query'])) ? '('.$query_args['query'].')' : '';
+		
+		  //Extend query with selected facets
+		  if (isset($query_args['facets'])) {
+		    foreach ($query_args['facets'] as $name => $value) {
+		      $facetArray[] = $name.'="'.$value.'"';
+		    }		
+		    $query .= ' AND '.implode(' AND ', $facetArray);
+		  }
+	  	
+		  // Get the corresponding entry in the search result 
+		  $result = ting_do_search($query, $entry, 1, array('facets' => array()));
+
+		  //Determine the order of object types based on the order of objects
+		  //in the search result
+		  //Add types and objects from the sorting search result (if any) first and original request last.
+		  $collections = array($collection);
+		  if ($search_collection = array_shift($result->collections)) {
+		  	array_unshift($collections, $search_collection);
+		  }
+		  
+		  foreach ($collections as $collection) {
+		  	foreach ($collection->objects as $object) {
+		  		if (!isset($sorted[$object->type])) {
+		  			$sorted[$object->type] = array();
+		  		}
+		  		//Some objects appear in both collections and are thus added twice. 
+		  		//In this case the existing value is overriden but the order remains. 
+		  		$sorted[$object->type][$object->id] = $object;
+		  	}
+		  }
+  	}
+  }
+  
+  //Default to standard sorting
+  if (sizeof($sorted) == 0) {
+	  foreach ($collection->objects as $object) {
+	    $sorted[$object->type][] = $object;
+	  }
+	  // By coincidence, the default type, "Bog", appears alphabetically first.
+	  ksort($sorted);
+  }
+
+  $variables["sorted_collection"] = $sorted;
+}
+
+/**
+=======
+>>>>>>> origin/v2.0.x
  * Template preprocessor for Ting collections in search results.
  */
 function template_preprocess_ting_search_collection(&$variables) {

@@ -70,12 +70,16 @@
               </div>
               <p><?php print check_plain($object->record['dcterms:abstract'][''][0]); ?></p>
               <?php if ($object->type != 'Netdokument') { ?>
-                <div class="alma-status waiting"><?php print t('waiting for data'); ?></div>
+                <div class="ting-status waiting"><?php print t('waiting for data'); ?></div>
               <?php } ?>
             </div>
-
-            <?php print theme('alma_cart_reservation_buttons', $object); ?>
-
+          
+	          <?php if ($buttons) :?>
+	            <div class="ting-object-buttons">
+	              <?php print theme('item_list', $buttons, NULL, 'ul', array('class' => 'buttons')) ?>
+	            </div>
+	          <?php endif; ?>
+          
           </div>
 
           <div class="object-information clearfix">
@@ -216,10 +220,10 @@
           ?>
 
           <?php if ($object->type[0] != 'Netdokument') { ?>
-            <div class="ding-box-wide alma-availability">
+            <div class="ding-box-wide ting-availability">
               <h3>Følgende biblioteker har "<?php print check_plain($object->title); ?>" hjemme:</h3>
               <ul class="library-list">
-                <li class="alma-status waiting even"><?php print t('waiting for data'); ?></li>
+                <li class="ting-status waiting even"><?php print t('waiting for data'); ?></li>
               </ul>
             </div>
           <?php } ?>

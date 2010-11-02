@@ -67,12 +67,23 @@ function ting_search_pages_ting_js() {
       'local_ids' => array(),
     );
 
+<<<<<<< HEAD
+    if (isset($searchResult->collections)) {
+	    foreach ($searchResult->collections as &$collection) {
+	      $result['result_html'] .= theme('ting_search_collection', $collection);
+	
+	      foreach ($collection->objects as $object) {
+	        $result['alma_ids'][] = $object->localId;
+	      }
+	    }
+=======
     foreach ($searchResult->collections as &$collection) {
       $result['result_html'] .= theme('ting_search_collection', $collection);
 
       foreach ($collection->objects as $object) {
         $result['local_ids'][] = $object->localId;
       }
+>>>>>>> origin/v2.0.x
     }
   }
   catch (TingClientException $e) {

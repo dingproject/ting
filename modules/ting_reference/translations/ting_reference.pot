@@ -1,0 +1,133 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  ting_reference_preview.tpl.php: n/a
+#  ting_reference.pages.inc: n/a
+#  ting_reference.module: n/a
+#  ting_reference.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2010-10-28 13:16+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ting_reference_preview.tpl.php:11
+msgid "By %creator_name%"
+msgstr ""
+
+#: ting_reference_preview.tpl.php:16
+msgid "(%publication_date%)"
+msgstr ""
+
+#: ting_reference_preview.tpl.php:21
+msgid "Material types:"
+msgstr ""
+
+#: ting_reference_preview.tpl.php:34
+msgid "Subjects:"
+msgstr ""
+
+#: ting_reference.pages.inc:18
+msgid "!author: !title (!manifestations)"
+msgstr ""
+
+#: ting_reference.pages.inc:46
+msgid "!author: !title (!type, !year, !id)"
+msgstr ""
+
+#: ting_reference.pages.inc:21
+msgid "1 manifestation"
+msgid_plural "@count manifestations"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ting_reference.module:66
+msgid "Ting reference"
+msgstr ""
+
+#: ting_reference.module:67
+msgid "Store a reference to a Ting object."
+msgstr ""
+
+#: ting_reference.module:99
+msgid "%name: Invalid object id: %object_id."
+msgstr ""
+
+#: ting_reference.module:110
+msgid "%name: Object id not found."
+msgstr ""
+
+#: ting_reference.module:132
+msgid "Default"
+msgstr ""
+
+#: ting_reference.module:150;200
+msgid "Object not found."
+msgstr ""
+
+#: ting_reference.module:162
+msgid "Default Ting reference widget"
+msgstr ""
+
+#: ting_reference.module:188
+msgid "Ting collection"
+msgstr ""
+
+#: ting_reference.module:188
+msgid "Ting object"
+msgstr ""
+
+#: ting_reference.module:194
+msgid "Search"
+msgstr ""
+
+#: ting_reference.module:204
+msgid "Reset"
+msgstr ""
+
+#: ting_reference.module:30
+msgid "Ting reference collection autocomplete"
+msgstr ""
+
+#: ting_reference.module:31
+msgid "Returns a list of collections to use for autocompletion"
+msgstr ""
+
+#: ting_reference.module:39
+msgid "Ting reference object autocomplete"
+msgstr ""
+
+#: ting_reference.module:40
+msgid "Returns a list of objects to use for autocompletion"
+msgstr ""
+
+#: ting_reference.module:48
+msgid "Ting reference collection"
+msgstr ""
+
+#: ting_reference.module:49
+msgid "Returns a Ting collection as a javascript object"
+msgstr ""
+
+#: ting_reference.info:0
+msgid "Ting object reference"
+msgstr ""
+
+#: ting_reference.info:0
+msgid "Defines a CCK field type for referencing a Ting object."
+msgstr ""
+
+#: ting_reference.info:0
+msgid "Ding!"
+msgstr ""
+
