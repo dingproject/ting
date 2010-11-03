@@ -22,13 +22,13 @@ function ting_search_pages_redirect() {
  */
 function ting_search_pages_ting_js() {
   module_load_include('client.inc', 'ting');
-  
+
   //Get users base query
   $query = $_REQUEST['query'];
   if (!$query) {
     return drupal_not_found();
   }
-  
+
   //Wrap base query
   $query = '('.$query.')';
 
@@ -46,7 +46,7 @@ function ting_search_pages_ting_js() {
 
     $query .= ' AND '.implode(' AND ', $facetArray);
   }
-  
+
   //Set sort method
   if (isset($_GET['sort'])) {
     $options['sort'] = $_GET['sort'];
