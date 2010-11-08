@@ -65,10 +65,16 @@ function ting_enrich_object(&$object) {
  */
 function ting_theme() {
   return array(
+    'ting_thing' => array(
+      'arguments' => array('type' => 'object', 'object' => NULL, 'query_args' => NULL),
+    ),
+    'ting_tabs' => array(
+      'arguments' => array('tabs' => NULL, 'wrapper_id' => NULL),
+      'template' => 'ting-tabs',
+    ),
     'ting_collection' => array(
       'arguments' => array('collection' => NULL, 'query_args' => NULL),
       'template' => 'ting_collection',
-      'file' => 'ting_search.theme.inc',
     ),
     'ting_object' => array(
       'arguments' => array('object' => NULL),
@@ -158,15 +164,58 @@ function ting_imagecache_default_presets() {
  * Implementation of hook_ting_add_js().
  */
 function ting_ting_add_js($type) {
-	// Add button helper on collection and object views if the required jQuery UI modules are loaded
-	// These are not requirements to avoid unecessary dependencies in ting module
-	if (in_array($type, array('ting_collection_view', 'ting_object_view'))) {
-		if (module_exists('jquery_ui') && module_exists('jquery_ui_theme')) {
-	    jquery_ui_add('ui.dialog');
-	    jquery_ui_theme_load();
-	    drupal_add_js(drupal_get_path('module', 'ting') . '/js/ting.buttons.js');
-		}
-	}
+  // Add button helper on collection and object views if the required jQuery UI modules are loaded
+  // These are not requirements to avoid unecessary dependencies in ting module
+  if (in_array($type, array('ting_collection_view', 'ting_object_view'))) {
+    if (module_exists('jquery_ui') && module_exists('jquery_ui_theme')) {
+      jquery_ui_add('ui.dialog');
+      jquery_ui_theme_load();
+      drupal_add_js(drupal_get_path('module', 'ting') . '/js/ting.buttons.js');
+    }
+  }
+}
+
+/**
+ * Theme something from Ting.
+ */
+function theme_ting_thing($type, $object, $query_args = NULL) {
+  module_invoke_all('ting_add_js', "ting_${type}_view");
+
+  $tabs = array();
+  $tabs['main'] = array(
+    'title' => t('Materials'),
+    'content' => theme("ting_$type", $object, $query_args),
+  );
+  drupal_alter('ting_tabs', $tabs, $type, $object);
+
+  return theme('ting_tabs', $tabs, $type == 'collection' ? 'ting-collection' : 'ting-object');
+}
+
+/**
+ * Template preprocessor for ting tabs.
+ */
+function template_preprocess_ting_tabs(&$vars) {
+
+  // jQuery UI tabs
+  jquery_ui_add('ui.tabs');
+  jquery_ui_theme_load();
+
+  drupal_add_js(drupal_get_path('module', 'ting') . '/js/ting.js', 'module');
+
+  $tab_labels = array();
+  $tab_content = array();
+  foreach ($vars['tabs'] as $id => $tab) {
+    $id = form_clean_id($id);
+    // Cannot use l/url, they can't generate a link with only a fragment. Also
+    // we don't want any 'active' classes.
+    $tab_labels[] = array(
+      'data' => "<a href='#$id'>" . check_plain($tab['title']) . "</a>",
+    );
+    $tab_content[$id] = $tab['content'];
+  }
+
+  $vars['tabs_labels'] = theme('item_list', $tab_labels);
+  $vars['tabs_content'] = $tab_content;
 }
 
 /**
@@ -238,7 +287,6 @@ function template_preprocess_ting_collection(&$variables) {
  */
 function template_preprocess_ting_object(&$variables) {
   $object = $variables['object'];
-
   // Allow modules to add action buttons to objects
   $variables['buttons'] = module_invoke_all('ting_object_buttons', $object);
 }

@@ -53,7 +53,7 @@ function ting_reference_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'ting_reference.pages.inc',
   );
-  
+
   return $items;
 }
 
@@ -236,7 +236,7 @@ function _ting_reference_add_css_js() {
     drupal_add_js(array(
       'tingReference' => array(
         'autocomplete' => array(
-          'collection' => url('ting_reference/autocomplete/collection/js'), 
+          'collection' => url('ting_reference/autocomplete/collection/js'),
           'object' => url('ting_reference/autocomplete/object/js'),
         ),
         'previewUrl' => url('ting_reference/preview/js'),
@@ -342,3 +342,20 @@ function ting_reference_nodes($object_or_collection) {
   return $nodes;
 }
 
+/**
+ *
+ */
+function ting_reference_ting_tabs_alter(&$tabs, $type, $object) {
+  $referenced_nodes = ting_reference_nodes($object);
+  if ($referenced_nodes) {
+    $content = '<h3>Omtale på websitet</h3>';
+    foreach ($referenced_nodes as $node) {
+      $content .= node_view($node, TRUE);
+    }
+
+    $tabs['reference'] = array(
+      'title' => t('On this site'),
+      'content' => $content,
+    );
+  }
+}
