@@ -98,7 +98,11 @@ function ting_search_pages_content_js() {
     $element = 0;
     $query = trim($_REQUEST['query']);
 
-    $search_result = do_search($query, 'node');
+    // Stolen from node_search(). Needed to respect access and status.
+    list($join1, $where1) = _db_rewrite_sql();
+    $arguments1 = array();
+    $conditions1 = 'n.status = 1';
+    $search_result = do_search($query, 'node', 'INNER JOIN {node} n ON n.nid = i.sid' . $join1, $conditions1 . (empty($where1) ? '' : ' AND '. $where1), $arguments1);
 
     $result = array(
       // do_search() calls pager_query() that populates these globals.
