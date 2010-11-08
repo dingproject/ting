@@ -186,18 +186,18 @@ function ting_search_add_js() {
   //Add jQuery ScrollTo plugin
   drupal_add_js($path . '/js/jquery.scrollTo/jquery.scrollTo.js', 'module', 'footer', TRUE);
   //drupal_add_js($path . '/js/jquery.scrollTo/jquery.scrollTo-min.js', 'module', 'footer', TRUE);
-  
+
   // jQuery UI tabs
   jquery_ui_add('ui.tabs');
   jquery_ui_theme_load();
 
   drupal_add_js($path . '/js/ting_search.js');
-  drupal_add_js($path . '/js/ting_result.js', 'module', 'footer', TRUE);  
+  drupal_add_js($path . '/js/ting_result.js', 'module', 'footer', TRUE);
   drupal_add_js($path . '/js/ting_facet_browser.js', 'module', 'footer', TRUE);
-  
+
   // Allow modules to add javascript handlers
   module_invoke_all('ting_add_js', 'ting_search_view');
-  
+
   drupal_add_css($path . '/css/ting_facet_browser.css', 'module');
 
   drupal_add_js(array('tingResult' => array(
@@ -208,9 +208,9 @@ function ting_search_add_js() {
     'noResultsText' => t('Sorry, we could not find any results for your search. Please try again with different keywords or ask a librarian.'),
   )), 'setting');
 
-  $facets = array('facet.creator', 'facet.subject', 'facet.type', 'facet.date', 
+  $facets = array('facet.creator', 'facet.subject', 'facet.type', 'facet.date',
                   'facet.language', 'facet.geographic', 'facet.period', 'facet.form',
-                  'facet.fiction', 'facet.nonFiction', 'facet.music', 'facet.dk5', 
+                  'facet.fiction', 'facet.nonFiction', 'facet.music', 'facet.dk5',
                   'dc.type');
   foreach ($facets as $facet) {
     drupal_add_js(array('tingResult' => array('facetNames' => array($facet => t($facet)))), 'setting');
