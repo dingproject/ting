@@ -30,11 +30,11 @@ Drupal.behaviors.tingAvailabilityTingObjectView = function () {
               itemData.reservable_count != undefined &&
               itemData.reserved_count != undefined) {
             var headline = $('#ting-item-' + itemData.local_id + ' .ting-availability h3');
-            headline.text(Drupal.t("There is @total_count copies available. @reservable_count can be reserved. There's @reserved_count reserved.", {
+            headline.after('<p>' + Drupal.t("There is @total_count copies available. @reservable_count can be reserved. There's @reserved_count reserved.", {
                   '@total_count': itemData.total_count,
                   '@reservable_count': itemData.reservable_count,
                   '@reserved_count': itemData.reserved_count,
-                    }));
+                    }) + '</p>');
           }
         }
       });
