@@ -13,12 +13,12 @@ function ting_search_carousel_install() {
 	drupal_install_schema('ting_search_carousel');
 
   variable_set('ting_search_carousel_searches', array());
-	
+
   //install ImageCache presets
   $preset = array(
       'presetname' => 'ting_search_carousel',
   );
- 
+
   $imagecache_actions = array(
     array(
       'action' => 'imagecache_scale',
@@ -43,29 +43,29 @@ function ting_search_carousel_install() {
       'weight' => 1,
     ),
   );
- 
+
   //need to install preset, id will be returned by function,
   //then install action add presetid to action prior to install:
   $preset = imagecache_preset_save($preset);
   foreach ($imagecache_actions as $action)
   {
     $action['presetid'] = $preset['presetid'];
-    imagecache_action_save($action);	
+    imagecache_action_save($action);
   }
   drupal_set_message(t('ImageCache preset %id: %name and corresponding actions saved.', array('%id' => $preset['presetid'], '%name' => $preset['presetname'])));
 }
-  
+
 /**
  * Implementation of hook_uninstall().
  */
 function ting_search_carousel_uninstall() {
 	drupal_uninstall_schema('ting_search_carousel');
-	
+
 	variable_del('ting_search_carousel_searches');
-	
+
 	if ($preset = imagecache_preset_by_name('ting_search_carousel'))
 	{
-    imagecache_preset_delete($preset);	
+    imagecache_preset_delete($preset);
 	}
 }
 
@@ -73,7 +73,7 @@ function ting_search_carousel_uninstall() {
  * Implementation of hook_schema().
  */
 function ting_search_carousel_schema() {
-	$schema = array(); 
+	$schema = array();
 	$schema['cache_ting_search_carousel'] = drupal_get_schema_unprocessed('system', 'cache');
 	return $schema;
 }
