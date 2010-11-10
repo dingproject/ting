@@ -21,7 +21,7 @@ function ting_ting_object_ctools_contexts() {
     'keyword' => 'ting_object',
     'context name' => 'ting_object',
     'convert list' => 'ting_ting_object_convert_list',
-    'convert' => 'ting_ting_object_convert', 
+    'convert' => 'ting_ting_object_convert',
     'placeholder form' => array(
       '#type' => 'textfield',
       '#description' => t('Enter the object ID for this context'),
@@ -46,7 +46,7 @@ function ting_ting_object_create($empty, $data = NULL, $conf = FALSE) {
     $object_id = is_array($data) && isset($data['object_id']) ? $data['object_id'] : (is_object($data) ? $data->id : 0);
 
     module_load_include('client.inc', 'ting');
-    $data = ting_get_object_by_id($object_id, true);
+    $data = ting_get_object_by_id($object_id, TRUE);
   }
 
   if (!empty($data)) {

@@ -41,6 +41,9 @@ function ting_get_object_by_id($object_id, $enrich = FALSE) {
     $request = ting_get_request_factory()->getObjectRequest();
     $request->setObjectId($object_id);
     $request = ting_add_agency($request);
+    if ($enrich) {
+      $request = ting_add_relations($request);
+    }
     $object = ting_execute($request);
 
     if ($object) {
@@ -67,10 +70,13 @@ function ting_get_object_by_id($object_id, $enrich = FALSE) {
  *    Whether to enrich the object with additional information, covers etc.
  * @return TingClientObject
  */
-function ting_get_object_by_local_id($local_id, $enrich = false) {
+function ting_get_object_by_local_id($local_id, $enrich = FALSE) {
   $request = ting_get_request_factory()->getObjectRequest();
   $request->setLocalId($local_id);
   $request = ting_add_agency($request);
+  if ($enrich) {
+    $request = ting_add_relations($request);
+  }
   $object = ting_execute($request);
 
   if ($object) {
@@ -100,6 +106,9 @@ function ting_get_collection_by_id($object_id, $enrich = FALSE) {
     $request = ting_get_request_factory()->getCollectionRequest();
     $request->setObjectId($object_id);
     $request = ting_add_agency($request);
+    if ($enrich) {
+      $request = ting_add_relations($request);
+    }
     $collection = ting_execute($request);
 
     if ($collection) {
@@ -440,6 +449,11 @@ function ting_add_agency(TingClientAgentRequest $request) {
   {
     $request->setAgency($agency);
   }
+  return $request;
+}
+
+function ting_add_relations($bool = TRUE) {
+  $request->setAllRelations($bool);
   return $request;
 }
 
