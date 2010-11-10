@@ -69,7 +69,7 @@ function ting_theme() {
       'arguments' => array('type' => 'object', 'object' => NULL, 'query_args' => NULL),
     ),
     'ting_list' => array(
-      'arguments' => array('ting_list' => NULL),
+      'arguments' => array('ting_list' => NULL, 'sorted' => FALSE),
       'template' => 'ting-list',
     ),
     'ting_list_item' => array(
@@ -211,13 +211,20 @@ function theme_ting_thing($type, $object, $query_args = NULL) {
  * Template preprocessor for ting-list.
  */
 function template_preprocess_ting_list(&$vars) {
-  $list = $vars['ting_list'];
-  $sorted = array();
-  foreach ($list as $object) {
-    $sorted[$object->type] .= theme('ting_list_item', $object);
+  if (!$vars['sorted']) {
+    $sorted = array();
+    foreach ($vars['ting_list'] as $object) {
+      $sorted[$object->type][] = $object;
+    }
+    ksort($sorted);
+    $vars['ting_list'] = $sorted;
   }
-  ksort($sorted);
-  $vars['ting_list'] = $sorted;
+  foreach ($vars['ting_list'] as $type => $object_list) {
+    $vars['ting_list'][$type] = "";
+    foreach ($object_list as $object) {
+      $vars['ting_list'][$type] .= theme('ting_list_item', $object);
+    }
+  }
 }
 
 /**
@@ -289,6 +296,7 @@ function template_preprocess_ting_collection(&$variables) {
   }
 
   $sorted = array();
+  $object_list = array();
 
   // If we know what query lead to the collection then we can use this for sorting
   if ($query_args = $variables['query_args']) {
@@ -336,6 +344,7 @@ function template_preprocess_ting_collection(&$variables) {
   }
 
   $variables["sorted_collection"] = $sorted;
+  $variables['ting_list'] = theme('ting_list', $sorted, TRUE);
 }
 
 /**

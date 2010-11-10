@@ -8,6 +8,7 @@
  * Available variables:
  * - $collection: The TingClientObjectCollection instance we're rendering.
  * - $sorted_collection: Array of TingClientObject instances sorted by type.
+ * - $ting_list: Rendered ting objects.
  */
 ?>
 <div class="ting-overview clearfix">
@@ -53,61 +54,4 @@
 </div>
 
 
-<?php
-foreach ($sorted_collection as $type => $objects) {
-  if(count($sorted_collection) > 1){
-    print '<h2>'.$type.'<a name="'.$type.'"></a></h2>';
-  }
-
-  foreach ($objects as $tingClientObject) {
-    // now display all the materials
-  ?>
-
-  <div id="ting-item-<?php print $tingClientObject->localId; ?>" class="ting-item clearfix">
-
-    <div class="content clearfix">
-      <div class="picture">
-        <?php $image_url = ting_covers_object_url($tingClientObject, '80_x'); ?>
-        <?php if ($image_url) { ?>
-          <?php print theme('image', $image_url, '', '', null, false); ?>
-        <?php } ?>
-      </div>
-
-      <div class="info">
-        <span class='date'><?php print $tingClientObject->record['dc:date'][''][0]; ?></span>
-        <h3><?php print l($tingClientObject->title, $tingClientObject->url, array('attributes' => array('class' => 'alternative'))); ?></h3>
-
-        <em><?php echo t('by'); ?></em>
-        <?php echo l($tingClientObject->creators[0], 'search/ting/'. $tingClientObject->creators[0], array('attributes' => array('class' => 'author alternative'))); ?>
-
-        <div class='language'><?php echo t('Language') . ': ' . $tingClientObject->language; ?></div>
-        <?php
-        for ($i = 1; $i < count($tingClientObject->creators); $i++) {
-          if ($extradesc = $tingClientObject->creators[$i]) {
-            print "<p>".$extradesc."</p>";
-          }
-        }
-        ?>
-
-        <div class="more">
-          <?php print l(t('More information'), $tingClientObject->url, array('attributes' => array('class' => 'more-link')) ); ?>
-        </div>
-        <?php if ($tingClientObject->type != 'Netdokument') { ?>
-        <div class="ting-status waiting">Afventer data…</div>
-        <?php } ?>
-      </div>
-
-    </div>
-
-    <?php if ($buttons[$tingClientObject->id]) :?>
-      <div class="ting-object-buttons">
-        <?php print theme('item_list', $buttons[$tingClientObject->id], NULL, 'ul', array('class' => 'buttons')) ?>
-      </div>
-    <?php endif; ?>
-
-  </div>
-
-  <?php
-  } // foreach objects
-} //foreach collection
-?>
+<?php print $ting_list; ?>
