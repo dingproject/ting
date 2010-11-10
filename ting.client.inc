@@ -106,9 +106,6 @@ function ting_get_collection_by_id($object_id, $enrich = FALSE) {
     $request = ting_get_request_factory()->getCollectionRequest();
     $request->setObjectId($object_id);
     $request = ting_add_agency($request);
-    if ($enrich) {
-      $request = ting_add_relations($request);
-    }
     $collection = ting_execute($request);
 
     if ($collection) {
@@ -362,6 +359,13 @@ function ting_add_object_info(TingClientObject $object) {
     }
   }
 
+  if ($object->relations) {
+    // Add details to relation objects.
+    foreach ($object->relations as $key => $relation) {
+      $object->relations[$key] = ting_add_object_info($relation);
+    }
+  }
+
   return $object;
 }
 
@@ -452,8 +456,9 @@ function ting_add_agency(TingClientAgentRequest $request) {
   return $request;
 }
 
-function ting_add_relations($bool = TRUE) {
-  $request->setAllRelations($bool);
+function ting_add_relations($request, $type = 'full') {
+  $request->setAllRelations(TRUE);
+  $request->setRelationData($type);
   return $request;
 }
 

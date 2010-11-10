@@ -68,6 +68,14 @@ function ting_theme() {
     'ting_thing' => array(
       'arguments' => array('type' => 'object', 'object' => NULL, 'query_args' => NULL),
     ),
+    'ting_list' => array(
+      'arguments' => array('ting_list' => NULL),
+      'template' => 'ting-list',
+    ),
+    'ting_list_item' => array(
+      'arguments' => array('object' => NULL),
+      'template' => 'ting-list-item',
+    ),
     'ting_tabs' => array(
       'arguments' => array('tabs' => NULL, 'wrapper_id' => NULL),
       'template' => 'ting-tabs',
@@ -186,9 +194,57 @@ function theme_ting_thing($type, $object, $query_args = NULL) {
     'title' => t('Materials'),
     'content' => theme("ting_$type", $object, $query_args),
   );
+
+  if (sizeof($object->relations)) {
+    $tabs['related'] = array(
+      'title' => t('Related'),
+      'content' => theme('ting_list', $object->relations),
+    );
+  }
+
   drupal_alter('ting_tabs', $tabs, $type, $object);
 
   return theme('ting_tabs', $tabs, $type == 'collection' ? 'ting-collection' : 'ting-object');
+}
+
+/**
+ * Template preprocessor for ting-list.
+ */
+function template_preprocess_ting_list(&$vars) {
+  $list = $vars['ting_list'];
+  $sorted = array();
+  foreach ($list as $object) {
+    $sorted[$object->type] .= theme('ting_list_item', $object);
+  }
+  ksort($sorted);
+  $vars['ting_list'] = $sorted;
+}
+
+/**
+ * Template preprocessor for ting-list-item.
+ */
+function template_preprocess_ting_list_item(&$vars) {
+  $object = $vars['object'];
+  $vars['local_id'] = check_plain($object->localId);
+
+  $image_url = ting_covers_object_url($object, '80_x');
+  if ($image_url) {
+    $vars['image'] = theme('image', $image_url, '', '', null, false);
+  }
+
+  $vars['date'] = check_plain($object->record['dc:date'][''][0]);
+  $vars['title'] = l($object->title, $object->url, array('attributes' => array('class' => 'alternative')));
+  $creators = $object->creators;
+  $first_creator = array_shift($creators);
+  $vars['creator'] = l($first_creator, 'search/ting/'. $first_creator, array('attributes' => array('class' => 'author alternative')));
+  $vars['additional_creators'] = array_filter($creators);
+  $vars['language'] = check_plain($object->language);
+
+  $vars['more_link'] = l(t('More information'), $object->url, array('attributes' => array('class' => 'more-link')));
+  $vars['type'] = check_plain($object->type);
+
+  // Let other modules add buttons.
+  $variables['buttons'] = module_invoke_all('ting_object_buttons', $object);
 }
 
 /**
@@ -299,10 +355,9 @@ function template_preprocess_ting_object(&$variables) {
 
   $titles = $object->record['dc:title'];
   unset($titles['']);
-  $titles = array_values($titles);
+  $titles = array_values(array_map('array_shift', $titles));
 
   $variables['other_titles'] = check_plain(implode(', ', $titles));
-
   $variables['alternative_titles'] = array();
   if ($object->record['dcterms:alternative']['']) {
     $titles = array_values($object->record['dcterms:alternative']['']);
