@@ -7,51 +7,51 @@
  *
  * Available variables:
  * - $object: The TingClientObject instance we're rendering.
+ * - $image: Image for the thing.
+ * - $title: Main title.
+ * - $other_titles: Also known as.
+ * - $alternative_titles: Array of other alternative titles. May be empty;
+ * - $creators: Authors of the item (string).
+ * - $date: The date of the thing.
+ * - $abstract: Short description.
  */
 ?>
 <div id="ting-item-<?php print $object->localId; ?>" class="ting-item ting-item-full">
   <div class="ting-overview clearfix">
     <div class="left-column left">
       <div class="picture">
-        <?php $image_url = ting_covers_object_url($object, '180_x'); ?>
-        <?php if ($image_url) { ?>
-          <?php print theme('image', $image_url, '', '', null, false); ?>
+        <?php if ($image) { ?>
+          <?php print $image; ?>
         <?php } ?>
       </div>
 
     </div>
 
     <div class="right-column left">
-      <h2><?php print check_plain($object->record['dc:title'][''][0]); ?></h2>
+      <h2><?php print $title; ?></h2>
       <?php
       $titles = array();
       foreach (array_diff_key($object->record['dc:title'], array('' => 1)) as $type => $dc_title) {
         $titles = array_merge($titles, $dc_title);
       }
       ?>
-      <?php if (!empty($titles)) { ?>
-        <h2><?php print check_plain(implode(', ', $titles)); ?></h2>
+      <?php if ($other_titles) { ?>
+        <h2><?php print $other_titles; ?></h2>
       <?php } ?>
-      <?php if (!empty($object->record['dcterms:alternative'][''])) { ?>
-        <?php foreach ($object->record['dcterms:alternative'][''] as $title) { ?>
+      <?php if ($alternative_titles) { ?>
+        <?php foreach ($alternative_titles as $title) { ?>
           <h2>(<?php print check_plain($title); ?>)</h2>
         <?php } ?>
       <?php } ?>
 
       <div class='creator'>
         <span class='byline'><?php echo ucfirst(t('by')); ?></span>
-        <?php
-        $creators = array();
-        foreach ($object->creators as $i => $creator) {
-          $creators[] = l($creator, 'search/ting/' . $creator, array('attributes' => array('class' => 'author')));
-        }
-        print implode(', ', $creators);
-        ?>
-        <?php if (!empty($object->date)) { ?>
-          <span class='date'>(<?php print $object->date; ?>)</span>
+        <?php print $creators; ?>
+        <?php if ($date) { ?>
+          <span class='date'>(<?php print $date; ?>)</span>
         <?php } ?>
       </div>
-      <p><?php print check_plain($object->record['dcterms:abstract'][''][0]); ?></p>
+      <p><?php print $abstract; ?></p>
       <?php if ($object->type != 'Netdokument') { ?>
         <div class="ting-status waiting"><?php print t('waiting for data'); ?></div>
       <?php } ?>

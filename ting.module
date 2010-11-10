@@ -289,6 +289,37 @@ function template_preprocess_ting_object(&$variables) {
   $object = $variables['object'];
   // Allow modules to add action buttons to objects
   $variables['buttons'] = module_invoke_all('ting_object_buttons', $object);
+
+  $image_url = ting_covers_object_url($object, '180_x');
+  if ($image_url) {
+    $variables['image'] = theme('image', $image_url, '', '', NULL, FALSE);
+  }
+
+  $variables['title'] = check_plain($object->record['dc:title'][''][0]);
+
+  $titles = $object->record['dc:title'];
+  unset($titles['']);
+  $titles = array_values($titles);
+
+  $variables['other_titles'] = check_plain(implode(', ', $titles));
+
+  $variables['alternative_titles'] = array();
+  if ($object->record['dcterms:alternative']['']) {
+    $titles = array_values($object->record['dcterms:alternative']['']);
+    $variables['alternative_titles'] = array_map($titles, 'check_plain');
+  }
+
+  $creators = array();
+  foreach ($object->creators as $i => $creator) {
+    $creators[] = l($creator, 'search/ting/' . $creator, array('attributes' => array('class' => 'author')));
+  }
+  $variables['creators'] = implode(', ', $creators);
+
+  if (!empty($object->date)) {
+    $variables['date'] = check_plain($object->date);
+  }
+
+  $variables['abstract'] = check_plain($object->record['dcterms:abstract'][''][0]);
 }
 
 /**
