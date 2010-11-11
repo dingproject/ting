@@ -184,6 +184,18 @@ function ting_ting_add_js($type) {
 }
 
 /**
+ * Implementation of hook_ting_object_buttons().
+ */
+function ting_ting_object_buttons($object) {
+  if (!empty($object->localId)) {
+    if (ting_object_is($object, 'online')) {
+      return l(t('Reserve now'), 'ding/reservation/' . $object->localId, array('attributes' => array('class' => 'reserve-now')));
+    }
+  }
+}
+
+
+/**
  * Theme something from Ting.
  */
 function theme_ting_thing($type, $object, $query_args = NULL) {
@@ -352,6 +364,7 @@ function template_preprocess_ting_collection(&$variables) {
  */
 function template_preprocess_ting_object(&$variables) {
   $object = $variables['object'];
+  dpm($object);
   // Allow modules to add action buttons to objects
   $variables['buttons'] = module_invoke_all('ting_object_buttons', $object);
 
@@ -406,4 +419,34 @@ function _ting_search_parse_query_args($query_string) {
   }
 
   return $query_args;
+}
+
+/**
+ * Return whether an object is of a given pseudo-class.
+ *
+ * Modules can add their own pseudo-classes by implementing
+ * hook_ting_object_is(). This function will call all implementations and
+ * return the overall result.
+ *
+ * Modules may return TRUE, FALSE or NULL from the hook. If any modules
+ * returned FALSE, the result is FALSE, else the result is TRUE if anyone
+ * returned TRUE, FALSE otherwise.
+ */
+function ting_object_is($object, $class) {
+  $result = module_invoke_all('ting_object_is', $object, $class);
+  // Return true if anyone returned true, an nobody returned false.
+  if (!in_array(FALSE, $result) && in_array(TRUE, $result)) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ *
+ */
+function ting_ting_object_is($object, $class) {
+  // Known online types.
+  if ($class == 'online' and in_array($object->type, array('lydbog (online)', 'netmusik (online)', 'netdokument'))) {
+    return TRUE;
+  }
 }
