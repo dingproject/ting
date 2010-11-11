@@ -188,10 +188,15 @@ function ting_ting_add_js($type) {
  */
 function ting_ting_object_buttons($object) {
   if (!empty($object->localId)) {
-    if (!empty($object->record['dc:identifier']['dcterms:URI'][0]) &&
+    if (!empty($object->online_url) &&
       ting_object_is($object, 'online')) {
-      return l(t('See online'), $object->record['dc:identifier']['dcterms:URI'][0] /*, array('attributes' => array('class' => 'reserve-now')) */
-      );
+      if (in_array(drupal_strtolower($object->type), array('lydbog (online)', 'netmusik (album)'))) {
+        $text = t('Hear online');
+      }
+      else {
+        $text = t('See online');
+      }
+      return l($text, $object->online_url , array('attributes' => array('class' => 'view-online')));
     }
   }
 }
@@ -443,7 +448,7 @@ function ting_object_is($object, $class) {
 }
 
 /**
- *
+ * Implementation of hook_ting_object_is().
  */
 function ting_ting_object_is($object, $class) {
   // Known online types.
