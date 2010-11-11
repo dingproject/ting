@@ -196,7 +196,12 @@ function ting_ting_object_buttons($object) {
       else {
         $text = t('See online');
       }
-      return l($text, $object->online_url , array('attributes' => array('class' => 'view-online')));
+      return array(
+        array(
+          'data' => l($text, $object->online_url),
+          'class' => 'view-online',
+        )
+      );
     }
   }
 }
