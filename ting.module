@@ -188,8 +188,10 @@ function ting_ting_add_js($type) {
  */
 function ting_ting_object_buttons($object) {
   if (!empty($object->localId)) {
-    if (ting_object_is($object, 'online')) {
-      return l(t('Reserve now'), 'ding/reservation/' . $object->localId, array('attributes' => array('class' => 'reserve-now')));
+    if (!empty($object->record['dc:identifier']['dcterms:URI'][0]) &&
+      ting_object_is($object, 'online')) {
+      return l(t('See online'), $object->record['dc:identifier']['dcterms:URI'][0] /*, array('attributes' => array('class' => 'reserve-now')) */
+      );
     }
   }
 }
@@ -364,7 +366,6 @@ function template_preprocess_ting_collection(&$variables) {
  */
 function template_preprocess_ting_object(&$variables) {
   $object = $variables['object'];
-  dpm($object);
   // Allow modules to add action buttons to objects
   $variables['buttons'] = module_invoke_all('ting_object_buttons', $object);
 
@@ -446,7 +447,7 @@ function ting_object_is($object, $class) {
  */
 function ting_ting_object_is($object, $class) {
   // Known online types.
-  if ($class == 'online' and in_array($object->type, array('lydbog (online)', 'netmusik (online)', 'netdokument'))) {
+  if ($class == 'online' and in_array(drupal_strtolower($object->type), array('lydbog (online)', 'netmusik (album)', 'netdokument'))) {
     return TRUE;
   }
 }

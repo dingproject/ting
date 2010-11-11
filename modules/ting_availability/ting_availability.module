@@ -95,3 +95,14 @@ function ting_availability_item_details_page($provider_id) {
   return;
 }
 
+/**
+ * Implementation of hook_ting_object_is().
+ */
+function ting_availability_ting_object_is($object, $class) {
+  if ($class == 'limited_availability') {
+    if (ting_object_is($object, 'online')) {
+      return FALSE;
+    }
+    return TRUE;
+  }
+}

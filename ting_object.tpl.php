@@ -52,7 +52,8 @@
         <?php } ?>
       </div>
       <p><?php print $abstract; ?></p>
-      <?php if ($object->type != 'Netdokument') { ?>
+      <?php // TODO: This should be refactored into the availability module.
+      if (ting_object_is($object, 'limited_availability')) { ?>
         <div class="ting-status waiting"><?php print t('waiting for data'); ?></div>
       <?php } ?>
     </div>
@@ -188,7 +189,9 @@
   }
   ?>
 
-  <?php if ($object->type[0] != 'Netdokument') { ?>
+  <?php
+    // TODO: This should be refactored into the availability module.
+  if (ting_object_is($object, 'limited_availability')) { ?>
   <div class="ding-box-wide ting-availability">
     <h3>Følgende biblioteker har "<?php print check_plain($object->title); ?>" hjemme:</h3>
     <ul class="library-list">
