@@ -68,7 +68,7 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
         .removeClass('waiting')
         .text(Drupal.t('not reservable'))
       .end()
-      .find('ul.ding-cart-buttons > li > a')
+      .find('ul.buttons > li > a')
         .addClass('disabled');
     }
     else if (itemData.available) {
