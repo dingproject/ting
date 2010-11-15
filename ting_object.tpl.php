@@ -60,7 +60,7 @@
                 <?php
                   $creators = array();
                   foreach ($object->creators as $i => $creator) {
-                    $creators[] = l($creator, 'search/ting/' . $creator, array('attributes' => array('class' => 'author')));
+                    $creators[] = l($creator, 'ting/search/' . $creator, array('attributes' => array('class' => 'author')));
                   }
                   print implode(', ', $creators);
                 ?>
@@ -73,18 +73,18 @@
                 <div class="ting-status waiting"><?php print t('waiting for data'); ?></div>
               <?php } ?>
             </div>
-          
+
 	          <?php if ($buttons) :?>
 	            <div class="ting-object-buttons">
 	              <?php print theme('item_list', $buttons, NULL, 'ul', array('class' => 'buttons')) ?>
 	            </div>
 	          <?php endif; ?>
-          
+
           </div>
 
           <div class="object-information clearfix">
-            <?php 
-              //we printed the first part up above so remove that 
+            <?php
+              //we printed the first part up above so remove that
               unset($object->record['dcterms:abstract'][''][0]);
             ?>
             <div class="abstract"><?php print implode(' ; ', format_danmarc2((array)$object->record['dcterms:abstract'][''])) ?></div>
@@ -166,7 +166,7 @@
                 foreach ($object->record['dc:identifier']['dcterms:URI'] as $uri) {
                   $uris[] = l($uri, $uri);
                 }
-                print theme('item_list', $uris, t('Host publication'), 'span', array('class' => 'identifier'));                
+                print theme('item_list', $uris, t('Host publication'), 'span', array('class' => 'identifier'));
               }
             ?>
 
@@ -194,7 +194,7 @@
             // Do we have more than only this one type?
             if (count($collection->types) > 1) {
               print '<div class="ding-box-wide object-otherversions">';
-              print '<h3>'. t('Also available as: ') . '</h3>';  
+              print '<h3>'. t('Also available as: ') . '</h3>';
               print "<ul>";
               foreach ($collection->types as $type) {
                 if ($type != $object->type) {
@@ -207,7 +207,7 @@
             }
           }
           ?>
-          
+
 
           <?php
           $referenced_nodes = ting_reference_nodes($object);
