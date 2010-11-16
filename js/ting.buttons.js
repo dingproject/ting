@@ -27,8 +27,8 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
           };
 
           message = (data) ? data.message :  Drupal.t('An error occurred.');
-          buttons = options.buttons(buttons, event, data);
-          
+          options.buttons(buttons, event, data);
+
           $('<div>' + message + '</div>')
             .dialog({
               'title': data.title,

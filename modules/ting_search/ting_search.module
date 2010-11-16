@@ -273,15 +273,22 @@ function template_preprocess_ting_search_collection(&$variables) {
     if (!isset($type_map[$object->type]  )) {
       $type_map[$object->type] = array();
     }
-    $type_map[$object->type][] = $object->localId;
+    $type_map[$object->type][] = $object;
   }
 
   $links = array();
-  foreach ($type_map as $type => $id_list) {
+  foreach ($type_map as $type => $objects) {
     $classes = '';
 
-    foreach ($id_list as $id) {
-      $classes .= ' ting-object-' . $id;
+    foreach ($objects as $object) {
+      // Quick hack, always show netdokuments as available. Will be
+      // fixed properly later.
+      if ($object->type == 'Netdokument') {
+        $classes .= ' available';
+      }
+      else {
+        $classes .= ' ting-object-' . $object->localId;
+      }
     }
 
     $links[] = array(

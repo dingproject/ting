@@ -37,7 +37,10 @@ function ting_availability_ting_add_js($type) {
       drupal_add_js($path . '/ting.availability.ting_object_view.js', 'module', 'footer', TRUE);
       break;
     case 'ting_collection_view':
-      drupal_add_js($path . '/ting.availability.js', 'module', 'footer', TRUE);
+      // Even though we're deferring the following code,
+      // Drupal.tingAvailability isn't defined when it runs, so we're
+      // *not* deferring ting.availability.js here.
+      drupal_add_js($path . '/ting.availability.js', 'module', 'footer', FALSE);
       drupal_add_js('$(function(){Drupal.tingAvailability.get_details(Drupal.tingAvailability.updateStatus)});', 'inline', 'footer', TRUE);
       break;
     case 'ting_search_view':
