@@ -65,6 +65,7 @@ function ting_search_pages_ting_js() {
       'result_html' => '',
       'facets' => $searchResult->facets,
       'local_ids' => array(),
+      'feed_icon' => theme('feed_icon', url('ting/search/feed/' . $_REQUEST['query'])),
     );
 
     foreach ($searchResult->collections as &$collection) {
@@ -111,6 +112,8 @@ function ting_search_pages_content_js() {
       'page' => $search_result ? $GLOBALS['pager_page_array'][$element] + 1 : 0,
       'resultsPerPage' => $max_results,
       'result_html' => '',
+      'feed_icon' => theme('feed_icon', url('ting/search/content/feed/' . $_REQUEST['query'])),
+
     );
     foreach ($search_result as $item) {
       if ($item->type == 'node') {

@@ -114,13 +114,28 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
 
       // Kasper: What is the purpose of this?
       element = $(element);
-      if (element.next().size() > 0) {
-        element.next().replaceWith($pager);
+      if (element.next('#pager').size() > 0) {
+        element.next('#pager').replaceWith($pager);
       }
       else {
         element.after($pager);
       }
     }
+  };
+
+  /**
+   * Render the search results feed icon.
+   */
+  this.renderTingSearchResultFeedIcon = function (element, result) {
+      $element = $(element);
+      if (result['feed_icon']) {
+        if ($element.nextAll('.feed-icon').size() > 0) {
+          $element.nextAll('.feed-icon').replaceWith(result['feed_icon']);
+        }
+        else {
+          $element.parent().append(result['feed_icon']);
+        }
+      }
   };
 
   /**
@@ -141,6 +156,7 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
         //Update search result and facet browser
         Drupal.renderTingSearchResults(Drupal.searchResultElement, data);
         Drupal.renderTingSearchResultPager(Drupal.searchResultElement, data);
+        Drupal.renderTingSearchResultFeedIcon(searchResultElement, result);
         Drupal.updateFacetBrowser(Drupal.facetBrowserElement, data);
         Drupal.bindSelectEvent(Drupal.facetBrowserElement, searchResultElement);
         Drupal.updateSelectedFacetsFromUrl(Drupal.facetBrowserElement);
@@ -167,6 +183,7 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
 
   this.renderTingSearchResults(searchResultElement, result);
   this.renderTingSearchResultPager(searchResultElement, result);
+  this.renderTingSearchResultFeedIcon(searchResultElement, result);
 
   $('#edit-ting-search-sort').val(Drupal.getAnchorVars().sort);
   $('#edit-ting-search-sort').change(function() {
