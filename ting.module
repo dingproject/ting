@@ -394,7 +394,7 @@ function template_preprocess_ting_object(&$variables) {
   $variables['alternative_titles'] = array();
   if ($object->record['dcterms:alternative']['']) {
     $titles = array_values($object->record['dcterms:alternative']['']);
-    $variables['alternative_titles'] = array_map($titles, 'check_plain');
+    $variables['alternative_titles'] = array_map('check_plain', $titles);
   }
 
   $creators = array();
