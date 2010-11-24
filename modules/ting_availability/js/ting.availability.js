@@ -71,6 +71,12 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
       .find('ul.buttons > li > a')
         .addClass('disabled');
     }
+    else if (itemData.available_from) {
+      $item.find('.ting-status')
+        .addClass('unavailable')
+        .removeClass('waiting')
+        .text(Drupal.t('available from @date', {'@date': itemData.available_from}));
+    }
     else if (itemData.available) {
       $item.find('.ting-status')
         .addClass('available')
