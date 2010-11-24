@@ -21,21 +21,18 @@ Drupal.behaviors.tingAvailabilityTingObjectView = function () {
         $.each(itemData.holdings, function (holdingIndex, holdingData) {
             container.append('<li>' + holdingData  + '</li>');
         });
-        // If holding is empty remove container
-        if (itemData.holdings.length === 0) {
-          container.parent().remove();
+        var headline = $('#ting-item-' + itemData.local_id + ' .ting-availability h3');
+        if (itemData.total_count != undefined &&
+            itemData.reservable_count != undefined &&
+            itemData.reserved_count != undefined) {
+          headline.after('<p>' + Drupal.t("There is @total_count copies available. @reservable_count can be reserved. There's @reserved_count reserved.", {
+                '@total_count': itemData.total_count,
+                '@reservable_count': itemData.reservable_count,
+                '@reserved_count': itemData.reserved_count,
+                  }) + '</p>');
         }
-        else {
-          if (itemData.total_count != undefined &&
-              itemData.reservable_count != undefined &&
-              itemData.reserved_count != undefined) {
-            var headline = $('#ting-item-' + itemData.local_id + ' .ting-availability h3');
-            headline.after('<p>' + Drupal.t("There is @total_count copies available. @reservable_count can be reserved. There's @reserved_count reserved.", {
-                  '@total_count': itemData.total_count,
-                  '@reservable_count': itemData.reservable_count,
-                  '@reserved_count': itemData.reserved_count,
-                    }) + '</p>');
-          }
+        if (itemData.holdings.length === 0) {
+          headline.text(Drupal.t("The material is currently not available at any library"));
         }
       });
     }

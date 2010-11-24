@@ -77,13 +77,18 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
         .removeClass('waiting')
         .text(Drupal.t('available'));
     }
-    else if (itemData.reservable) {
+    else if (!itemData.reservable) {
       $item.find('.ting-status')
         .addClass('unavailable')
         .removeClass('waiting')
         .text(Drupal.t('unavailable'));
     }
-    else {
+    else if (itemData.reserved_count < 1) {
+      $item.find('.ting-status')
+        .addClass('unavailable')
+        .removeClass('waiting')
+        .text(Drupal.t('on loan'));
+    } else {
       $item.find('.ting-status')
         .addClass('unavailable')
         .addClass('reserved')
