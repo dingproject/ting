@@ -36,7 +36,7 @@ function ting_covers_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'ting_covers.pages.inc',
   );
-  
+
   $items['admin/settings/ting/covers'] = array(
     'title' => 'Covers',
     'page callback' => 'drupal_get_form',
@@ -57,11 +57,28 @@ function ting_covers_object_path($object_id) {
 }
 
 /**
+ *
+ */
+function ting_covers_cache_is_valid($path, $presetname) {
+  $file = file_create_path($path);
+  if (file_exists($file)) {
+    if (filemtime($file) > $_SERVER['REQUEST_TIME'] - variable_get('ting_covers_cache_lifetime', 86400)) {
+      return TRUE;
+    }
+    else {
+      // Remove imagecache derivatives.
+      unlink(imagecache_create_path($presetname, $path));
+    }
+  }
+  return FALSE;
+}
+
+/**
  * Return the URL to the cover of the object.
  */
 function ting_covers_object_url(TingClientObject $object, $presetname) {
   $path = ting_covers_object_path($object->id);
-  if (file_exists(file_create_path($path))) {
+  if (ting_covers_cache_is_valid($path, $presetname)) {
     return imagecache_create_url($presetname, $path);
   }
   else {
@@ -82,7 +99,7 @@ function ting_covers_collection_path($object_id) {
  */
 function ting_covers_collection_url(TingClientObject $object, $presetname) {
   $path = ting_covers_collection_path($object->id);
-  if (file_exists(file_create_path($path))) {
+  if (ting_covers_cache_is_valid($path, $presetname)) {
     return imagecache_create_url($presetname, $path);
   }
   else {
@@ -110,7 +127,7 @@ function ting_covers_faust_path($faust_number) {
  */
 function ting_covers_faust_url($faust_number, $presetname) {
   $path = ting_covers_faust_path($faust_number);
-  if (file_exists(file_create_path($path))) {
+  if (ting_covers_cache_is_valid($path, $presetname)) {
     return imagecache_create_url($presetname, $path);
   }
   else {

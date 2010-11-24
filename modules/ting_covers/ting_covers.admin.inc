@@ -9,6 +9,27 @@ function ting_covers_admin_settings_form(&$form_state) {
 
   $form['#attributes'] = array('enctype' => 'multipart/form-data');
 
+  $form['settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Cover settings'),
+  );
+
+  $form['settings']['cache_lifetime'] = array(
+    '#type' => 'select',
+    '#title' => t('Cover cache lifetime'),
+    '#options' => array(
+      '86400' => t("24 hours"),
+      '1209600' => t("2 weeks"),
+    ),
+    '#default_value' => variable_get('ting_covers_cache_lifetime', 86400),
+  );
+
+  $form['settings']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save settings'),
+    '#submit' => array('ting_covers_admin_settings_save'),
+  );
+
   $form['default'] = array(
     '#type' => 'fieldset',
     '#title' => t('Default cover image'),
@@ -43,6 +64,13 @@ function ting_covers_admin_settings_form(&$form_state) {
   );
 
   return $form;
+}
+
+/**
+ * Submission handler.
+ */
+function ting_covers_admin_settings_save($form, &$form_state) {
+  variable_set('ting_covers_cache_lifetime', $form_state['values']['cache_lifetime']);
 }
 
 /**
