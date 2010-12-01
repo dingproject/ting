@@ -219,7 +219,7 @@ function ting_search_add_js() {
   $facets = array('facet.creator', 'facet.subject', 'facet.type', 'facet.date', 
                   'facet.language', 'facet.geographic', 'facet.period', 'facet.form',
                   'facet.fiction', 'facet.nonFiction', 'facet.music', 'facet.dk5', 
-                  'dc.type');
+                  'dc.type', 'facet.category', 'facet.acSource');
   foreach ($facets as $facet) {
     drupal_add_js(array('tingResult' => array('facetNames' => array($facet => t($facet)))), 'setting');
   }
