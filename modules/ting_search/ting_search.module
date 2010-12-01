@@ -93,24 +93,6 @@ function ting_search_menu() {
   return $items;
 }
 
-
-/**
- * Implementation of hook_search().
- */
-function ting_search_search($op = 'search', $keys = null) {
-  switch ($op) {
-    case 'name':
-      return t('Ting');
-    case 'status':
-    case 'admin':
-    case 'search':
-      // We're not providing any sort of admin interface or actual
-      // search results, since this is just a dummy module to get the
-      // search/ting URL.
-      return array();
-  }
-}
-
 /**
  * Implementation of hook_block().
  */
@@ -131,16 +113,6 @@ function ting_search_block($op = 'list', $delta = 0, $edit = array()) {
         'content' => drupal_get_form('ting_search_form'),
       );
   }
-}
-
-/**
- * Implementation of hook_menu_alter().
- */
-function ting_search_menu_alter(&$items) {
-  // Override the page callback for the Ting search results.
-  $items['search/ting/%menu_tail']['page callback'] = 'ting_search_pages_redirect';
-  $items['search/ting/%menu_tail']['file'] = 'ting_search.pages.inc';
-  $items['search/ting/%menu_tail']['file path'] = drupal_get_path('module', 'ting_search');
 }
 
 /**
