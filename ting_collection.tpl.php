@@ -19,7 +19,7 @@
     <?php
     $creators = array();
     foreach ($collection->creators as $i => $creator) {
-      $creators[] = l($creator, 'search/ting/' . $creator, array('attributes' => array('class' => 'author')));
+      $creators[] = l($creator, 'ting/search/' . $creator, array('attributes' => array('class' => 'author')));
     }
     print implode(', ', $creators);
     ?>
@@ -34,7 +34,7 @@
     <?php
     $subjects = array();
     foreach ($collection->subjects as $subject) {
-      $subjects[] = "<span class='term'>". l($subject, 'search/ting/'. $subject) ."</span>";
+      $subjects[] = "<span class='term'>". l($subject, 'ting/search/'. $subject) ."</span>";
     }
     print implode(', ', $subjects);
     ?>
