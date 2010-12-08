@@ -13,6 +13,32 @@ function ting_periodical_theme() {
 }
 
 /**
+ * Implementation of hook_requirements().
+ */
+function ting_periodical_requirements($phase) {
+  $requrements = array();
+  if ($phase == 'runtime') {
+    $provider = ding_provider_description('availability');
+    $periodical = ding_provider_supports('availability', 'periodical');
+
+    $requrements['ting_periodical'] = array(
+      'title' => t('Ting periodical'),
+      'severity' => $provider && $periodical ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
+      'value' => $provider,
+      'description' => t('OK'),
+    );
+    if (!$provider) {
+      $requrements['ting_periodical']['description'] = t('No reservation provider active.');
+    }
+    elseif (!$periodical) {
+      $requrements['ting_periodical']['description'] = t("Provider doesn't support periodical info.");
+    }
+  }
+
+  return $requrements;
+}
+
+/**
  * Template preprocessor for ting objects.
  */
 function ting_periodical_preprocess_ting_object(&$vars) {
