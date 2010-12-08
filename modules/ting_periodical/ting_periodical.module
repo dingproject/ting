@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * Implementation of hook_theme().
+ */
+function ting_periodical_theme() {
+  return array(
+    'ting_periodical_issues' => array(
+      'arguments' => array('element' => NULL),
+      'template' => 'ting_periodical_issues',
+    ),
+  );
+}
+
+/**
+ * Template preprocessor for ting objects.
+ */
+function ting_periodical_preprocess_ting_object(&$vars) {
+  $object = $vars['object'];
+  if (ting_object_is($object, 'periodical')) {
+    $vars['additional_content'][] = array(
+      '#type' => 'ting_periodical_issues',
+      '#object' => $object,
+    );
+  }
+}
+
+/**
+ * Preprocessor for the ting_periodical_issues element template.
+ */
+function template_preprocess_ting_periodical_issues(&$vars) {
+  drupal_add_js(drupal_get_path('module', 'ting_periodical') . '/ting_periodical.js');
+
+  $items = ding_provider_invoke('availability', 'periodical', array($vars['element']['#object']->localId));
+  $vars['issues'] = array();
+  // Only show reservation link if ding_reservation is enabled.
+  $reservable = module_exists('ding_reservation');
+  // Also add ding_reservation's js, needed for the buttons to be ajaxified.
+  if ($reservable) {
+    drupal_add_js(drupal_get_path('module', 'ding_reservation') . '/ding_reservation.buttons.js');
+  }
+
+  if (isset($items[$vars['element']['#object']->localId])) {
+    $object_holding = $items[$vars['element']['#object']->localId];
+  }
+  if ($object_holding && isset($object_holding['issues'])) {
+    $single_rendering = FALSE;
+    // Only switch to rendering one item per year, if both first and second
+    // year only contains one issue.
+    if (isset($object_holding['issues'][0]) &&
+      isset($object_holding['issues'][1]) &&
+      sizeof($object_holding['issues'][1]) < 2 &&
+      sizeof($object_holding['issues'][0]) < 2
+    ) {
+      $single_rendering = TRUE;
+    }
+    foreach ($object_holding['issues'] as $year => $issues) {
+      $items = array();
+
+      // Special case for when there’s only one issue per year, we're showing
+      // reservation link and the item is reservable.
+      if ($single_rendering &&  count($issues) == 1 && $reservable && $issues[0]['reservable']) {
+        $issue = array_shift($issues);
+        $vars['issues'][$year] = theme('item_list', array(
+                                   l(t('Reserve now'), 'ding/reservation/' . $object_holding['local_id'] . '/' . $issue['local_id'], array('attributes' => array('class' => 'reserve-now'))),
+                                 ), $year, 'ul', array('class' => 'buttons'));
+      }
+      else {
+        foreach ($issues as $issue_name => $issue) {
+          $output = '<div class="title">' . $issue_name . '</div>';
+          if ($issue['reservable']) {
+            $output .= theme('item_list', array(
+                         l(t('Reserve now'), 'ding/reservation/' . $object_holding['local_id'] . '/' . $issue['local_id'], array('attributes' => array('class' => 'reserve-now'))),
+                       ), NULL, 'ul', array('class' => 'buttons'));
+          }
+          $items[] = $output;
+        }
+
+        $vars['issues'][$year] = theme('item_list', $items, $year);
+      }
+    }
+  }
+}
+
+/**
+ * Implementation of hook_ting_object_is().
+ */
+function ting_periodical_ting_object_is($object, $class) {
+  // Also override availability information for the main object.
+  if ($class == 'periodical' || $class == 'limited_availability') {
+    if (in_array(drupal_strtolower($object->type), array('tidsskrift', 'periodikum', 'årbog'))) {
+      return $class == 'periodical' ? TRUE : FALSE;
+    }
+    return $class == 'periodical' ? FALSE : TRUE;
+  }
+}

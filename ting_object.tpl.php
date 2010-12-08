@@ -199,4 +199,6 @@
     </ul>
   </div>
   <?php } ?>
+
+  <?php if (isset($additional_content)) { print drupal_render($additional_content); } ?>
 </div>

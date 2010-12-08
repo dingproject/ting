@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Install file providing upgrade hooks for ting.
+ */
+
+/**
+ * Migrate from alma_periodical to ting_periodical.
+ */
+function ting_update_6001() {
+  $ret = array();
+  if (module_exists('alma_periodical')) {
+    drupal_install_modules(array('ting_periodical'));
+    $ret[] = array(
+      'success' => TRUE,
+      'query' => t('Replaced alma_periodical with ting_periodical.'),
+    );
+    drupal_uninstall_module('alma_periodical');
+  }
+  return $ret;
+}

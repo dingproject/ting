@@ -92,12 +92,6 @@ function ting_theme() {
       'arguments' => array('object' => NULL, 'display_image' => NULL),
       'template' => 'ting-object-title',
     ),
-    // Render periodicals as objects. Library system modules should
-    // Override this to use another template
-    'ting_periodical' => array(
-      'arguments' => array('object' => NULL),
-      'template' => 'ting_object',
-    ),
   );
 }
 
@@ -445,7 +439,7 @@ function _ting_search_parse_query_args($query_string) {
  */
 function ting_object_is($object, $class) {
   $result = module_invoke_all('ting_object_is', $object, $class);
-  // Return true if anyone returned true, an nobody returned false.
+  // Return true if anyone returned true, and nobody returned false.
   if (!in_array(FALSE, $result) && in_array(TRUE, $result)) {
     return TRUE;
   }
