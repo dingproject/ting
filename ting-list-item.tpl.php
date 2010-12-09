@@ -43,11 +43,7 @@
       <div class="more">
         <?php print $more_link; ?>
       </div>
-      <?php
-        // TODO: This should go into ting_availability.
-      if ($type != 'Netdokument') { ?>
-      <div class="ting-status waiting">Afventer data…</div>
-      <?php } ?>
+      <?php if (isset($additional_content)) { print drupal_render($additional_content); } ?>
     </div>
 
   </div>

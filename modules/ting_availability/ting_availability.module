@@ -109,3 +109,37 @@ function ting_availability_ting_object_is($object, $class) {
     return TRUE;
   }
 }
+
+/**
+ * Template preprocessor for ting objects.
+ */
+function ting_availability_preprocess_ting_object(&$vars) {
+  $object = $vars['object'];
+  if (ting_object_is($object, 'limited_availability')) {
+    $vars['additional_main_content'][] = array(
+      '#type' => 'markup',
+      '#value' => '<div class="ting-status waiting">' . t('waiting for data') . '</div>',
+    );
+
+    $vars['additional_content'][] = array(
+      '#type' => 'markup',
+      '#weight' => -10,
+      '#value' => '<div class="ding-box-wide ting-availability"><h3>Følgende biblioteker har "' . check_plain($object->title) . '" hjemme:</h3><ul class="library-list"><li class="ting-status waiting even">' . t('waiting for data') .'</li></ul></div>',
+    );
+
+  };
+}
+
+/**
+ * Template preprocessor for ting list item.
+ */
+function ting_availability_preprocess_ting_list_item(&$vars) {
+  $object = $vars['object'];
+  if (ting_object_is($object, 'limited_availability')) {
+    $vars['additional_content'][] = array(
+      '#type' => 'markup',
+      '#value' => '<div class="ting-status waiting">Afventer data…</div>',
+    );
+
+  };
+}
