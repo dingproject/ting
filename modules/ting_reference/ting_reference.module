@@ -343,7 +343,7 @@ function ting_reference_nodes($object_or_collection) {
 }
 
 /**
- *
+ * TODO: Document this.
  */
 function ting_reference_ting_tabs_alter(&$tabs, $type, $object) {
   $referenced_nodes = ting_reference_nodes($object);
@@ -359,3 +359,4 @@ function ting_reference_ting_tabs_alter(&$tabs, $type, $object) {
     );
   }
 }
+
