@@ -37,10 +37,12 @@ function ting_reference_object_autocomplete_js() {
 	$string = $_REQUEST['query'];
 	
 	$items = array();
-	if ($string && (strlen($string) > 0))
-	{
+	if ($string && (strlen($string) > 0)) {
 		$searchResult = ting_do_search($string, 1, 10, array('useCollections' => 'false', 'facets' => array()));
 		
+    // If there is no usable result, exit immediately, providng no reply.
+    if (!$searchResult) { exit; }
+
 		foreach ($searchResult->collections as $collection) {
 			$object = array_shift($collection->objects);
       $items[$object->id] = t('!author: !title (!type, !year, !id)',  array(
