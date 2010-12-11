@@ -257,6 +257,9 @@ function _ting_reference_add_css_js() {
  */
 function ting_reference_form_alter(&$form, $form_state, $form_id) {
   if ($form['#id'] == 'node-form') {
+    // If node type has no CCK fields, just bail right away.
+    if (!isset($form['#field_info'])) { return; }
+
     foreach ($form['#field_info'] as $name => $field) {
       if ($field['type'] == 'flexifield') {
         _ting_reference_add_css_js();
