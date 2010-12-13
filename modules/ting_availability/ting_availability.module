@@ -77,7 +77,6 @@ function ting_availability_requirements($phase) {
  */
 function ting_availability_item_page($provider_id) {
   $items = ding_provider_invoke('availability', 'items', explode(',', $provider_id));
-
   // We are returning JavaScript, so tell the browser.
   drupal_set_header('Content-Type: application/json; charset=utf-8');
   echo json_encode($items);

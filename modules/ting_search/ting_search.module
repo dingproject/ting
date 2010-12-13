@@ -182,7 +182,7 @@ function ting_search_add_js() {
 
   $facets = array('facet.creator', 'facet.subject', 'facet.type', 'facet.date',
                   'facet.language', 'facet.geographic', 'facet.period', 'facet.form',
-                  'facet.fiction', 'facet.nonFiction', 'facet.music', 'facet.dk5', 
+                  'facet.fiction', 'facet.nonFiction', 'facet.music', 'facet.dk5',
                   'dc.type', 'facet.category', 'facet.acSource');
   foreach ($facets as $facet) {
     drupal_add_js(array('tingResult' => array('facetNames' => array($facet => t($facet)))), 'setting');
@@ -253,13 +253,15 @@ function template_preprocess_ting_search_collection(&$variables) {
     $classes = '';
 
     foreach ($objects as $object) {
-      // Quick hack, always show netdokuments as available. Will be
-      // fixed properly later.
-      if ($object->type == 'Netdokument') {
-        $classes .= ' available';
+      // TODO: Really, this should go into ting_availability.
+      if (ting_object_is($object, 'limited_availability')) {
+        $classes .= ' ting-object-' . $object->localId;
       }
       else {
-        $classes .= ' ting-object-' . $object->localId;
+        // We have at least one object that's always available, show
+        // that and break out.
+        $classes = 'available';
+        break;
       }
     }
 
