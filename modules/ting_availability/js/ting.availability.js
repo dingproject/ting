@@ -77,6 +77,12 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
         .removeClass('waiting')
         .text(Drupal.t('available from @date', {'@date': itemData.available_from}));
     }
+    else if (itemData.deferred_period) {
+      $item.find('.ting-status')
+        .addClass('unavailable')
+        .removeClass('waiting')
+        .text(Drupal.t('waiting period'));
+    }
     else if (itemData.available) {
       $item.find('.ting-status')
         .addClass('available')
