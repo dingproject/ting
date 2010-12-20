@@ -6,6 +6,8 @@
  * Provide functionality and page callbacks for retrieving covers for Ting objects and collections
  */
 
+define('TING_COVERS_CACHE_LIFETIME', 86400);
+
 /**
  * Implementation of hook_menu().
  */
@@ -62,7 +64,7 @@ function ting_covers_object_path($object_id) {
 function ting_covers_cache_is_valid($path, $presetname) {
   $file = file_create_path($path);
   if (file_exists($file)) {
-    if (filemtime($file) > $_SERVER['REQUEST_TIME'] - variable_get('ting_covers_cache_lifetime', 86400)) {
+    if (filemtime($file) > $_SERVER['REQUEST_TIME'] - variable_get('ting_covers_cache_lifetime', TING_COVERS_CACHE_LIFETIME)) {
       return TRUE;
     }
     else {
@@ -80,6 +82,9 @@ function ting_covers_object_url(TingClientObject $object, $presetname) {
   $path = ting_covers_object_path($object->id);
   if (ting_covers_cache_is_valid($path, $presetname)) {
     return imagecache_create_url($presetname, $path);
+  }
+  elseif ($cache = cache_get('ting_covers:' . $path)) {
+    return ting_covers_default_image_path($presetname);
   }
   else {
     // Return an absolute URL like imagecache_create_url() does.
@@ -101,6 +106,9 @@ function ting_covers_collection_url(TingClientObject $object, $presetname) {
   $path = ting_covers_collection_path($object->id);
   if (ting_covers_cache_is_valid($path, $presetname)) {
     return imagecache_create_url($presetname, $path);
+  }
+  elseif ($cache = cache_get('ting_covers:' . $path)) {
+    return ting_covers_default_image_path($presetname);
   }
   else {
     // Return an absolute URL like imagecache_create_url() does.
@@ -130,6 +138,9 @@ function ting_covers_faust_url($faust_number, $presetname) {
   if (ting_covers_cache_is_valid($path, $presetname)) {
     return imagecache_create_url($presetname, $path);
   }
+  elseif ($cache = cache_get('ting_covers:' . $path)) {
+    return ting_covers_default_image_path($presetname);
+  }
   else {
     // Return an absolute URL like imagecache_create_url() does.
     return url('ting/covers/faust/' . $presetname . '/' . $faust_number, array('absolute' => TRUE));
@@ -140,10 +151,7 @@ function ting_covers_faust_url($faust_number, $presetname) {
  * Redirect to default image.
  */
 function ting_covers_goto_default($preset) {
-  $default_image = ting_covers_default_image();
-  $filepath = ($default_image) ? $default_image->filepath : drupal_get_path('module', 'ting_covers') . '/img/default.gif';
-
-  return drupal_goto(imagecache_create_url($preset, $filepath));
+  return drupal_goto(ting_covers_default_image_path($preset));
 }
 
 /**
@@ -164,3 +172,12 @@ function ting_covers_default_image() {
   return FALSE;
 }
 
+/**
+ * Return the path to the default image.
+ */
+function ting_covers_default_image_path($preset) {
+  $default_image = ting_covers_default_image();
+  $filepath = ($default_image) ? $default_image->filepath : drupal_get_path('module', 'ting_covers') . '/img/default.gif';
+
+  return imagecache_create_url($preset, $filepath);
+}

@@ -14,6 +14,7 @@ function ting_covers_object($preset, $object_id) {
     $object = ting_get_object_by_id($object_id, true);
 
     if (!$object) {
+      cache_set('ting_covers:' . $path, TRUE, 'cache', $_SERVER['REQUEST_TIME'] + TING_COVERS_CACHE_LIFETIME);
       ting_covers_goto_default($preset);
     }
 
@@ -24,6 +25,7 @@ function ting_covers_object($preset, $object_id) {
       $source_url = $object->additionalInformation->thumbnailUrl;
     }
     else {
+      cache_set('ting_covers:' . $path, TRUE, 'cache', $_SERVER['REQUEST_TIME'] + TING_COVERS_CACHE_LIFETIME);
       ting_covers_goto_default($preset);
     }
 
@@ -45,6 +47,7 @@ function ting_covers_collection($preset, $object_id) {
   if (!ting_covers_cache_is_valid($path, $preset)) {
     $collection = ting_get_collection_by_id($object_id, true);
     if (!$collection) {
+      cache_set('ting_covers:' . $path, TRUE, 'cache', $_SERVER['REQUEST_TIME'] + TING_COVERS_CACHE_LIFETIME);
       ting_covers_goto_default($preset);
     }
 
@@ -114,6 +117,7 @@ function _ting_covers_pages_fetch_or_redirect($path, $source_url, $preset) {
     }
   }
 
+  cache_set('ting_covers:' . $path, TRUE, 'cache', $_SERVER['REQUEST_TIME'] + TING_COVERS_CACHE_LIFETIME);
   ting_covers_goto_default($preset);
 }
 
