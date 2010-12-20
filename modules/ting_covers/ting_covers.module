@@ -82,7 +82,7 @@ function ting_covers_object_url(TingClientObject $object, $presetname) {
     return imagecache_create_url($presetname, $path);
   }
   else {
-  	// Return an absolute URL like imagecache_create_url() does.
+    // Return an absolute URL like imagecache_create_url() does.
     return url('ting/covers/object/' . $presetname . '/' . $object->id, array('absolute' => TRUE));
   }
 }
@@ -104,7 +104,7 @@ function ting_covers_collection_url(TingClientObject $object, $presetname) {
   }
   else {
     // Return an absolute URL like imagecache_create_url() does.
-  	return url('ting/covers/collection/' . $presetname . '/' . $object->id, array('absolute' => TRUE));
+    return url('ting/covers/collection/' . $presetname . '/' . $object->id, array('absolute' => TRUE));
   }
 }
 
