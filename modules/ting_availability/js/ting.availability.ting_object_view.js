@@ -28,7 +28,7 @@ Drupal.behaviors.tingAvailabilityTingObjectView = function () {
           headline.after('<p>' + Drupal.t("There is @total_count copies available. @reservable_count can be reserved. There's @reserved_count reserved.", {
                 '@total_count': itemData.total_count,
                 '@reservable_count': itemData.reservable_count,
-                '@reserved_count': itemData.reserved_count,
+                '@reserved_count': itemData.reserved_count
                   }) + '</p>');
         }
         if (itemData.holdings.length === 0) {
