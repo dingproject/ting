@@ -11,13 +11,13 @@
  * This is _not_ a Drupal.behavior, since those take a lot longer to load.
  */
 
-Drupal.ting = {}
+Drupal.ting = {};
 
 $(function () {
   // Configure our tabs
-  $(".tab-navigation")
+  $('.tab-navigation')
     .tabs( {
-        select: Drupal.ting.selectTab,
+        select: Drupal.ting.selectTab
    });
 });
 
