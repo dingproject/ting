@@ -25,6 +25,14 @@ function ting_search_autocomplete_menu() {
   
   return $items;
 }
+/**
+ * Implementation of hook_trampoline().
+ */
+function ting_search_autocomplete_trampoline() {
+  $items = array();
+  $items['ting/autocomplete'] = TRUE;
+  return $items;
+}
 
 /**
  * Implementation of hook_flush_caches().
@@ -47,7 +55,9 @@ function ting_search_autocomplete_form_ting_search_form_alter(&$form, &$form_sta
 		
 		$modulePath = drupal_get_path('module', 'ting_search_autocomplete');
 		drupal_add_js($modulePath.'/js/ting_search_autocomplete.js', 'module', 'footer', TRUE);
-		drupal_add_js(array('tingSearchAutocomplete' => array('path' => url('ting/autocomplete'))), 'setting');
+
+    $autocomple_path = (module_exists('trampoline')) ? trampoline_url('ting/autocomplete') : url('ting/autocomplete');
+    drupal_add_js(array('tingSearchAutocomplete' => array('path' => $autocomple_path)), 'setting');
 		drupal_add_css($modulePath.'/css/ting_search_autocomplete.css', 'module');
 		
 		$includes_loaded = true;

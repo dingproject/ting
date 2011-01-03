@@ -27,13 +27,20 @@ Drupal.tingAvailability.find_ids = function () {
  * Get details for all ting items found.
  */
 Drupal.tingAvailability.get_details = function (callback) {
+  if (Drupal.settings.trampolinePath) {
+    var ajax_path = Drupal.settings.trampolinePath;
+  }
+  else {
+    var ajax_path = '/';
+  }
+
   // If the id_list is empty, try and find ids again.
   if (Drupal.tingAvailability.id_list.length === 0) {
     Drupal.tingAvailability.find_ids();
   }
 
   if (Drupal.tingAvailability.id_list.length > 0) {
-    $.getJSON(Drupal.settings.basePath + 'ting/availability/item/' + Drupal.tingAvailability.id_list.join(',') + '/details', {}, callback);
+    $.getJSON(ajax_path + 'ting/availability/item/' + Drupal.tingAvailability.id_list.join(',') + '/details', {}, callback);
   }
 };
 
@@ -50,7 +57,13 @@ Drupal.tingAvailability.get_availability = function (callback) {
   }
 
   if (Drupal.tingAvailability.id_list.length > 0) {
-    $.getJSON(Drupal.settings.basePath + 'ting/availability/item/' + Drupal.tingAvailability.id_list.join(','), {}, callback);
+    if (Drupal.settings.trampolinePath) {
+      var ajax_path = Drupal.settings.trampolinePath;
+    }
+    else {
+      var ajax_path = '/';
+    }
+    $.getJSON(ajax_path + 'ting/availability/item/' + Drupal.tingAvailability.id_list.join(',') + '/details', {}, callback);
   }
 };
 

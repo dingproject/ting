@@ -25,12 +25,22 @@ function ting_availability_menu() {
   return $items;
 }
 
+function ting_availability_trampoline() {
+  $items = array();
+  $items['ting/availability/item/%/details'] = array(
+    'includes' => array(
+      drupal_get_path('module', 'ding_provider').'/ding_provider.module', 
+      drupal_get_path('module', 'ctools') . '/ctools.module'),
+    'hooks' => array('ding_provider_availability', 'ctools_plugin_directory' => array('alma', 'openruth')),
+  );
+  return $items;
+}
+
 /**
  * Implementation of hook_ting_add_js().
  */
 function ting_availability_ting_add_js($type) {
   $path = drupal_get_path('module', 'ting_availability') . '/js';
-
   switch ($type) {
     case 'ting_object_view':
       drupal_add_js($path . '/ting.availability.js', 'module', 'footer', TRUE);
