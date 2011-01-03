@@ -29,7 +29,7 @@ function ting_availability_trampoline() {
   $items = array();
   $items['ting/availability/item/%/details'] = array(
     'includes' => array(
-      drupal_get_path('module', 'ding_provider').'/ding_provider.module', 
+      drupal_get_path('module', 'ding_provider') . '/ding_provider.module',
       drupal_get_path('module', 'ctools') . '/ctools.module'),
     'hooks' => array('ding_provider_availability', 'ctools_plugin_directory' => array('alma', 'openruth')),
   );
