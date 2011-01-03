@@ -30,7 +30,14 @@ function ting_search_autocomplete_menu() {
  */
 function ting_search_autocomplete_trampoline() {
   $items = array();
-  $items['ting/autocomplete'] = TRUE;
+  $items['ting/autocomplete'] = array(
+    'variables' => array(
+      'ting_search_url',
+      'ting_scan_url',
+      'ting_spell_url',
+      'ting_recommendation_server',
+    ),
+  );
   return $items;
 }
 

@@ -32,7 +32,16 @@ function ting_availability_trampoline() {
       drupal_get_path('module', 'ding_provider') . '/ding_provider.module',
       drupal_get_path('module', 'ctools') . '/ctools.module'),
     'hooks' => array('ding_provider_availability', 'ctools_plugin_directory' => array('alma', 'openruth')),
+    'variables' => array(
+      'ting_search_url',
+      'ting_scan_url',
+      'ting_spell_url',
+      'ting_recommendation_server',
+    ),
   );
+  if (module_exists('alma')) {
+    $items['ting/availability/item/%/details']['variables'][] = 'alma_base_url';
+  }
   return $items;
 }
 
