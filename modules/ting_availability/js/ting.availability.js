@@ -31,7 +31,7 @@ Drupal.tingAvailability.get_details = function (callback) {
     var ajax_path = Drupal.settings.trampolinePath;
   }
   else {
-    var ajax_path = '/';
+    var ajax_path = Drupal.settings.basePath;
   }
 
   // If the id_list is empty, try and find ids again.
@@ -61,7 +61,7 @@ Drupal.tingAvailability.get_availability = function (callback) {
       var ajax_path = Drupal.settings.trampolinePath;
     }
     else {
-      var ajax_path = '/';
+      var ajax_path = Drupal.settings.basePath;
     }
     $.getJSON(ajax_path + 'ting/availability/item/' + Drupal.tingAvailability.id_list.join(',') + '/details', {}, callback);
   }
