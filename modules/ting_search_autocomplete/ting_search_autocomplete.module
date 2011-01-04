@@ -32,6 +32,7 @@ function ting_search_autocomplete_trampoline() {
   $items = array();
   $items['ting/autocomplete'] = array(
     'variables' => array(
+      'ting_agency',
       'ting_search_url',
       'ting_scan_url',
       'ting_spell_url',

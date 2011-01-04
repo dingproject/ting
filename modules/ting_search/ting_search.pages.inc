@@ -21,7 +21,8 @@ function ting_search_pages_redirect() {
  * JSON callback to search Ting.
  */
 function ting_search_pages_ting_js() {
-  module_load_include('client.inc', 'ting');
+  $path = drupal_get_path('module', 'ting');
+  require $path . '/ting.client.inc';
 
   //Get users base query
   $query = $_REQUEST['query'];
@@ -77,6 +78,7 @@ function ting_search_pages_ting_js() {
     }
   }
   catch (TingClientException $e) {
+    throw($e);
     // TODO: Log the error.
     $result = array('count' => 0);
   }

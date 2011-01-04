@@ -19,7 +19,7 @@
       </div>
 
       <h3>
-        <?php print l($collection->title, $collection->url, array('attributes' => array('class' =>'title'))) ;?> 
+        <?php print l($collection->title, $collection->url, array('attributes' => array('class' =>'title'))) ;?>
       </h3>
 
       <div class="meta">

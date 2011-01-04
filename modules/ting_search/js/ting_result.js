@@ -148,7 +148,12 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
       var vars = Drupal.getAnchorVars();
       vars.query = Drupal.settings.tingSearch.keys;
 
-      $.getJSON(Drupal.settings.tingSearch.ting_url, vars, function(data) {
+      var url = Drupal.settings.tingSearch.ting_url;
+      if (Drupal.settings.trampolinePath) {
+          url = Drupal.settings.trampolinePath + url.substr(1);
+      }
+
+      $.getJSON(url, vars, function(data) {
         //Update tabs now that we have the result
         Drupal.tingSearch.summary.ting = { count: data.count, page: data.page };
         Drupal.tingSearch.updateTabs('ting');
