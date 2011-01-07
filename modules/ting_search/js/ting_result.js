@@ -51,7 +51,7 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
           var $type = $list.find('.ting-object-' + providerID);
           // If it already has the available class, don't touch it.
           if (!$type.hasClass('available')) {
-            if (available) {
+            if (available.available) {
               $type.addClass('available');
               $type.removeClass('unavailable');
             }
