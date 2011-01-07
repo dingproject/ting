@@ -41,10 +41,6 @@ Drupal.tingSearch.getTingData = function(url, keys) {
   var vars = Drupal.getAnchorVars();
   vars.query = keys;
 
-  if (Drupal.settings.trampolinePath) {
-    url = Drupal.settings.trampolinePath + url.substr(1);
-  }
-
   $.getJSON(url, vars, function (result) {
     if (result.count > 0) {
       Drupal.tingSearch.summary.ting = { count: result.count, page: result.page };

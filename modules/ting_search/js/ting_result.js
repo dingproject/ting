@@ -149,9 +149,6 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
       vars.query = Drupal.settings.tingSearch.keys;
 
       var url = Drupal.settings.tingSearch.ting_url;
-      if (Drupal.settings.trampolinePath) {
-          url = Drupal.settings.trampolinePath + url.substr(1);
-      }
 
       $.getJSON(url, vars, function(data) {
         //Update tabs now that we have the result

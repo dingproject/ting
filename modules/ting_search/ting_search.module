@@ -116,39 +116,6 @@ function ting_search_block($op = 'list', $delta = 0, $edit = array()) {
 }
 
 /**
- * Implementation of hook_trampoline
- */
-function ting_search_trampoline() {
-  $items = array();
-
-  $items['ting/search/js'] = array(
-    'includes' => array(
-      drupal_get_path('module', 'ting') . '/ting.module',
-      drupal_get_path('module', 'ting_covers') . '/ting_covers.module',
-      drupal_get_path('module', 'imagecache') . '/imagecache.module',
-      drupal_get_path('module', 'transliteration') . '/transliteration.module',
-      drupal_get_path('module', 'transliteration') . '/transliteration.inc',
-      drupal_get_path('theme', 'mothership') . '/template/template.alternatives.php',
-    ),
-    'theme_hooks' => array(
-      'ting_search_collection',
-      'item_list',
-      'placeholder',
-      'image',
-    ),
-    'variables' => array(
-      'ting_agency',
-      'ting_search_url',
-      'ting_scan_url',
-      'ting_spell_url',
-      'ting_recommendation_server',
-    ),
-  );
-
-  return $items;
-}
-
-/**
  * Implementation of hook_ctools_plugin_api().
  */
 function ting_search_ctools_plugin_api($module, $api) {
