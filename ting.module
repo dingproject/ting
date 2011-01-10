@@ -17,7 +17,7 @@ function ting_menu() {
     'page callback' => 'ting_search_pages_object_redirect',
     'access arguments' => array('search content'),
     'type' => MENU_CALLBACK,
-    'file' => 'ting_search.pages.inc',
+    'file' => 'ting.pages.inc',
   );
 
   $items['admin/settings/ting'] = array(
