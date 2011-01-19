@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-10-28 13:16+0200\n"
+"POT-Creation-Date: 2011-01-19 14:30+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -33,34 +33,54 @@ msgid "Ding!"
 msgstr ""
 
 #: ting_covers.admin.inc:14
-msgid "Default cover image"
+msgid "Cover settings"
+msgstr ""
+
+#: ting_covers.admin.inc:19
+msgid "Cover cache lifetime"
 msgstr ""
 
 #: ting_covers.admin.inc:21
-msgid "Your current default image:"
+msgid "24 hours"
+msgstr ""
+
+#: ting_covers.admin.inc:22
+msgid "2 weeks"
 msgstr ""
 
 #: ting_covers.admin.inc:29
-msgid "You currently have no default image. You can upload one below."
+msgid "Save settings"
 msgstr ""
 
 #: ting_covers.admin.inc:35
+msgid "Default cover image"
+msgstr ""
+
+#: ting_covers.admin.inc:42
+msgid "Your current default image:"
+msgstr ""
+
+#: ting_covers.admin.inc:50
+msgid "You currently have no default image. You can upload one below."
+msgstr ""
+
+#: ting_covers.admin.inc:56
 msgid "Upload new"
 msgstr ""
 
-#: ting_covers.admin.inc:36
+#: ting_covers.admin.inc:57
 msgid "Upload a new default image. This should be of a reasonable size, and preferably in PNG or JPEG format."
 msgstr ""
 
-#: ting_covers.admin.inc:41
+#: ting_covers.admin.inc:62
 msgid "Upload"
 msgstr ""
 
-#: ting_covers.admin.inc:88
+#: ting_covers.admin.inc:116
 msgid "Failed to write the uploaded file to ting/covers in the site’s files folder."
 msgstr ""
 
-#: ting_covers.admin.inc:92
+#: ting_covers.admin.inc:120
 msgid "Error validating file upload. Please upload an image in PNG or JPEG format."
 msgstr ""
 

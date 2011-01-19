@@ -3,6 +3,7 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 # Generated from files:
+#  js/ting.availability.ting_object_view.js: n/a
 #  js/ting.availability.js: n/a
 #  ting_availability.info: n/a
 #  ting_availability.module: n/a
@@ -11,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-10-28 13:16+0200\n"
+"POT-Creation-Date: 2011-01-19 14:30+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -20,8 +21,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#: js/ting.availability.ting_object_view.js:0
+msgid "There is @total_count copies available. @reservable_count can be reserved. There's @reserved_count reserved."
+msgstr ""
+
+#: js/ting.availability.ting_object_view.js:0
+msgid "The material is currently not available at any library"
+msgstr ""
+
 #: js/ting.availability.js:0
 msgid "not reservable"
+msgstr ""
+
+#: js/ting.availability.js:0
+msgid "available from @date"
+msgstr ""
+
+#: js/ting.availability.js:0
+msgid "waiting period"
 msgstr ""
 
 #: js/ting.availability.js:0
@@ -30,6 +47,10 @@ msgstr ""
 
 #: js/ting.availability.js:0
 msgid "unavailable"
+msgstr ""
+
+#: js/ting.availability.js:0
+msgid "on loan"
 msgstr ""
 
 #: js/ting.availability.js:0
@@ -48,16 +69,20 @@ msgstr ""
 msgid "Ding!"
 msgstr ""
 
-#: ting_availability.module:59
+#: ting_availability.module:62
 msgid "Ding availability"
 msgstr ""
 
-#: ting_availability.module:62
+#: ting_availability.module:65
 msgid "OK"
 msgstr ""
 
-#: ting_availability.module:62
+#: ting_availability.module:65
 msgid "No availability provider active."
+msgstr ""
+
+#: ting_availability.module:120;126
+msgid "waiting for data"
 msgstr ""
 
 #: ting_availability.module:10

@@ -1,0 +1,58 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  ting_periodical.module: n/a
+#  ting_periodical.info: n/a
+#  ting_periodical_issues.tpl.php: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2011-01-19 14:30+0100\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: ting_periodical.module:25
+msgid "Ting periodical"
+msgstr ""
+
+#: ting_periodical.module:28
+msgid "OK"
+msgstr ""
+
+#: ting_periodical.module:31
+msgid "No reservation provider active."
+msgstr ""
+
+#: ting_periodical.module:34
+msgid "Provider doesn't support periodical info."
+msgstr ""
+
+#: ting_periodical.module:91;99
+msgid "Reserve now"
+msgstr ""
+
+#: ting_periodical.info:0
+msgid "Ding! periodical view"
+msgstr ""
+
+#: ting_periodical.info:0
+msgid "Displays periodicals if the library system supports it."
+msgstr ""
+
+#: ting_periodical.info:0
+msgid "Ding!"
+msgstr ""
+
+#: ting_periodical_issues.tpl.php:18
+msgid "No issues found."
+msgstr ""
+

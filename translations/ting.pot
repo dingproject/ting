@@ -5,8 +5,8 @@
 # Generated from files:
 #  ting_collection.tpl.php: n/a
 #  ting_object.tpl.php: n/a
+#  ting-list-item.tpl.php: n/a
 #  plugins/content_types/object_view.inc: n/a
-#  plugins/content_types/periodical_view.inc: n/a
 #  plugins/access/ting_object_type.inc: n/a
 #  plugins/contexts/ting_object.inc: n/a
 #  plugins/arguments/object_id.inc: n/a
@@ -17,13 +17,14 @@
 #  includes/ting.admin.inc: n/a
 #  ting.module: n/a
 #  ting.info: n/a
+#  ting.install: n/a
 #  ting.client.inc: n/a
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-10-28 13:16+0200\n"
+"POT-Creation-Date: 2011-01-19 14:30+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -32,123 +33,115 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ting_collection.tpl.php:30;93 ting_object.tpl.php:59
+#: ting_collection.tpl.php:18 ting_object.tpl.php:48 ting-list-item.tpl.php:33
 msgid "by"
 msgstr ""
 
-#: ting_collection.tpl.php:45
+#: ting_collection.tpl.php:33
 msgid "Terms:"
 msgstr ""
 
-#: ting_collection.tpl.php:57
+#: ting_collection.tpl.php:45
 msgid "Go to material:"
 msgstr ""
 
-#: ting_collection.tpl.php:96 ting_object.tpl.php:102
-msgid "Language"
-msgstr ""
-
-#: ting_collection.tpl.php:104
-msgid "More information"
-msgstr ""
-
-#: ting_object.tpl.php:73;226
-msgid "waiting for data"
-msgstr ""
-
-#: ting_object.tpl.php:92
+#: ting_object.tpl.php:74
 msgid "Type"
 msgstr ""
 
-#: ting_object.tpl.php:94
+#: ting_object.tpl.php:76
 msgid "Format"
 msgstr ""
 
-#: ting_object.tpl.php:97
+#: ting_object.tpl.php:79
 msgid "Available in"
 msgstr ""
 
-#: ting_object.tpl.php:105
+#: ting_object.tpl.php:84 ting-list-item.tpl.php:36
+msgid "Language"
+msgstr ""
+
+#: ting_object.tpl.php:87
 msgid "Speech"
 msgstr ""
 
-#: ting_object.tpl.php:108
+#: ting_object.tpl.php:90
 msgid "Subtitles"
 msgstr ""
 
-#: ting_object.tpl.php:112
+#: ting_object.tpl.php:94
 msgid "Genre"
 msgstr ""
 
-#: ting_object.tpl.php:115
+#: ting_object.tpl.php:97
 msgid "Subjects"
 msgstr ""
 
-#: ting_object.tpl.php:118
+#: ting_object.tpl.php:100
 msgid "Classification"
 msgstr ""
 
-#: ting_object.tpl.php:125
+#: ting_object.tpl.php:107
 msgid "Reader"
 msgstr ""
 
-#: ting_object.tpl.php:128
+#: ting_object.tpl.php:110
 msgid "Actor"
 msgstr ""
 
-#: ting_object.tpl.php:131
+#: ting_object.tpl.php:113
 msgid "Musician"
 msgstr ""
 
-#: ting_object.tpl.php:135
+#: ting_object.tpl.php:117
 msgid "Contains"
 msgstr ""
 
-#: ting_object.tpl.php:139
+#: ting_object.tpl.php:121
 msgid "Referenced by"
 msgstr ""
 
-#: ting_object.tpl.php:145
+#: ting_object.tpl.php:127
 msgid "Description"
 msgstr ""
 
-#: ting_object.tpl.php:150
+#: ting_object.tpl.php:132
 msgid "Original title"
 msgstr ""
 
-#: ting_object.tpl.php:153
+#: ting_object.tpl.php:135
 msgid "Previous title"
 msgstr ""
 
-#: ting_object.tpl.php:156
+#: ting_object.tpl.php:138
 msgid "Later title"
 msgstr ""
 
-#: ting_object.tpl.php:160
+#: ting_object.tpl.php:142
 msgid "ISBN no."
 msgstr ""
 
-#: ting_object.tpl.php:169
+#: ting_object.tpl.php:151
 msgid "Host publication"
 msgstr ""
 
-#: ting_object.tpl.php:175
+#: ting_object.tpl.php:156
 msgid "Version"
 msgstr ""
 
-#: ting_object.tpl.php:181
+#: ting_object.tpl.php:160
 msgid "Extent"
 msgstr ""
 
-#: ting_object.tpl.php:184
+#: ting_object.tpl.php:163
 msgid "Publisher"
 msgstr ""
 
-#: ting_object.tpl.php:187
+#: ting_object.tpl.php:166
 msgid "Rights"
 msgstr ""
 
-#: ting_object.tpl.php:197
+#: ting_object.tpl.php:176
 msgid "Also available as: "
 msgstr ""
 
@@ -160,15 +153,15 @@ msgstr ""
 msgid "Provides the full display of a Ting object."
 msgstr ""
 
-#: plugins/content_types/object_view.inc:20 plugins/content_types/periodical_view.inc:20 plugins/access/ting_object_type.inc:21 plugins/contexts/ting_object.inc:17 plugins/arguments/object_id.inc:15
+#: plugins/content_types/object_view.inc:20 plugins/access/ting_object_type.inc:21 plugins/contexts/ting_object.inc:17 plugins/arguments/object_id.inc:15
 msgid "Ting object"
 msgstr ""
 
-#: plugins/content_types/object_view.inc:21 plugins/content_types/collection_view.inc:23 plugins/content_types/periodical_view.inc:21
+#: plugins/content_types/object_view.inc:21 plugins/content_types/collection_view.inc:23
 msgid "Ting"
 msgstr ""
 
-#: plugins/content_types/object_view.inc:46
+#: plugins/content_types/object_view.inc:43
 msgid "“@s”: Ting object view"
 msgstr ""
 
@@ -188,20 +181,8 @@ msgstr ""
 msgid "Query arguments"
 msgstr ""
 
-#: plugins/content_types/collection_view.inc:57
+#: plugins/content_types/collection_view.inc:54
 msgid "“@s1, @s2”: Ting collection view"
-msgstr ""
-
-#: plugins/content_types/periodical_view.inc:17
-msgid "Ting periodical view"
-msgstr ""
-
-#: plugins/content_types/periodical_view.inc:19
-msgid "Provides the full display of a Ting object of the periodical type."
-msgstr ""
-
-#: plugins/content_types/periodical_view.inc:46
-msgid "“@s”: Ting periodical view"
 msgstr ""
 
 #: plugins/access/ting_object_type.inc:15;51
@@ -388,6 +369,26 @@ msgstr ""
 msgid "Enter one hostname per line, e.g. <em>magazine.example.com</em>. Do not include the <em>http://</em> prefix."
 msgstr ""
 
+#: ting.module:188
+msgid "Hear online"
+msgstr ""
+
+#: ting.module:191
+msgid "See online"
+msgstr ""
+
+#: ting.module:212
+msgid "Materials"
+msgstr ""
+
+#: ting.module:218
+msgid "Related"
+msgstr ""
+
+#: ting.module:268
+msgid "More information"
+msgstr ""
+
 #: ting.module:16
 msgid "Redirect to object based on local ID (links from bibliotek.dk)."
 msgstr ""
@@ -412,31 +413,35 @@ msgstr ""
 msgid "Ding!"
 msgstr ""
 
-#: ting.client.inc:127
+#: ting.install:17
+msgid "Replaced alma_periodical with ting_periodical."
+msgstr ""
+
+#: ting.client.inc:142
 msgid "Relevance"
 msgstr ""
 
-#: ting.client.inc:128
+#: ting.client.inc:143
 msgid "Title – A → Z"
 msgstr ""
 
-#: ting.client.inc:129
+#: ting.client.inc:144
 msgid "Title – Z → A"
 msgstr ""
 
-#: ting.client.inc:130
+#: ting.client.inc:145
 msgid "Author – A → Z"
 msgstr ""
 
-#: ting.client.inc:131
+#: ting.client.inc:146
 msgid "Author – Z → A"
 msgstr ""
 
-#: ting.client.inc:132
+#: ting.client.inc:147
 msgid "Year of publication – newest first"
 msgstr ""
 
-#: ting.client.inc:133
+#: ting.client.inc:148
 msgid "Year of publication – oldest first"
 msgstr ""
 

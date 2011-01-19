@@ -7,8 +7,8 @@
 #  ting_search_result_page.tpl.php: n/a
 #  ting_search.pages.inc: n/a
 #  ting_search.module: n/a
-#  plugins/content_types/result.inc: n/a
 #  ting_search.info: n/a
+#  plugins/content_types/result.inc: n/a
 #  ting_search_collection.tpl.php: n/a
 #  ting_result_pager.tpl.php: n/a
 #
@@ -16,7 +16,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-10-28 13:16+0200\n"
+"POT-Creation-Date: 2011-01-19 14:30+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -33,57 +33,53 @@ msgstr ""
 msgid "Showing !firstResult-!lastResult of !count results"
 msgstr ""
 
-#: ting_search.pages.inc:183
+#: ting_search.pages.inc:191
 msgid "“@title” search results feed"
 msgstr ""
 
-#: ting_search.pages.inc:195;267
+#: ting_search.pages.inc:203;275
 msgid "First @max of @count items found."
 msgstr ""
 
-#: ting_search.pages.inc:201;273
+#: ting_search.pages.inc:209;281
 msgid "No items found."
 msgstr ""
 
-#: ting_search.pages.inc:255
+#: ting_search.pages.inc:263
 msgid "“@title” content search results feed"
 msgstr ""
 
-#: ting_search.pages.inc:198;270
+#: ting_search.pages.inc:206;278
 msgid "One item found"
 msgid_plural "@count items found."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ting_search.module:103 plugins/content_types/result.inc:21
-msgid "Ting"
-msgstr ""
-
-#: ting_search.module:122
+#: ting_search.module:104
 msgid "Ting search box – for page header"
 msgstr ""
 
-#: ting_search.module:130;245
+#: ting_search.module:112;217
 msgid "Search"
 msgstr ""
 
-#: ting_search.module:206
+#: ting_search.module:178
 msgid "Show more facet terms"
 msgstr ""
 
-#: ting_search.module:207
+#: ting_search.module:179
 msgid "No results found"
 msgstr ""
 
-#: ting_search.module:208
+#: ting_search.module:180
 msgid "Sorry, we could not find any results for your search. Please try again with different keywords or ask a librarian."
 msgstr ""
 
-#: ting_search.module:237
+#: ting_search.module:209
 msgid "Enter your search terms here"
 msgstr ""
 
-#: ting_search.module:249
+#: ting_search.module:221
 msgid "For example:"
 msgstr ""
 
@@ -125,6 +121,10 @@ msgstr ""
 
 #: plugins/content_types/result.inc:20
 msgid "Search keys"
+msgstr ""
+
+#: plugins/content_types/result.inc:21
+msgid "Ting"
 msgstr ""
 
 #: plugins/content_types/result.inc:35

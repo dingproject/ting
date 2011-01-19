@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2010-10-28 13:16+0200\n"
+"POT-Creation-Date: 2011-01-19 14:30+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "!author: !title (!manifestations)"
 msgstr ""
 
-#: ting_reference.pages.inc:46
+#: ting_reference.pages.inc:48
 msgid "!author: !title (!type, !year, !id)"
 msgstr ""
 
@@ -93,6 +93,10 @@ msgstr ""
 
 #: ting_reference.module:204
 msgid "Reset"
+msgstr ""
+
+#: ting_reference.module:360
+msgid "On this site"
 msgstr ""
 
 #: ting_reference.module:30
