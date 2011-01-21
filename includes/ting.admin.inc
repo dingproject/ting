@@ -92,27 +92,6 @@ function ting_admin_settings_form($form_state) {
     '#default_value' => variable_get('addi_enable_logging', false),
   );
   
-  $form['proxy'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Proxy service'),
-  	'#description' => t('Restricted-access resources referenced by Ting may be accessed through the library\'s proxy server'),
-    '#tree' => FALSE,
-  );
-  $form['proxy']['restricted_access_proxy_prefix'] = array(
-    '#type' => 'textfield',
-    '#title' => 'Proxy server URL prefix',
-    '#default_value' => variable_get('restricted_access_proxy_prefix', ''),
-    '#description' => t('E.g. <em>http://proxy.example.com/?url=</em>.'),
-  );
-  $form['proxy']['restricted_access_proxy_hostnames'] = array(
-    '#type' => 'textarea',
-    '#title' => 'Hostnames',
-    '#rows' => 15,
-    '#default_value' => implode("\n", variable_get('restricted_access_proxy_hostnames', array())),
-    '#value_callback' => 'ting_admin_settings_hostnames_value',
-    '#description' => t('Enter one hostname per line, e.g. <em>magazine.example.com</em>. Do not include the <em>http://</em> prefix.'),
-  );
-
   return system_settings_form($form);
 }
 

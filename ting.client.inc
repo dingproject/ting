@@ -363,7 +363,7 @@ function ting_add_object_info(TingClientObject $object) {
 
   if ($object->record['dc:identifier']['dcterms:URI']) {
     foreach ($object->record['dc:identifier']['dcterms:URI'] as $url) {
-      $object->online_url = ting_rewrite_download_url($url);
+      $object->online_url = ting_proxy_rewrite_download_url($url);
     }
   }
 
@@ -480,23 +480,3 @@ function ting_remove_supporting_types(TingClientSearchRequest $request) {
   $request->setQuery($request->getQuery().' NOT ('.implode(' OR ', $supportingTypes).')');
   return $request;
 }
-
-/**
- * Rewrite the download URL of external restricted-access ressources.
- *
- * This allow access to the ressources through the library's proxy server.
- *
- * Only URLs refererring to sites specified on the Ting settings page are
- * modified; other URLs are returned unmodified.
- */
-function ting_rewrite_download_url($url) {
-  $host = parse_url($url, PHP_URL_HOST);
-  if (in_array($host, variable_get('restricted_access_proxy_hostnames', array()))) {
-    $prefix = variable_get('restricted_access_proxy_prefix', '');
-    if ($prefix) {
-      $url = $prefix . $url;
-    }
-  }
-  return $url;
-}
-

@@ -20,3 +20,42 @@ function ting_update_6001() {
   }
   return $ret;
 }
+
+/**
+ * Migrate to ting_proxy
+ */
+function ting_update_6002() {
+
+  // Install ting proxy
+  drupal_install_modules(array('ting_proxy'));
+
+  // Get prefix
+  $proxy = array();
+  $proxy['prefix'] = variable_get('restricted_access_proxy_prefix', '');
+
+  $key = 0;
+  $hostnames = variable_get('restricted_access_proxy_hostnames', array());
+  foreach ($hostnames as $hostname) {
+    $proxy['hostnames'][$key] = array(
+      'url' => $hostname,
+      'regex' => '',
+      'replacement' => '',
+      'no' => 0,
+    );
+    $key++;
+  }
+
+  // Save settings
+  variable_set('ting_proxy', $proxy);
+
+  // Clean up
+  variable_del('restricted_access_proxy_prefix');
+  variable_del('restricted_access_proxy_hostnames');
+
+  // Return message
+  $ret[] = array(
+    'success' => TRUE,
+    'query' => t('Update to ting proxy completed.'),
+  );
+  return $ret;
+}

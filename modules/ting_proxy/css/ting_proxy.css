@@ -1,0 +1,29 @@
+/* $Id$*/
+
+.hostname-wrap {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.hostname-wrap:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.hostname-wrap .optional-proxy {
+  float: left;
+}
+
+.hostname-wrap .optional-proxy label {
+  position: relative;
+  top: -5px;
+  left: 5px;
+}
+
+.hostname-wrap .remove {
+  float: right;
+}
