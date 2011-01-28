@@ -1,5 +1,12 @@
-Drupal.behaviors.addTingReferenceAutocomplete = function(context)
-{
+/**
+ * JavaScript behaviors for Ting reference form element.
+ */
+
+/**
+ * Set up the autocomplete for Ting search.
+ */
+Drupal.behaviors.addTingReferenceAutocomplete = function(context) {
+  var path, type;
 	type = jQuery('.ting-reference-type-radio:checked').val();
 	path = Drupal.settings.tingReference.autocomplete[type];
 	jQuery('input.ting-reference-autocomplete').each(function(i, e)
@@ -21,13 +28,19 @@ Drupal.behaviors.addTingReferenceAutocomplete = function(context)
 		});
 
 	});
+};
 
-}
+/**
+ * Set up the preview for the currently selected object.
+ */
+Drupal.behaviors.tingReferencePreview = function(context) {
+  var wrapper = jQuery('.form-item.form-ting-reference');
 
-Drupal.behaviors.initPreview = function(context) {
-  jQuery('input.ting-object-id').change(function() {
-    var input = jQuery(this);
-    var refType = input.parents('.form-ting-reference').find('input.ting-reference-type-radio:checked').val();
+  // Whenever the object ID changes, refresh the prison.
+  wrapper.find('.ting-object-id').change(function() {
+    var input = jQuery(this), refType;
+    refType = input.parents('.form-ting-reference').find('input.ting-reference-type-radio:checked').val();
+
     jQuery.getJSON(
       Drupal.settings.tingReference.previewUrl + '/' + refType + '/' + Drupal.encodeURIComponent(input.val()), 
       null,
@@ -37,10 +50,21 @@ Drupal.behaviors.initPreview = function(context) {
     );
   });
 
-	jQuery('.ting-reference-reset').click(function(event) {
-    jQuery(event.target).parents('.form-ting-reference').find('.ting-reference-preview').html('');
-    jQuery(event.target).parents('.form-ting-reference').find('.ting-object-id').val('');
-    // Do not submit the form.
-    event.preventDefault();
+  // Add a reset link.
+  wrapper.find('.ting-reference-preview').after('<a class="ting-reference-reset" href="#reset">' + Drupal.t('Reset') + '</a>');
+
+  // Enable the reset link.
+	wrapper.find('.ting-reference-reset').click(function (event) {
+    jQuery(event.target)
+      .parents('.form-ting-reference')
+        .find('.ting-reference-preview')
+          .html('')
+        .end()
+        .find('.ting-object-id')
+          .val('');
+
+    // Do not follow the link.
+    return false;
   });
-}
+};
+

@@ -175,8 +175,11 @@ function ting_reference_widget_info() {
 function ting_reference_widget(&$form, &$form_state, $field, $items, $delta = 0) {
   _ting_reference_add_css_js();
 
-  $element['#prefix'] = '<div class="form-item form-ting-reference">';
-  $element['#suffix'] = '</div>';
+  // Start out with creating a new element, wrapped in a div.
+  $element = array(
+    '#prefix' => '<div class="form-item form-ting-reference">',
+    '#suffix' => '</div>',
+  );
 
   $ting_object_id = isset($items[$delta]['ting_object_id']) ? $items[$delta]['ting_object_id'] : '';
   $ting_ref_type = !empty($items[$delta]['ting_ref_type']) ? $items[$delta]['ting_ref_type'] : 'collection';
@@ -186,7 +189,7 @@ function ting_reference_widget(&$form, &$form_state, $field, $items, $delta = 0)
     '#title' => 'Reference type',
     '#default_value' => $ting_ref_type,
     '#options' => array('collection' => t('Ting collection'), 'object' => t('Ting object')),
-    '#attributes' => array('class' => 'ting-reference-type-radio'),
+    '#attributes' => array('class' => 'ting-reference-type-radio clear-block'),
   );
 
   $element['search'] = array (
@@ -195,27 +198,26 @@ function ting_reference_widget(&$form, &$form_state, $field, $items, $delta = 0)
     '#maxlength' => NULL,
     '#attributes' => array('class' => 'form-autocomplete ting-reference-autocomplete')
   );
+
   $collection = _ting_reference_get_collection($ting_ref_type, $ting_object_id);
   $element['preview'] = array (
     '#value' => '<div class="ting-reference-preview">' . ($collection ? theme('ting_reference_preview', $collection) : t('Object not found.')) . '</div>',
   );
-  $element['reset'] = array (
-    '#type' => 'button',
-    '#value' => t('Reset'),
-    '#attributes' => array('class' => 'ting-reference-reset'),
-  );
+
   $element['ting_object_id'] = array (
     '#type' => 'hidden',
     '#title' => 'Ting object id',
     '#default_value' => $ting_object_id,
     '#attributes' => array('class' => 'ting-object-id')
   );
+
   $element['description'] = array (
     '#type' => 'textarea',
     '#title' => 'Description',
     '#rows' => 2,
     '#default_value' => isset($items[$delta]['description']) ? $items[$delta]['description'] : '',
   );
+
   return $element;
 }
 
