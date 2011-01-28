@@ -9,18 +9,15 @@ Drupal.behaviors.addTingReferenceAutocomplete = function(context) {
   var path, type;
 	type = jQuery('.ting-reference-type-radio:checked').val();
 	path = Drupal.settings.tingReference.autocomplete[type];
-	jQuery('input.ting-reference-autocomplete').each(function(i, e)
-	{
-		var autocompleter = jQuery(e);
+	jQuery('input.ting-reference-autocomplete').each(function(index, element) {
+		var autocompleter = jQuery(element);
 		
 		autocompleter.autocomplete(path, {});
-		autocompleter.result(function(event, data, formatted)
-		{
+		autocompleter.result(function(event, data, formatted) {
 			jQuery(event.target).parent().siblings('.ting-object-id').val(data[1]).change();
 		});
 
-		autocompleter.parents('.form-ting-reference').find('input.ting-reference-type-radio').focus(function()
-		{
+		autocompleter.parents('.form-ting-reference').find('input.ting-reference-type-radio').focus(function() {
 			type = jQuery(this).val();
 			path = Drupal.settings.tingReference.autocomplete[type];
 			autocompleter.setOptions({ url: path });
