@@ -69,7 +69,10 @@ function ting_covers_cache_is_valid($path, $presetname) {
     }
     else {
       // Remove imagecache derivatives.
-      unlink(imagecache_create_path($presetname, $path));
+      $ic_path = imagecache_create_path($presetname, $path);
+      if (file_exists($ic_path)) {
+        unlink($ic_path);
+      }
     }
   }
   return FALSE;
