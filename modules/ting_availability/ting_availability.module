@@ -42,6 +42,9 @@ function ting_availability_trampoline() {
   );
   if (module_exists('alma')) {
     $items['ting/availability/item/%/details']['variables'][] = 'alma_base_url';
+    foreach (_alma_cached_methods() as $name => $title) {
+      $items['ting/availability/item/%/details']['variables'][] = 'alma_' . $name . '_expire';
+    }
   }
   return $items;
 }
