@@ -205,6 +205,17 @@ function ting_ting_object_buttons($object) {
  * Theme something from Ting.
  */
 function theme_ting_thing($type, $object, $query_args = NULL) {
+  static $displayed_relation_types = array(
+    'isAuthorDescriptionOf',
+    'hasAuthorDescription',
+    'hasReview',
+    'isReviewOf',
+    'hasAnalysis',
+    'isAnalysisOf',
+    'isSubjectDescriptionOf',
+    'hasSubjectDescription',
+    'hasFulltext',
+  );
   module_invoke_all('ting_add_js', "ting_${type}_view");
 
   $tabs = array();
@@ -214,10 +225,18 @@ function theme_ting_thing($type, $object, $query_args = NULL) {
   );
 
   if (sizeof($object->relations)) {
-    $tabs['related'] = array(
-      'title' => t('Related'),
-      'content' => theme('ting_list', $object->relations),
-    );
+    $relations = array();
+    foreach ($object->relations as $relation) {
+      if (in_array($relation->relationType, $displayed_relation_types)) {
+        $relations[] = $relation;
+      }
+    }
+    if ($relations) {
+      $tabs['related'] = array(
+        'title' => t('Related'),
+        'content' => theme('ting_list', $object->relations),
+      );
+    }
   }
 
   drupal_alter('ting_tabs', $tabs, $type, $object);
