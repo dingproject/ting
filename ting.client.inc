@@ -361,9 +361,11 @@ function ting_add_object_info(TingClientObject $object) {
 
   $object->url = url('ting/object/'.$object->id, array('absolute' => TRUE));
 
-  if ($object->record['dc:identifier']['dcterms:URI']) {
-    foreach ($object->record['dc:identifier']['dcterms:URI'] as $url) {
-      $object->online_url = ting_proxy_rewrite_download_url($url);
+  if (function_exists('ting_proxy_rewrite_download_url')) {
+    if ($object->record['dc:identifier']['dcterms:URI']) {
+      foreach ($object->record['dc:identifier']['dcterms:URI'] as $url) {
+        $object->online_url = ting_proxy_rewrite_download_url($url);
+      }
     }
   }
 
