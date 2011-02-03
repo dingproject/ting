@@ -16,6 +16,7 @@ function ting_proxy_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ting_proxy_settings_form'),
     'access arguments' => array('administer site configuration'),
+    'type' => MENU_LOCAL_TASK,
     'file' => 'ting_proxy.admin.inc',
     'file path' => $path,
   );
