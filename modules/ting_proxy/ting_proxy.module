@@ -169,7 +169,8 @@ function ting_proxy_rewrite_download_url($url) {
     foreach ($proxy['hostnames'] as $key => $hostname) {
       if ($host == $hostname['url'] && $proxy['prefix']) {
         // Rewrite/convert url using regex
-        if (isset($hostname['expression']['regex']) && isset($hostname['expression']['replacement'])) {
+        if ((isset($hostname['expression']['regex']) && !empty($hostname['expression']['regex'])) &&
+            (isset($hostname['expression']['replacement']) && !empty($hostname['expression']['replacement']))) {
           $url = preg_replace($hostname['expression']['regex'], 
                               $hostname['expression']['replacement'],
                               $url);
