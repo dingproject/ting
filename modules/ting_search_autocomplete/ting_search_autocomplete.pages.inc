@@ -65,7 +65,7 @@ function ting_search_autocomplete_term_sort($t1, $t2) {
   if ($t1->score > $t2->score) {
     return 1;
   }
-  elseif ($t2 > $t1->score) {
+  elseif ($t2->score > $t1->score) {
     return -1;
   }
   else {
