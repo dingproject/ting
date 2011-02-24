@@ -45,7 +45,17 @@ function ting_search_result_content_type_render($subtype, $conf, $panel_args, $c
       'content_url' => url('ting/search/content/js'),
       'result_template' => theme('ting_result')
     )), 'setting', 'header');
-    $block->content = theme('ting_search_result_page', $keys);
+    $show_hook_params = array('keys' => $keys);
+    $modsret = module_invoke_all('ting_search_show', $show_hook_params);
+    $all_content = '';
+    if (is_array($modsret['content'])) {     
+      foreach ($modsret['content'] as $content) {
+        $all_content=$all_content.$content;
+      }
+    } else {
+      $all_content = $modsret['content'];
+    } 
+    $block->content = theme('ting_search_result_page', $keys, $all_content);
   }
   return $block;
 }
