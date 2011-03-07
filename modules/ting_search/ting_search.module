@@ -12,7 +12,7 @@
 function ting_search_theme() {
   return array(
     'ting_search_result_page' => array(
-      'arguments' => array('keys' => NULL, 'addon_content' => NULL),
+      'arguments' => array('keys' => NULL, 'tabs' => NULL),
       'template' => 'ting_search_result_page'
     ),
     'ting_search' => array(

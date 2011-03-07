@@ -12,9 +12,11 @@
     <li class="ting spinning"><a href="#ting-result"><?php echo t('Materials') ?></a></li>
     <li class="content spinning"><a href="#content-result"><?php echo t('Website') ?></a></li>
 
-    <?php if ($addon_content): ?>
-      <li class="addon spinning"><a href="#addon-result"><?php echo t('Other results') ?></a></li>
-    <?php endif; ?>
+    <?php foreach ($tabs as $i => $tab): ?>
+      <li class="addon spinning">
+        <a href="#addon-<?php echo $i ?>-result"><?php echo $tab['title'] ?></a>
+      </li>
+    <?php endforeach; ?>
   </ul>
 
   <div id="ting-result">
@@ -33,13 +35,13 @@
     <div id="content-search-result"></div>
   </div>
 
-  <?php if ($addon_content): ?>
-  <div id="addon-result" class="ui-tabs-hide">
-    <div id="addon-search-result">
-      <?php print $addon_content; ?>
+  <?php foreach ($tabs as $i => $tab): ?>
+  <div id="addon-<?php echo $i ?>-result" class="ui-tabs-hide">
+    <div id="addon-<?php echo $i ?>-search-result">
+      <?php echo $tab['content'] ?>
     </div>
   </div>
-  <?php endif; ?>
+  <?php endforeach; ?>
 
 </div>
 <div id="ting-search-spinner">
