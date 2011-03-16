@@ -200,7 +200,18 @@ function ting_ting_object_buttons($object) {
   }
 }
 
-
+/**
+ * Implementation of hook_trampoline_variables().
+ */
+function ting_trampoline_variables() {
+  return array(
+    'ting_agency',
+    'ting_search_url',
+    'ting_scan_url',
+    'ting_spell_url',
+    'ting_recommendation_server',
+  );
+}
 /**
  * Theme something from Ting.
  */
