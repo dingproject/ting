@@ -118,5 +118,9 @@ function ting_periodical_ting_object_is($object, $class) {
       return $class == 'periodical' ? TRUE : FALSE;
     }
     return $class == 'periodical' ? FALSE : TRUE;
+  } elseif ($class == 'reservable' || $class == 'cartable') {
+    if (in_array(drupal_strtolower($object->type), array('årbog'))) {
+      return FALSE;
+    }
   }
 }
