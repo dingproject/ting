@@ -11,6 +11,12 @@
   <ul id="ting-search-tabs" class="ui-tabs-nav">
     <li class="ting spinning"><a href="#ting-result"><?php echo t('Materials') ?></a></li>
     <li class="content spinning"><a href="#content-result"><?php echo t('Website') ?></a></li>
+
+    <?php foreach ($tabs as $i => $tab): ?>
+      <li class="addon spinning">
+        <a href="#addon-<?php echo $i ?>-result"><?php echo $tab['title'] ?></a>
+      </li>
+    <?php endforeach; ?>
   </ul>
 
   <div id="ting-result">
@@ -28,6 +34,15 @@
     </div>
     <div id="content-search-result"></div>
   </div>
+
+  <?php foreach ($tabs as $i => $tab): ?>
+  <div id="addon-<?php echo $i ?>-result" class="ui-tabs-hide">
+    <div id="addon-<?php echo $i ?>-search-result">
+      <?php echo $tab['content'] ?>
+    </div>
+  </div>
+  <?php endforeach; ?>
+
 </div>
 <div id="ting-search-spinner">
   <h4><?php print t('Searching'); ?>…</h4>

@@ -45,7 +45,21 @@ function ting_search_result_content_type_render($subtype, $conf, $panel_args, $c
       'content_url' => url('ting/search/content/js'),
       'result_template' => theme('ting_result')
     )), 'setting', 'header');
-    $block->content = theme('ting_search_result_page', $keys);
+    $rets = module_invoke_all('ting_search_tab', $keys);
+    $tabs = array();
+    if (isset($rets['title'])) {
+      if (is_array($rets['title'])) {
+        for ($i=0; $i<count($rets['title']); $i++) {
+          $ttitle = $rets['title'][$i];
+          $tcontent = $rets['content'][$i];
+          array_push($tabs, array('title' => $ttitle, 'content' => $tcontent));
+        }
+      } else {
+        array_push($tabs, array('title' => $rets['title'], 
+          'content' => $rets['content']));
+      }
+    }
+    $block->content = theme('ting_search_result_page', $keys, $tabs);
   }
   return $block;
 }
