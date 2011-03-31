@@ -1,4 +1,3 @@
-// $Id$
 
 /**
  * Ting facet browser configuration function.

@@ -1,4 +1,3 @@
-// $Id$
 
 // Attache onClick to remove buttons in the admin UI.
 Drupal.behaviors.tingProxyAdmin = function(context) {

@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * @file collection_id.inc

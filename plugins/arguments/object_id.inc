@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * @file object_id.inc

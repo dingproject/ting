@@ -1,4 +1,3 @@
-// $Id$
 /**
  * @file alma.availability.js
  * JavaScript behaviours for fetching and displaying availability.

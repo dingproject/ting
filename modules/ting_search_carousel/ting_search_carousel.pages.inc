@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * AHAH callback to retrieve carousel items

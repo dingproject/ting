@@ -1,4 +1,3 @@
-; $Id$
 name = Ting proxy
 description = Rewrite of proxy url's
 package = Ding!

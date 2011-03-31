@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 function ting_proxy_uninstall() {
   variable_del('ting_proxy');

@@ -1,4 +1,3 @@
-// $Id$
 
 /**
  * Behaviour to set up the search carousel.

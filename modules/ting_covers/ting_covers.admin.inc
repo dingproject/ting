@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * Admin settings form for Ting covers.

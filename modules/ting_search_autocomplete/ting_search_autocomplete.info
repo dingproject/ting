@@ -1,4 +1,3 @@
-; $Id$
 name = Ting search autocomplete
 description = Enables autocompletion for the Ting search box.
 package = Ding!

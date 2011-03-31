@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * Return the URL for the cover of an object

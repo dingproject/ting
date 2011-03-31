@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * Redirect to object view based on local ID (used by bibliotek.dk).

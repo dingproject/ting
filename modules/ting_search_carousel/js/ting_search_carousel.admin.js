@@ -1,4 +1,3 @@
-// $Id$
 
 Drupal.behaviors.tingSearchCarouselAdmin = function(context)
 {

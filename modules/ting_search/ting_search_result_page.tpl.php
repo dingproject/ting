@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * @file ting_result_page.tpl.php

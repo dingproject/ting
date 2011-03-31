@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * Ting search settings form.

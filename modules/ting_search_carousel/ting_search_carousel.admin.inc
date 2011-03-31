@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * Rules editing page callback.

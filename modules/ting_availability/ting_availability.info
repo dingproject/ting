@@ -1,4 +1,3 @@
-; $Id$
 name = Ting availability
 description = Displays availability information for Ting objects and collections if the library system supports this
 package = Ding!

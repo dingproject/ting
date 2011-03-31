@@ -1,4 +1,3 @@
-// $Id$
 
 /**
  * Search result handling function.

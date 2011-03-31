@@ -1,4 +1,3 @@
-// $Id$
 
 /**
  * Javascript helpers for Ting buttons.

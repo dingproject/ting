@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * JSON callback to Ting reference collection autocomplete

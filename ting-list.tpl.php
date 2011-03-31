@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file
  * Display a list of ting objects.
