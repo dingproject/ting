@@ -18,6 +18,7 @@ function ting_menu() {
     'access arguments' => array('search content'),
     'type' => MENU_CALLBACK,
     'file' => 'ting.pages.inc',
+    'file path' => $path,
   );
 
   $items['admin/settings/ting'] = array(
