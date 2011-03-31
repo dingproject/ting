@@ -57,12 +57,12 @@ function ting_admin_settings_form($form_state) {
   	'#description' => t('The Additional Information service is used to retrieve cover images and other information about objects. <a href="http://www.danbib.dk/index.php?doc=forsideservice">More information about the service (in Danish)</a>'),
     '#tree' => FALSE,
   );
-  $form['addi']['addi_wdsl_url'] = array(
+  $form['addi']['addi_wsdl_url'] = array(
     '#type' => 'textfield',
     '#title' => t('Service URL'),
     '#description' => t('URL to the Additional Information webservice, e.g. http://forside.addi.dk/addi.wsdl'),
     '#required' => TRUE,
-    '#default_value' => variable_get('addi_wdsl_url', ''),
+    '#default_value' => variable_get('addi_wsdl_url', ''),
   );
   $form['addi']['addi_username'] = array(
     '#type' => 'textfield',

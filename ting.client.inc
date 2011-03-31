@@ -425,7 +425,7 @@ function ting_add_additional_info($collection) {
  */
 function ting_get_additional_info($faust_numbers) {
   $addiVariables = array(
-    'wsdlUrl' => 'addi_wdsl_url',
+    'wsdlUrl' => 'addi_wsdl_url',
     'username' => 'addi_username',
     'group' => 'addi_group',
     'password' => 'addi_password',

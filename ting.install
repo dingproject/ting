@@ -22,7 +22,7 @@ function ting_update_6001() {
 }
 
 /**
- * Migrate to ting_proxy
+ * Migrate to ting_proxy.
  */
 function ting_update_6002() {
 
@@ -59,3 +59,19 @@ function ting_update_6002() {
   );
   return $ret;
 }
+
+/**
+ * Correct WSDL typo.
+ *
+ * Variable was named wdsl in place of wsdl.
+ */
+function ting_update_6003() {
+  $url = variable_get('addi_wdsl_url', '');
+
+  if (!empty($url)) {
+    variable_set('addi_wsdl_url', $url);
+  }
+
+  variable_del('addi_wdsl_url', $url);
+}
+
