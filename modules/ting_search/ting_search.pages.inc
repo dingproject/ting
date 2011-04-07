@@ -48,9 +48,7 @@ function ting_search_pages_ting_js() {
   }
 
   //Set sort method
-  if (isset($_GET['sort'])) {
-    $options['sort'] = $_GET['sort'];
-  }
+  $options['sort'] = (isset($_GET['sort'])) ? $_GET['sort'] : 'rank_general';
 
   try {
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
@@ -68,11 +66,13 @@ function ting_search_pages_ting_js() {
       'feed_icon' => theme('feed_icon', url('ting/search/feed/' . $_REQUEST['query'])),
     );
 
-    foreach ($searchResult->collections as &$collection) {
-      $result['result_html'] .= theme('ting_search_collection', $collection);
+    if (isset($searchResult->collections)) {
+      foreach ($searchResult->collections as &$collection) {
+        $result['result_html'] .= theme('ting_search_collection', $collection);
 
-      foreach ($collection->objects as $object) {
-        $result['local_ids'][] = $object->localId;
+        foreach ($collection->objects as $object) {
+          $result['local_ids'][] = $object->localId;
+        }
       }
     }
   }
