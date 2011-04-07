@@ -99,8 +99,8 @@ function ting_get_object_by_local_id($local_id, $enrich = FALSE) {
  *    Collection object, if found - boolean FALSE if not.
  */
 function ting_get_collection_by_id($object_id, $enrich = FALSE) {
-  // If passed object_id is empty, save ourselves the trouble of trying 
-  // to load the Ting client, do a request, etc. Big speedup for empty 
+  // If passed object_id is empty, save ourselves the trouble of trying
+  // to load the Ting client, do a request, etc. Big speedup for empty
   // Ting reference fields.
   if (empty($object_id)) { return FALSE; }
 
@@ -138,7 +138,7 @@ function ting_get_collection_by_id($object_id, $enrich = FALSE) {
  */
 function ting_search_sort_options() {
   return array(
-    '' => t('Relevance'),
+    'rank_general' => t('Relevance'),
     'title_ascending' => t('Title – A → Z'),
     'title_descending' => t('Title – Z → A'),
     'creator_ascending' => t('Author – A → Z'),
@@ -177,7 +177,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
   $request = (!isset($options['supportingTypes']) || !$options['supportingTypes']) ? ting_remove_supporting_types($request) : $request;
   $request->setFacets((isset($options['facets'])) ? $options['facets'] : array('facet.subject', 'facet.creator', 'facet.type', 'facet.category', 'facet.language', 'facet.date', 'facet.acSource'));
   $request->setNumFacets((isset($options['numFacets'])) ? $options['numFacets'] : ((sizeof($request->getFacets()) == 0) ? 0 : 10));
-  $request->setSort((isset($options['sort'])) ? $options['sort'] : '');
+  $request->setSort((isset($options['sort']) && $options['sort']) ? $options['sort'] : 'rank_general');
   $request->setAllObjects(isset($options['allObjects']) ? $options['allObjects'] : FALSE);
 
   $searchResult = ting_execute($request);

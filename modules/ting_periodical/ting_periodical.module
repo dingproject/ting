@@ -99,7 +99,10 @@ function template_preprocess_ting_periodical_issues(&$vars) {
                          l(t('Reserve now'), 'ding/reservation/' . $object_holding['local_id'] . '/' . $issue['local_id'], array('attributes' => array('class' => 'reserve-now'))),
                        ), NULL, 'ul', array('class' => 'buttons'));
           }
-          $items[] = $output;
+          $items[] = array(
+            'data' => $output,
+            'class' => 'issue',
+          );
         }
 
         $vars['issues'][$year] = theme('item_list', $items, $year);
