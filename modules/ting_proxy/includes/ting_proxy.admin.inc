@@ -115,10 +115,8 @@ function ting_proxy_add_hostname_ahah($form, &$form_state) {
   // process it. We retreive the cached form, add the element, and resave.
   $form = form_get_cache($form_build_id, $form_state);
 
-  // Delta is assigned to the count of current elements, so it'll be the
-  // next in the zero-based list.
-  $delta = count(element_children($form['ting_proxy']['hostnames']));
-  $delta++;
+  // Add one to the current highest delta value to get the next one.
+  $delta = max(element_children($form['ting_proxy']['hostnames'])) + 1;
 
   // Added field and update form cache
   $form['ting_proxy']['hostnames'][$delta] = array(
