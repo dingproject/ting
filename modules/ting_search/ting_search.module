@@ -1,7 +1,6 @@
 <?php
-
 /**
- * @file ting_search.module
+ * @file
  * Displays facet browser and search results from the Ting database.
  */
 
@@ -150,7 +149,7 @@ function ting_search_add_js() {
   drupal_add_js($path . '/js/prototype/object.js', 'module', 'footer', TRUE);
   drupal_add_js($path . '/js/prototype/enumerable.js', 'module', 'footer', TRUE);
 
-  //Add jQuery Url plugin
+  //Add jQuery URL plugin
   drupal_add_js($path . '/js/jquery.url/jquery.url.js', 'module', 'footer', TRUE);
   //drupal_add_js($path . '/js/jquery.url/jquery.url.packed.js', 'module', 'footer', TRUE);
 
