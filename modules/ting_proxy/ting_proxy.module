@@ -23,6 +23,7 @@ function ting_proxy_menu() {
   // Administration ahah callback
   $items['ting/proxy/hostname/ahah'] = array(
     'title' => 'Ting proxy ahah callback',
+    'title callback' => FALSE,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ting_proxy_add_hostname_ahah'),
     'access arguments' => array('administer site configuration'),
