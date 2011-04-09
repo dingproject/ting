@@ -60,7 +60,7 @@ function ting_proxy_settings_form($form_state) {
     '#weight' => 1,
     //'#submit' => array('ting_proxy_add_hostname_submit'),
     '#ahah' => array(
-      'path' => 'admin/settings/ting/proxy/ahah',
+      'path' => 'ting/proxy/hostname/ahah',
       'wrapper' => 'hostnames',
       'method' => 'append',
       'effect' => 'slide'
