@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Admin pages for Ting module.
+ */
 
 /**
  * Ting search settings form.
@@ -102,5 +106,148 @@ function ting_admin_settings_hostnames_value($form, $edit = FALSE) {
   if ($edit !== FALSE) {
     return array_filter(array_map('trim', explode("\n", $edit)));
   }
+}
+
+/**
+ * Ranking settings form.
+ */
+function ting_admin_ranking_form(&$form_state) {
+  $form = array(
+    '#after_build' => array('ting_admin_ranking_form_after_build'),
+  );
+
+  $form['ting_ranking_custom'] = array(
+    '#title' => t('Enable custom ranking'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('ting_ranking_custom', 0),
+    '#description' => t('If enabled, the Ting client will use the custom ranking settings provided below when making queries to Ting.'),
+  );
+
+  // Get the stored ranking fields.
+  $fields = variable_get('ting_ranking_fields', array());
+
+  // Wrapper, so that the ahah callback have some place to put new elements
+  $form['ting_ranking_fields'] = array(
+    '#prefix' => '<h4>' . t('Custom ranking fields') . '</h4><div id="ting_ranking_fields">',
+    '#suffix' => '</div>',
+    '#tree' => TRUE,
+  );
+
+  // If there is no pre-existing fields, create an empty one.
+  if (empty($fields)) {
+    $form['ting_ranking_fields'][0] = array(
+      '#type' => 'ting_ranking_field',
+      '#default_value' => array(),
+    );
+  }
+  else {
+    foreach ($fields as $delta => $field) {
+      $form['ting_ranking_fields'][$delta] = array(
+        '#type' => 'ting_ranking_field',
+        '#default_value' => $field,
+      );
+    }
+  }
+
+  $form['add_ranking_field'] = array(
+    '#type' => 'submit',
+    '#value' => t('Add another ranking field'),
+    '#weight' => 1,
+    '#ahah' => array(
+      'path' => 'ting/ranking_field/ahah',
+      'wrapper' => 'ting_ranking_fields',
+      'method' => 'append',
+      'effect' => 'slide'
+    ),
+  );
+
+  $form['buttons']['save'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save changes'),
+  );
+
+  return $form;
+}
+
+/**
+ * Submit handler for ranking settings form.
+ */
+function ting_admin_ranking_form_submit($form, &$form_state) {
+  variable_set('ting_ranking_custom', (integer) $form_state['values']['ting_ranking_custom']);
+
+  $fields = $form_state['values']['ting_ranking_fields'];
+
+  $fields = array_filter($fields, '_ting_ranking_field_filter');
+  usort($fields, '_ting_ranking_field_sort');
+
+  variable_set('ting_ranking_fields', $fields);
+}
+
+/**
+ * After build callback to the ranking settings form.
+ *
+ * Add a little bit of CSS and JS to the form.
+ */
+function ting_admin_ranking_form_after_build($form, &$form_state) {
+  $path = drupal_get_path('module', 'ting');
+
+  drupal_add_css($path .'/css/ting_admin_ranking_form.css');
+  drupal_add_js($path . '/js/ting_admin_ranking_form.js');
+
+  return $form;
+}
+
+/**
+ * array_filter() callback to remove empty/deleted elements.
+ */
+function _ting_ranking_field_filter($element) {
+  return !empty($element['field_name']);
+}
+
+/**
+ * usort() callback to remove empty/deleted elements.
+ */
+function _ting_ranking_field_sort($a, $b) {
+  if ($a['weight'] == $b['weight']) {
+      return 0;
+  }
+  return ($a['weight'] > $b['weight']) ? -1 : 1;
+}
+
+/**
+ * AHAH callback to add another ranking field to the form.
+ */
+function ting_admin_ranking_add_field_ahah() {
+  $form_state = array('submitted' => FALSE);
+  $form_build_id = $_POST['form_build_id'];
+
+  // Drupal is not aware of this new elements existence and will not
+  // process it. We retreive the cached form, add the element, and resave.
+  $form = form_get_cache($form_build_id, $form_state);
+
+  // Add one to the current highest delta value to get the next one.
+  $delta = max(element_children($form['ting_ranking_fields'])) + 1;
+
+  // Added field and update form cache
+  $form['ting_ranking_fields'][$delta] = array(
+    '#type' => 'ting_ranking_field',
+    '#default_value' => array(),
+  );
+  form_set_cache($form_build_id, $form, $form_state);
+
+  // Reset form vars
+  $form += array(
+    '#post' => $_POST,
+    '#programmed' => FALSE,
+  );
+
+  // Rebuild the form.
+  $form = form_builder($_POST['form_id'], $form, $form_state);
+
+  // Render and return the new field.
+  drupal_json(array(
+    'data' => drupal_render($form['ting_ranking_fields'][$delta]),
+    'status' => TRUE));
+  exit();
 }
 

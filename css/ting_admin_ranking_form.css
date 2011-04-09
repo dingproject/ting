@@ -1,0 +1,9 @@
+/**
+ * @file
+ * CSS rules for ranking field editing form.
+ */
+
+#ting_ranking_fields .ranking-field-instance .form-item,
+#ting_ranking_fields .ranking-field-instance input { float: left; }
+#ting_ranking_fields .ranking-field-instance input.form-submit { margin: 1.92em 0 0 0.2em; }
+
