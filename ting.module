@@ -33,6 +33,7 @@ function ting_menu() {
   $items['admin/settings/ting/access'] = array(
     'title' => 'Ting access',
     'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
   );
 
   return $items;
