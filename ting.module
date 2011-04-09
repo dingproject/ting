@@ -1,8 +1,7 @@
 <?php
-
 /**
- * @file ting.module
- * Module to integrate the Ting search engine in our Drupal site.
+ * @file
+ * Module to integrate the Ting search engine with a Drupal site.
  */
 
 /**
@@ -37,29 +36,6 @@ function ting_menu() {
   );
 
   return $items;
-}
-
-/**
- * Menu loader function.
- */
-function ting_id_load($id) {
-  module_load_include('client.inc', 'ting');
-  return ting_get_object_by_id($id);
-}
-
-/**
- * Menu loader function.
- */
-function ting_local_id_load($id) {
-  module_load_include('client.inc', 'ting');
-  return ting_get_object_by_local_id($id);
-}
-
-/**
- * Add additional information to a ting object.
- */
-function ting_enrich_object(&$object) {
-  $object = array_shift(ting_add_additional_info(array($object)));
 }
 
 /**
@@ -214,6 +190,30 @@ function ting_trampoline_variables() {
     'ting_recommendation_server',
   );
 }
+
+/**
+ * Menu loader function.
+ */
+function ting_id_load($id) {
+  module_load_include('client.inc', 'ting');
+  return ting_get_object_by_id($id);
+}
+
+/**
+ * Menu loader function.
+ */
+function ting_local_id_load($id) {
+  module_load_include('client.inc', 'ting');
+  return ting_get_object_by_local_id($id);
+}
+
+/**
+ * Add additional information to a ting object.
+ */
+function ting_enrich_object(&$object) {
+  $object = array_shift(ting_add_additional_info(array($object)));
+}
+
 /**
  * Theme something from Ting.
  */
@@ -487,3 +487,4 @@ function ting_ting_object_is($object, $class) {
     return TRUE;
   }
 }
+
