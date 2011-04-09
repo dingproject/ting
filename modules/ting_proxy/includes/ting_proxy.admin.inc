@@ -4,7 +4,7 @@
  * Administration UI for ting proxy backend
  *
  * @param array $form_state
- * @return string form
+ * @return array form
  */
 function ting_proxy_settings_form($form_state) {
   // Load saved settings
