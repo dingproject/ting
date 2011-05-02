@@ -5,21 +5,6 @@
  * Wrapper functions for Ting client.
  */
 
-// Ting client has a ton of includes. Let's load them.
-$includes = array(
-  'ting-client/lib/TingClient.php',
-  'ting-client/lib/adapter/http/TingClientDrupal6HttpRequestAdapter.php',
-  'ting-client/lib/request/rest-json/RestJsonTingClientRequestFactory.php',
-  'ting-client/lib/log/TingClientDrupalWatchDogLogger.php',
-  'addi-client/AdditionalInformationService.php'
-);
-
-$path = drupal_get_path('module', 'ting') . '/lib/';
-
-foreach ($includes as $include) {
-  require_once($path . $include);
-}
-
 /**
  * Load an object from Ting by ID.
  *
@@ -259,7 +244,7 @@ function ting_get_client() {
   if (!isset($client))
   {
     $logger = (variable_get('ting_enable_logging', false)) ? new TingClientDrupalWatchDogLogger() : new TingClientVoidLogger();
-    $client = new TingClient(new TingClientDrupal6HttpRequestAdapter(), $logger);
+    $client = new TingClient(new TingClientRequestAdapter(), $logger);
   }
 
   return $client;
@@ -273,25 +258,25 @@ function ting_get_client() {
 function ting_get_request_factory() {
   static $requestFactory;
 
-  if (!isset($requestFactory))
-  {
-    $urlVariables = array(  'search' => 'ting_search_url',
-                            'scan' => 'ting_scan_url',
-                            'object' => 'ting_search_url',
-                            'collection' => 'ting_search_url',
-                            'spell' => 'ting_spell_url',
-                            'recommendation' => 'ting_recommendation_server');
+  if (!isset($requestFactory)) {
+    $urlVariables = array(
+      'search' => 'ting_search_url',
+      'scan' => 'ting_scan_url',
+      'object' => 'ting_search_url',
+      'collection' => 'ting_search_url',
+      'spell' => 'ting_spell_url',
+      'recommendation' => 'ting_recommendation_server',
+    );
 
     $urls = array();
-    foreach ($urlVariables as $name => $setting)
-    {
+    foreach ($urlVariables as $name => $setting) {
       $urls[$name] = variable_get($setting, false);
       if (!$urls[$name]) {
         throw new TingClientException('No Ting webservice url defined for '.$name);
       }
     }
 
-    $requestFactory = new RestJsonTingClientRequestFactory($urls);
+    $requestFactory = new TingClientRequestFactory($urls);
   }
 
   return $requestFactory;
@@ -457,9 +442,8 @@ function ting_get_additional_info($faust_numbers) {
   return array();
 }
 
-function ting_add_agency(TingClientAgentRequest $request) {
-  if ($agency = variable_get('ting_agency', false))
-  {
+function ting_add_agency(TingClientSearchRequest $request) {
+  if ($agency = variable_get('ting_agency', false)) {
     $request->setAgency($agency);
   }
   return $request;
@@ -481,3 +465,4 @@ function ting_remove_supporting_types(TingClientSearchRequest $request) {
   $request->setQuery($request->getQuery().' NOT ('.implode(' OR ', $supportingTypes).')');
   return $request;
 }
+
