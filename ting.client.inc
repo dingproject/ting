@@ -121,9 +121,22 @@ function ting_get_collection_by_id($object_id, $enrich = FALSE) {
  * @return
  *   A key/value array of sort keys and labels.
  */
+function ting_search_rank_options() {
+  return array(
+    'rank_creator' => t('Rank by creator'),
+    'rank_general' => t('Rank by general relevance'),
+    'rank_title' => t('Rank by title'),
+  );
+}
+
+/**
+ * Return the possible sort keys and their corresponding labels.
+ *
+ * @return
+ *   A key/value array of sort keys and labels.
+ */
 function ting_search_sort_options() {
   return array(
-    'rank_general' => t('Relevance'),
     'title_ascending' => t('Title – A → Z'),
     'title_descending' => t('Title – Z → A'),
     'creator_ascending' => t('Author – A → Z'),
@@ -162,7 +175,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
   $request = (!isset($options['supportingTypes']) || !$options['supportingTypes']) ? ting_remove_supporting_types($request) : $request;
   $request->setFacets((isset($options['facets'])) ? $options['facets'] : array('facet.subject', 'facet.creator', 'facet.type', 'facet.category', 'facet.language', 'facet.date', 'facet.acSource'));
   $request->setNumFacets((isset($options['numFacets'])) ? $options['numFacets'] : ((sizeof($request->getFacets()) == 0) ? 0 : 10));
-  $request->setSort((isset($options['sort']) && $options['sort']) ? $options['sort'] : 'rank_general');
+  $request->setRank((isset($options['rank']) && $options['rank']) ? $options['rank'] : 'rank_general');
   $request->setAllObjects(isset($options['allObjects']) ? $options['allObjects'] : FALSE);
 
   $searchResult = ting_execute($request);
