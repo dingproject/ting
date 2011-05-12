@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file ting.client.inc
  * Wrapper functions for Ting client.
@@ -454,7 +453,7 @@ function ting_get_additional_info($faust_numbers) {
   return array();
 }
 
-function ting_add_agency(TingClientSearchRequest $request) {
+function ting_add_agency(TingClientRequest $request) {
   if ($agency = variable_get('ting_agency', false)) {
     $request->setAgency($agency);
   }
