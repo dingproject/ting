@@ -254,8 +254,7 @@ function ting_execute($request) {
 function ting_get_client() {
   static $client;
 
-  if (!isset($client))
-  {
+  if (!isset($client)) {
     $logger = (variable_get('ting_enable_logging', false)) ? new TingClientDrupalWatchDogLogger() : new TingClientVoidLogger();
     $client = new TingClient(new TingClientRequestAdapter(), $logger);
   }
