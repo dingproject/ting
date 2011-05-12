@@ -177,6 +177,21 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
   $request->setRank((isset($options['rank']) && $options['rank']) ? $options['rank'] : 'rank_general');
   $request->setAllObjects(isset($options['allObjects']) ? $options['allObjects'] : FALSE);
 
+  if (variable_get('ting_ranking_custom', FALSE)) {
+    $fields = array();
+    foreach (variable_get('ting_ranking_fields', array()) as $field) {
+      $fields[] = array(
+        'fieldName' => $field['field_name'],
+        'fieldType' => $field['field_type'],
+        'weight' => $field['weight'],
+      );
+    }
+
+    if (!empty($fields)) {
+      $request->userDefinedRanking = array('tieValue' => 0.1, 'rankField' => $fields);
+    }
+  }
+
   $searchResult = ting_execute($request);
 
   //Decorate search result with additional information
