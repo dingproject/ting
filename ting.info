@@ -3,6 +3,7 @@ description = Integrates Drupal with the Ting search system.
 package = Ding!
 core = 6.x
 dependencies[] = autoload
+dependencies[] = nanosoap
 dependencies[] = search
 files[] = lib/addi-client/AdditionalInformation.php
 files[] = lib/addi-client/AdditionalInformationService.php
@@ -31,4 +32,3 @@ files[] = lib/ting-client/lib/result/search/TingClientFacetResult.php
 files[] = lib/ting-client/lib/result/search/TingClientSearchResult.php
 files[] = lib/ting-client/lib/result/spell/TingClientSpellSuggestion.php
 files[] = lib/ting-client/lib/TingClient.php
-
