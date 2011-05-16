@@ -24,12 +24,52 @@ function ting_search_autocomplete_menu() {
 
   return $items;
 }
+
 /**
  * Implementation of hook_trampoline().
  */
 function ting_search_autocomplete_trampoline() {
+  $includes = array();
+
+  //Include Ting client
+  $ting_files = array(
+    'TingClient.php',
+    'exception/TingClientException.php',
+    'adapter/TingClientRequestAdapter.php',
+    'log/TingClientLogger.php',
+    'log/TingClientDrupalDebugLogger.php',
+    'log/TingClientDrupalWatchDogLogger.php',
+    'log/TingClientVoidLogger.php',
+    'request/TingClientRequest.php',
+    'request/TingClientSearchRequest.php',
+    'request/TingClientCollectionRequest.php',
+    'request/TingClientObjectRecommendationRequest.php',
+    'request/TingClientObjectRequest.php',
+    'request/TingClientRequestFactory.php',
+    'request/TingClientScanRequest.php',
+    'request/TingClientSpellRequest.php',
+    'result/object/TingClientObject.php',
+    'result/object/TingClientObjectCollection.php',
+    'result/object/data/TingClientObjectData.php',
+    'result/recommendation/TingClientObjectRecommendation.php',
+    'result/scan/TingClientScanResult.php',
+    'result/scan/TingClientScanTerm.php',
+    'result/search/TingClientFacetResult.php',
+    'result/search/TingClientSearchResult.php',
+    'result/spell/TingClientSpellSuggestion.php',
+  );
+  $ting_path = drupal_get_path('module', 'ting');
+  foreach ($ting_files as $file) {
+    $includes[] = $ting_path . '/lib/ting-client/lib/' . $file;
+  }
+
+  //Include NanoSOAP required by Ting client
+  $includes[] = drupal_get_path('module', 'nanosoap') . '/nanosoap.inc';
+
   $items = array();
-  $items['ting/autocomplete'] = array();
+  $items['ting/autocomplete'] = array(
+    'includes' => $includes,
+  );
   return $items;
 }
 
