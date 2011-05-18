@@ -74,3 +74,11 @@ function ting_update_6003() {
   variable_del('addi_wdsl_url', $url);
 }
 
+/**
+ * Installed the new dependency, NanoSOAP.
+ */
+function ting_update_6004() {
+  // Install NanoSOAP.
+  drupal_install_modules(array('nanosoap'));
+}
+
