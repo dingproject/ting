@@ -1,12 +1,12 @@
-
 /**
+ * @file
  * Javascript helpers for Ting buttons.
  */
-Drupal.tingButtons = {}
+Drupal.tingButtons = {};
 
 Drupal.tingButtons.dialogButton = function (selector, options) {
-  defaults = { 'buttons': function() {} }
-  var options = $.extend(defaults, options);
+  var defaults = { 'buttons': function() {} };
+  options = $.extend(defaults, options);
 
   $(selector).click(function (event) {
       // Make sure we grab the click.
