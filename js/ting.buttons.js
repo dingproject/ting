@@ -5,41 +5,84 @@
 Drupal.tingButtons = {};
 
 Drupal.tingButtons.dialogButton = function (selector, options) {
-  var defaults = { 'buttons': function() {} };
-  options = $.extend(defaults, options);
+  var self = this;
 
-  $(selector).click(function (event) {
-      // Make sure we grab the click.
-      event.preventDefault();
+  self.defaults = { 'buttons': function() {} };
+  self.options = $.extend(self.defaults, options);
+  self.selector = selector;
 
-      var $button = $(this);
+  /**
+   * Set up routines.
+   */
+  self.init = function () {
+    $(self.selector).click(self.buttonClick);
+  };
 
-      if (!$button.hasClass('disabled')) {
-        // Make the request back to Drupal.
-        $.post(this.href, {}, function (data) {
-          var buttons, $count, message;
-          // Message is overwritten by the data attribute.
-          message = '';
-          buttons = {};
-          buttons[Drupal.t('Close')] = function () {
-            $(this).dialog('close');
-          };
+  /**
+   * AJAX error handler.
+   */
+  self.ajaxErrorCallback = function (jqXHR, textStatus, errorThrown) {
+    var title = jqXHR.status + ' ' + jqXHR.statusText,
+        message = Drupal.t('An error occurred. Please try again, or contact support if the problem persists.');
+    
+    self.generateDialog(title, message, self.defaultButtons());
+  };
 
-          message = (data) ? data.message :  Drupal.t('An error occurred.');
-          options.buttons(buttons, event, data);
+  /**
+   * AJAX success handler.
+   */
+  self.ajaxSuccessCallback = function (data, textStatus, jqXHR) {
+    var buttons = self.defaultButtons(), message;
 
-          $('<div>' + message + '</div>')
-            .dialog({
-              'title': data.title,
-              'buttons': buttons,
-              'close': function (event, ui) {
-                $(this).dialog('destroy').remove();
-              }
-            });
-        }, 'json');
-      }
+    // Message is overwritten by the data attribute.
+    message = (data) ? data.message :  Drupal.t('An error occurred.');
+    self.options.buttons(buttons, event, data);
+    self.generateDialog(data, message, buttons);
+  };
 
-      return false;
-  });
+  /**
+   * Button click handler.
+   */
+  self.buttonClick = function (event) {
+    if ($(this).hasClass('disabled')) {
+      $.ajax({
+        url: this.href,
+        dataType: 'json',
+        type: 'POST',
+        cache: false,
+        error: self.ajaxErrorCallback,
+        success: self.ajaxSuccessCallback
+      });
+    }
+
+    // Prevent the browser from following the link.
+    event.preventDefault();
+  };
+
+  /**
+   * Generate the default buttons.
+   */
+  self.defaultButtons = function () {
+    var buttons = {};
+    buttons[Drupal.t('Close')] = function () {
+      $(this).dialog('close');
+    };
+  };
+
+  /**
+   * Generate the jQuery UI dialog response.
+   */
+  self.generateDialog = function (title, message, buttons) {
+    $('<div>' + message + '</div>')
+      .dialog({
+        'title': title,
+        'buttons': buttons,
+        'close': function (event, ui) {
+          $(this).dialog('destroy').remove();
+        }
+      });
+  };
+
+  self.init();
 };
 
