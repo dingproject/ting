@@ -348,7 +348,6 @@ function template_preprocess_ting_list_item(&$vars) {
  * Template preprocessor for ting tabs.
  */
 function template_preprocess_ting_tabs(&$vars) {
-
   // jQuery UI tabs
   jquery_ui_add('ui.tabs');
   jquery_ui_theme_load();

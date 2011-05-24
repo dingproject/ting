@@ -1,6 +1,6 @@
 <?php
 /**
- * @file ting.client.inc
+ * @file
  * Wrapper functions for Ting client.
  */
 

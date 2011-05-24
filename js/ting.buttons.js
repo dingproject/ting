@@ -32,19 +32,21 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
    * AJAX success handler.
    */
   self.ajaxSuccessCallback = function (data, textStatus, jqXHR) {
-    var buttons = self.defaultButtons(), message;
+    var buttons = self.defaultButtons(), message, title;
 
     // Message is overwritten by the data attribute.
+    title = (data) ? data.title :  Drupal.t('An error occurred.');
     message = (data) ? data.message :  Drupal.t('An error occurred.');
-    self.options.buttons(buttons, event, data);
-    self.generateDialog(data, message, buttons);
+    self.options.buttons(buttons, self.clickEvent, data);
+    self.generateDialog(title, message, buttons);
   };
 
   /**
    * Button click handler.
    */
   self.buttonClick = function (event) {
-    if ($(this).hasClass('disabled')) {
+    self.clickEvent = event;
+    if (!$(this).hasClass('disabled')) {
       $.ajax({
         url: this.href,
         dataType: 'json',
@@ -53,6 +55,11 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
         error: self.ajaxErrorCallback,
         success: self.ajaxSuccessCallback
       });
+    }
+    else {
+      self.generateDialog(Drupal.t('Reservation not allowed'), 
+                          Drupal.t('This material cannot currently be reserved.'), 
+                          self.defaultButtons());
     }
 
     // Prevent the browser from following the link.
