@@ -379,7 +379,7 @@ function ting_reference_nodes($object_or_collection) {
 function ting_reference_ting_tabs_alter(&$tabs, $type, $object) {
   $referenced_nodes = ting_reference_nodes($object);
   if ($referenced_nodes) {
-    $content = '<h3>Omtale på websitet</h3>';
+    $content = '<h3>'.t('Mentions on this site').'</h3>';
     foreach ($referenced_nodes as $node) {
       $content .= node_view($node, TRUE);
     }
