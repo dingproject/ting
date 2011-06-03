@@ -222,6 +222,7 @@ function ting_reference_widget(&$form, &$form_state, $field, $items, $delta = 0)
     '#type' => 'textfield',
     '#title' => t('Search'),
     '#maxlength' => NULL,
+    '#description' => t('Enter a query to search for objects or collections to reference'),
     '#attributes' => array('class' => 'form-autocomplete ting-reference-autocomplete')
   );
 
