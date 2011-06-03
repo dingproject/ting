@@ -47,7 +47,7 @@ function ting_search_pages_ting_js() {
   }
 
   //Set sort method
-  $options['sort'] = (isset($_GET['sort'])) ? $_GET['sort'] : 'rank_general';
+  $options['sort'] = (isset($_GET['sort'])) ? $_GET['sort'] : NULL;
 
   try {
     $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;

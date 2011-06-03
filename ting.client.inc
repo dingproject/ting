@@ -136,6 +136,7 @@ function ting_search_rank_options() {
  */
 function ting_search_sort_options() {
   return array(
+    '' => t('Relevance'),
     'title_ascending' => t('Title – A → Z'),
     'title_descending' => t('Title – Z → A'),
     'creator_ascending' => t('Author – A → Z'),
@@ -175,6 +176,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
   $request->setFacets((isset($options['facets'])) ? $options['facets'] : array('facet.subject', 'facet.creator', 'facet.type', 'facet.category', 'facet.language', 'facet.date', 'facet.acSource'));
   $request->setNumFacets((isset($options['numFacets'])) ? $options['numFacets'] : ((sizeof($request->getFacets()) == 0) ? 0 : 10));
   $request->setRank((isset($options['rank']) && $options['rank']) ? $options['rank'] : 'rank_general');
+  $request->setSort((isset($options['sort']) && $options['sort']) ? $options['sort'] : NULL);
   $request->setAllObjects(isset($options['allObjects']) ? $options['allObjects'] : FALSE);
 
   if (variable_get('ting_ranking_custom', FALSE)) {
