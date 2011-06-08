@@ -55,11 +55,9 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
         error: self.ajaxErrorCallback,
         success: self.ajaxSuccessCallback
       });
+    } //Do nothing if the user clicks on a disabled button
+    
     }
-    else {
-      self.generateDialog(Drupal.t('Reservation not allowed'), 
-                          Drupal.t('This material cannot currently be reserved.'), 
-                          self.defaultButtons());
     }
 
     // Prevent the browser from following the link.
