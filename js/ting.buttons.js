@@ -59,11 +59,13 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
       });
     } //Do nothing if the user clicks on a disabled button
     
-    // Prevent the browser from following the link.
-    if (self.options.allowPropagation) {
+    // By default we prevent the browser from following the link and
+    // and stop propagation as this used to be default behavior.
+    // Now this can be changed through configuration.
+    if (!self.options.allowPropagation) {
       event.stopPropagation();
     }
-    if(self.options.allowDefault) {
+    if(!self.options.allowDefault) {
       event.preventDefault();
     }
   };
