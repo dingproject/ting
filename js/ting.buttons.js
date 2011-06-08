@@ -7,7 +7,9 @@ Drupal.tingButtons = {};
 Drupal.tingButtons.dialogButton = function (selector, options) {
   var self = this;
 
-  self.defaults = { 'buttons': function() {} };
+  self.defaults = { 'buttons': function() {},
+                    'allowPropagation': false,
+                    'allowDefault': false };
   self.options = $.extend(self.defaults, options);
   self.selector = selector;
 
@@ -57,11 +59,13 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
       });
     } //Do nothing if the user clicks on a disabled button
     
-    }
-    }
-
     // Prevent the browser from following the link.
-    event.preventDefault();
+    if (self.options.allowPropagation) {
+      event.stopPropagation();
+    }
+    if(self.options.allowDefault) {
+      event.preventDefault();
+    }
   };
 
   /**
