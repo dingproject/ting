@@ -78,7 +78,6 @@ function ting_update_6003() {
  * Installed the new dependency, NanoSOAP.
  */
 function ting_update_6004() {
-  // Install NanoSOAP.
-  drupal_install_modules(array('nanosoap'));
+  // Install NanoSOAP and dependencies.
+  drupal_install_modules(array('autoload', 'nanosoap'));
 }
-
