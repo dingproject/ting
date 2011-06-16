@@ -187,6 +187,9 @@ function ting_search_add_js() {
   foreach ($facets as $facet) {
     drupal_add_js(array('tingResult' => array('facetNames' => array($facet => t($facet)))), 'setting');
   }
+
+  drupal_add_js(array('tingResultStatusNames'=>array('unavailable'=>t('Unavailable'),'available'=>t('Available'))),'setting');
+
 }
 
 function ting_search_render_pager_template() {

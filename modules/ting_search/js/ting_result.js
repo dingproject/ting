@@ -52,11 +52,11 @@ Drupal.tingResult = function (searchResultElement, facetBrowserElement, result) 
           // If it already has the available class, don't touch it.
           if (!$type.hasClass('available')) {
             if (available.available) {
-              $type.addClass('available');
+              $type.addClass('available').attr('title',Drupal.settings.tingResultStatusNames.available);
               $type.removeClass('unavailable');
             }
             else {
-              $type.addClass('unavailable');
+              $type.addClass('unavailable').attr('title',Drupal.settings.tingResultStatusNames.unavailable);
             }
           }
         });
