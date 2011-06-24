@@ -280,6 +280,11 @@ function theme_ting_thing($type, $object, $query_args = NULL) {
   if (sizeof($object->relations)) {
     $relations = array();
     foreach ($object->relations as $relation) {
+      // Remove relations that's not from the local agency.
+      if ($relation->ownerId != $object->ownerId) {
+        continue;
+      }
+
       if (in_array($relation->relationType, $displayed_relation_types)) {
         $relations[] = $relation;
       }
