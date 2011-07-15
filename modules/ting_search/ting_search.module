@@ -187,9 +187,6 @@ function ting_search_add_js() {
   foreach ($facets as $facet) {
     drupal_add_js(array('tingResult' => array('facetNames' => array($facet => t($facet)))), 'setting');
   }
-
-  drupal_add_js(array('tingResultStatusNames'=>array('unavailable'=>t('Unavailable'),'available'=>t('Available'))),'setting');
-
 }
 
 function ting_search_render_pager_template() {
@@ -259,11 +256,13 @@ function template_preprocess_ting_search_collection(&$variables) {
       // TODO: Really, this should go into ting_availability.
       if (ting_object_is($object, 'limited_availability')) {
         $classes .= ' ting-object-' . $object->localId;
+        $title = NULL;
       }
       else {
         // We have at least one object that's always available, show
         // that and break out.
         $classes = 'available';
+        $title = t('Available');
         break;
       }
     }
@@ -271,6 +270,7 @@ function template_preprocess_ting_search_collection(&$variables) {
     $links[] = array(
       'data' => $type,
       'class' => trim($classes),
+      'title' => $title,
     );
   }
 
