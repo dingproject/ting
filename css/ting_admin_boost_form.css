@@ -1,0 +1,9 @@
+/**
+ * @file
+ * CSS rules for boost field editing form.
+ */
+
+#boost-fields-wrapper .boost-field-instance .form-item,
+#boost-fields-wrapper .boost-field-instance input { float: left; }
+#boost-fields-wrapper .boost-field-instance input.form-submit { margin: 1.92em 0 0 0.2em; }
+

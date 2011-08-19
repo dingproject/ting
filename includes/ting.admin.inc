@@ -251,3 +251,150 @@ function ting_admin_ranking_add_field_ahah() {
   exit();
 }
 
+/**
+ * Form builder; Configure custom search result ranking for this site.
+ *
+ * @ingroup forms
+ */
+function ting_admin_boost_settings($form, &$form_state) {
+  $form = array('#after_build' => array('ting_admin_boost_form_after_build'));
+
+  // Get our stored data.
+  $field_data = variable_get('ting_boost_fields', array());
+
+  if (!isset($form_state['boost_field_count'])) {
+    $form_state['boost_field_count'] = count($field_data);
+  }
+
+  // Wrapper, so that the AJAX callback have some place to put new elements
+  $form['ting_boost_fields'] = array(
+    '#title' => t('Custom fields boost values'),
+    '#type' => 'fieldset',
+    '#prefix' => '<div id="boost-fields-wrapper">',
+    '#suffix' => '</div>',
+    '#tree' => TRUE,
+  );
+
+  foreach (range(0, $form_state['boost_field_count']) as $i) {
+    $form['ting_boost_fields']['fields'][$i] = array(
+      '#type' => 'ting_boost_field',
+      '#default_value' => (isset($field_data[$i])) ? $field_data[$i] : array(),
+    );
+  }
+
+  $form['ting_boost_fields']['add_value'] = array(
+    '#type' => 'submit',
+    '#value' => t('Add another boost value'),
+    '#submit' => array('ting_admin_boost_add_more_submit'),
+    '#weight' => 10,
+    '#ahah' => array(
+      'path' => 'ting/boost_field/ahah',
+      'wrapper' => 'boost-fields-wrapper',
+      'method' => 'append',
+      'effect' => 'slide'
+    ),
+  );
+
+  $form['buttons']['save'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save changes'),
+  );
+
+  return $form;
+}
+
+/**
+ * Submit handler for the "Add another item" button of a field form.
+ *
+ * This handler is run regardless of whether JS is enabled or not. It makes
+ * changes to the form state. If the button was clicked with JS disabled, then
+ * the page is reloaded with the complete rebuilt form. If the button was
+ * clicked with JS enabled, then ajax_form_callback() calls field_add_more_js()
+ * to return just the changed part of the form.
+ */
+function ting_admin_boost_add_more_submit($form, &$form_state) {
+  // Simply add another empty set of values to the field array and ask
+  // to have the form rebuilt. The form code will take care of the rest.
+  $form_state['boost_field_count'] += 1;
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * AHAH callback to add another ranking field to the form.
+ */
+function ting_admin_boost_add_field_ahah() {
+  $form_state = array('submitted' => FALSE);
+  $form_build_id = $_POST['form_build_id'];
+
+  // Drupal is not aware of this new elements existence and will not
+  // process it. We retreive the cached form, add the element, and resave.
+  $form = form_get_cache($form_build_id, $form_state);
+
+  // Add one to the current highest delta value to get the next one.
+  $delta = max(element_children($form['ting_boost_fields']['fields'])) + 1;
+
+  // Added field and update form cache
+  $form['ting_ranking_fields']['fields'][$delta] = array(
+    '#type' => 'ting_boost_field',
+    '#default_value' => array(),
+  );
+  form_set_cache($form_build_id, $form, $form_state);
+
+  // Reset form vars
+  $form += array(
+    '#post' => $_POST,
+    '#programmed' => FALSE,
+  );
+
+  // Rebuild the form.
+  $form = form_builder($_POST['form_id'], $form, $form_state);
+
+  // Render and return the new field.
+  drupal_json(array(
+    'data' => drupal_render($form['ting_ranking_fields'][$delta]),
+    'status' => TRUE));
+  exit();
+}
+
+/**
+ * After build callback to the boost settings form.
+ *
+ * Add a little bit of CSS and JS to the form.
+ */
+function ting_admin_boost_form_after_build($form, &$form_state) {
+  $path = drupal_get_path('module', 'ting');
+
+  drupal_add_css($path .'/css/ting_admin_boost_form.css');
+
+  return $form;
+}
+
+/**
+ * Submit handler for boost settings form.
+ */
+function ting_admin_boost_settings_submit($form, &$form_state) {
+  $fields = $form_state['values']['ting_boost_fields']['fields'];
+
+  $fields = array_filter($fields, '_ting_boost_field_filter');
+  usort($fields, '_ting_boost_field_sort');
+
+  variable_set('ting_boost_fields', $fields);
+}
+
+/**
+ * array_filter() callback to remove empty/deleted elements.
+ */
+function _ting_boost_field_filter($element) {
+  return !(empty($element['field_name']) || empty($element['field_value']));
+}
+
+/**
+ * usort() callback to remove empty/deleted elements.
+ */
+function _ting_boost_field_sort($a, $b) {
+  if ($a['weight'] == $b['weight']) {
+      return 0;
+  }
+  return ($a['weight'] > $b['weight']) ? -1 : 1;
+}
+

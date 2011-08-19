@@ -194,6 +194,12 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
     }
   }
 
+  // Apply custom boosts if any.
+  $boosts = variable_get('ting_boost_fields', array());
+  if ($boosts) {
+    $request->userDefinedBoost = $boosts;
+  }
+
   $searchResult = ting_execute($request);
 
   //Decorate search result with additional information
