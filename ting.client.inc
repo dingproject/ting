@@ -446,7 +446,7 @@ function ting_get_additional_info($faust_numbers) {
 
   foreach ($addiVariables as $name => &$setting) {
     $setting = variable_get($setting, false);
-    if (!$name) {
+    if (!$setting) {
       watchdog('TingClient', 'Additional Information service setting '.$name.' not set', array(), WATCHDOG_WARNING);
       return $collection;
     }
