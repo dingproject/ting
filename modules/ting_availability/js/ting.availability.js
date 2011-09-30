@@ -75,7 +75,7 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
   $.each(data, function(itemId, itemData) {
     var $item = $('#ting-item-' + itemId);
     if (!itemData.show_reservation_button) {
-      $item.find('.ting-status')
+      $item.find('.ting-availability-status')
         .addClass('unreservable')
         .removeClass('waiting')
         .text(Drupal.t('not reservable'))
@@ -84,36 +84,36 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
         .addClass('disabled');
     }
     else if (itemData.available_from) {
-      $item.find('.ting-status')
+      $item.find('.ting-availability-status')
         .addClass('unavailable')
         .removeClass('waiting')
         .text(Drupal.t('available from @date', {'@date': itemData.available_from}));
     }
     else if (itemData.deferred_period) {
-      $item.find('.ting-status')
+      $item.find('.ting-availability-status')
         .addClass('unavailable')
         .removeClass('waiting')
         .text(Drupal.t('waiting period'));
     }
     else if (itemData.available) {
-      $item.find('.ting-status')
+      $item.find('.ting-availability-status')
         .addClass('available')
         .removeClass('waiting')
         .text(Drupal.t('available'));
     }
     else if (!itemData.reservable) {
-      $item.find('.ting-status')
+      $item.find('.ting-availability-status')
         .addClass('unavailable')
         .removeClass('waiting')
         .text(Drupal.t('unavailable'));
     }
     else if (itemData.reserved_count < 1) {
-      $item.find('.ting-status')
+      $item.find('.ting-availability-status')
         .addClass('unavailable')
         .removeClass('waiting')
         .text(Drupal.t('on loan'));
     } else {
-      $item.find('.ting-status')
+      $item.find('.ting-availability-status')
         .addClass('unavailable')
         .addClass('reserved')
         .removeClass('waiting')
