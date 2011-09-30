@@ -80,7 +80,7 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
         .removeClass('waiting')
         .text(Drupal.t('not reservable'))
       .end()
-      .find('.ting-status ul.buttons > li > a')
+      .find('.ting-object-buttons .buttons > li > a')
         .addClass('disabled');
     }
     else if (itemData.available_from) {

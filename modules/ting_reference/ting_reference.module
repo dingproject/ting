@@ -212,7 +212,7 @@ function ting_reference_widget(&$form, &$form_state, $field, $items, $delta = 0)
 
   $element['ting_ref_type'] = array (
     '#type' => 'radios',
-    '#title' => 'Reference type',
+    '#title' => t('Reference type'),
     '#default_value' => $ting_ref_type,
     '#options' => array('collection' => t('Ting collection'), 'object' => t('Ting object')),
     '#attributes' => array('class' => 'ting-reference-type-radio clear-block'),
@@ -240,7 +240,7 @@ function ting_reference_widget(&$form, &$form_state, $field, $items, $delta = 0)
 
   $element['description'] = array (
     '#type' => 'textarea',
-    '#title' => 'Description',
+    '#title' => t('Description'),
     '#rows' => 2,
     '#default_value' => isset($items[$delta]['description']) ? $items[$delta]['description'] : '',
   );
