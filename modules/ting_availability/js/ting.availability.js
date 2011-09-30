@@ -80,7 +80,15 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
         .removeClass('waiting')
         .text(Drupal.t('not reservable'))
       .end()
-      .find('.ting-status ul.buttons > li > a')
+      // FIXME: There are two problems here:
+      // - Reservation adds a class to the link. Cart to the li.
+      //   The class for the link should be moved to the li in 
+      //   ding_reservation_ting_object_buttons().
+      // - The carting button is toggled based on whether the item
+      //   is reservable or not. This it harmful to sites which 
+      //   offer other options besides reservation from the cart.
+      .find('.ting-status ul.buttons > li > a.reserve-now,' +
+            '.ting-status ul.buttons > li.add-to-cart > a')
         .addClass('disabled');
     }
     else if (itemData.available_from) {
