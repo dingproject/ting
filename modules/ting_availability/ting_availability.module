@@ -25,6 +25,17 @@ function ting_availability_menu() {
   return $items;
 }
 
+/**
+ * Implementation of hook_theme().
+ */
+function ting_availability_theme() {
+  return array(
+    'ting_availability_box' => array(
+      'arguments' => array('object' => NULL),
+    ),
+  );
+}
+
 function ting_availability_trampoline() {
   $items = array();
   $items['ting/availability/item/%/details'] = array(
@@ -133,7 +144,7 @@ function ting_availability_preprocess_ting_object(&$vars) {
     $vars['additional_content'][] = array(
       '#type' => 'markup',
       '#weight' => -10,
-      '#value' => '<div class="ding-box-wide ting-availability"><h3>Følgende biblioteker har "' . check_plain($object->title) . '" hjemme:</h3><ul class="library-list"><li class="ting-status waiting even">' . t('waiting for data') .'</li></ul></div>',
+      '#value' => theme('ting_availability_box', $object),
     );
 
   };
@@ -151,4 +162,21 @@ function ting_availability_preprocess_ting_list_item(&$vars) {
     );
 
   };
+}
+
+/**
+ * Theme function for the availability box.
+ *
+ * If overriding this then note that the ting-availability and library-list classes are
+ * required for the AJAX based retrieval of availability information to work.
+ */
+function theme_ting_availability_box($object) {
+  return '<div class="ding-box-wide ting-availability">
+  					<h3>' .
+              t('%title is available at the following libraries:', array('%title' => check_plain($object->title))) .
+            '</h3>' .
+          	'<ul class="library-list">' .
+              '<li class="ting-status waiting even">' . t('waiting for data') .'</li>' .
+            '</ul>' .
+         '</div>';
 }
