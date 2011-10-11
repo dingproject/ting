@@ -127,7 +127,7 @@ function ting_availability_preprocess_ting_object(&$vars) {
   if (ting_object_is($object, 'limited_availability')) {
     $vars['additional_main_content'][] = array(
       '#type' => 'markup',
-      '#value' => '<div class="ting-status waiting">' . t('waiting for data') . '</div>',
+      '#value' => '<div class="ting-status ting-availability-status waiting">' . t('waiting for data') . '</div>',
     );
 
     $vars['additional_content'][] = array(
@@ -147,7 +147,7 @@ function ting_availability_preprocess_ting_list_item(&$vars) {
   if (ting_object_is($object, 'limited_availability')) {
     $vars['additional_content'][] = array(
       '#type' => 'markup',
-      '#value' => '<div class="ting-status waiting">Afventer data…</div>',
+      '#value' => '<div class="ting-status ting-availability-status waiting">' . t('waiting for data') . '</div>',
     );
 
   };
