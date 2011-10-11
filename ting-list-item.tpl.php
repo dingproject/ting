@@ -29,8 +29,10 @@
       <span class='date'><?php print $date; ?></span>
       <h3><?php print $title; ?></h3>
 
-      <em><?php echo t('by'); ?></em>
-      <?php print $creator ?>
+      <?php if ($creator) { ?>
+        <em><?php echo t('by'); ?></em>
+        <?php print $creator ?>
+      <?php } ?>
 
       <div class='language'><?php echo t('Language') . ': ' . $language; ?></div>
       <?php
