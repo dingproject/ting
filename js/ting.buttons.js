@@ -88,6 +88,7 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
       .dialog({
         'title': title,
         'buttons': buttons,
+        'height': 'auto',
         'close': function (event, ui) {
           $(this).dialog('destroy').remove();
         }
