@@ -125,6 +125,11 @@ function ting_search_pages_content_js() {
     }
   }
 
+  // Kill any messages set during searching. As the result is returned as
+  // JSON they will not be shown in the current context. Chances are
+  // they will not be relevant in the subsequent page view.
+  drupal_get_messages(NULL, true);
+
   drupal_json($result);
   exit;
 }
