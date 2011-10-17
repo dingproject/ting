@@ -259,7 +259,12 @@ function ting_get_object_recommendations($isbn, $numResults = 10) {
  */
 function ting_execute($request) {
   try {
-    return ting_get_client()->execute($request);
+    // Allow other modules to modify the request just before executing
+    // and the response immediatly after returning
+    drupal_alter('ting_client_request', $request);
+    $response = ting_get_client()->execute($request);
+    drupal_alter('ting_client_response', $response);
+    return $response;
   } catch (TingClientException $e) {
     watchdog('ting client', 'Error performing request: '.$e->getMessage(), NULL, WATCHDOG_ERROR, 'http://'.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
     return false;

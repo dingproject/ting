@@ -254,11 +254,13 @@ function template_preprocess_ting_search_collection(&$variables) {
       // TODO: Really, this should go into ting_availability.
       if (ting_object_is($object, 'limited_availability')) {
         $classes .= ' ting-object-' . $object->localId;
+        $title = NULL;
       }
       else {
         // We have at least one object that's always available, show
         // that and break out.
         $classes = 'available';
+        $title = t('Available');
         break;
       }
     }
@@ -266,17 +268,18 @@ function template_preprocess_ting_search_collection(&$variables) {
     $links[] = array(
       'data' => $type,
       'class' => trim($classes),
+      'title' => $title,
     );
   }
 
   $variables['type_list'] = theme('item_list', $links, NULL, 'ul', array('class' => 'ting-search-collection-types'));
 
-
+  $alt_text=$variables['collection']->objects[0]->creators_string.' / '.$variables['collection']->objects[0]->title;
   // Get the picture if we have a valid object.
   if ($variables['collection']->objects[0] instanceOf TingClientObject) {
     $image_url = ting_covers_collection_url($variables['collection']->objects[0], '80_x');
     if ($image_url) {
-      $variables['picture'] = l(theme('image', $image_url, '', '', null, false), $variables['collection']->url, array('html' => true));
+      $variables['picture'] = l(theme('image', $image_url, $alt_text, $alt_text, null, false), $variables['collection']->url, array('html' => true));
     }
   }
 }

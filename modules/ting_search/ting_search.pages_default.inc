@@ -51,8 +51,8 @@ function ting_search_default_page_manager_pages() {
   $display->layout_settings = array();
   $display->panel_settings = array();
   $display->cache = array();
-  $display->title = '';
-  $display->hide_title = FALSE;
+  $display->title = 'Søg: %keys:html_safe';
+  $display->hide_title = PANELS_TITLE_FIXED;
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass;
