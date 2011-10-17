@@ -177,6 +177,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
   $request->setSort((isset($options['sort']) && $options['sort']) ? $options['sort'] : NULL);
   $request->setAllObjects(isset($options['allObjects']) ? $options['allObjects'] : FALSE);
 
+  // Apply custom ranking if enabled.
   if (variable_get('ting_ranking_custom', FALSE)) {
     $fields = array();
     foreach (variable_get('ting_ranking_fields', array()) as $field) {
@@ -188,8 +189,26 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
     }
 
     if (!empty($fields)) {
+      // Add the default anyIndex ranks. Without these, the result set 
+      // will be mangled.
+      $fields[] = array(
+        'fieldName' => 'cql.anyIndexes',
+        'fieldType' => 'phrase',
+        'weight' => 1,
+      );
+
+      $fields[] = array(
+        'fieldName' => 'cql.anyIndexes',
+        'fieldType' => 'word',
+        'weight' => 1,
+      );
+
       $request->userDefinedRanking = array('tieValue' => 0.1, 'rankField' => $fields);
     }
+  }
+  // Otherwise, use the ranking setting.
+  else {
+    $request->setRank((isset($options['rank']) && $options['rank']) ? $options['rank'] : 'rank_general');
   }
 
   // Apply custom boosts if any.

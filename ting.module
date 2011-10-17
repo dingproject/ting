@@ -581,7 +581,7 @@ function ting_ranking_field_element_process($element, $form_state) {
     '#type' => 'select',
     '#options' => array(
       '' => '- ' . t('Choose') . ' -',
-      'dc.source' => t('Source'),
+      'ac.source' => t('Source'),
       'dc.title' => t('Title'),
       'dc.creator' => t('Author'),
       'dc.subject' => t('Subject'),
