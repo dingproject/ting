@@ -21,6 +21,14 @@ function ting_admin_settings_form($form_state) {
     '#description' => t('The 6-digit code representing the library organization'),
     '#default_value' => variable_get('ting_agency', ''),
   );
+  $form['ting']['ting_profile'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Sources profile'),
+    '#description' => t('The name of the sources profile to be used when searching. Default is opac.
+    										 Note that the name must be exactly as defined in !vip_link', array('!vip_link' => l(t('DBCs VIP database'), 'http://vip.dbc.dk'))),
+    '#default_value' => variable_get('ting_profile', 'opac'),
+  );
+
   $form['ting']['ting_search_url'] = array(
     '#type' => 'textfield',
     '#title' => t('Search service URL'),
