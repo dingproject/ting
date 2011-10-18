@@ -482,12 +482,16 @@ function template_preprocess_ting_object(&$variables) {
     $variables['image'] = theme('image', $image_url, '', '', NULL, FALSE);
   }
 
-  $variables['title'] = check_plain($object->record['dc:title'][''][0]);
-
   $titles = $object->record['dc:title'];
+  $title = $titles[''][0];
   unset($titles['']);
-  $titles = array_values(array_map('array_shift', $titles));
+  if (isset($titles['dkdcplus:full'])) {
+    $title = $titles['dkdcplus:full'][0];
+    unset($titles['dkdcplus:full']);
+  }
+  $variables['title'] = check_plain($title);
 
+  $titles = array_values(array_map('array_shift', $titles));
   $variables['other_titles'] = check_plain(implode(', ', $titles));
   $variables['alternative_titles'] = array();
   if ($object->record['dcterms:alternative']['']) {
@@ -565,7 +569,7 @@ function ting_ting_object_is($object, $class) {
  */
 function ting_ranking_field_element_process($element, $form_state) {
   $element['#tree'] = TRUE;
-  
+
   $element['field_type'] = array(
     '#title' => t('Type'),
     '#type' => 'select',
