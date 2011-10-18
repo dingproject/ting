@@ -218,7 +218,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
         'weight' => 1,
       );
 
-      $request->userDefinedRanking = array('tieValue' => 0.1, 'rankField' => $fields);
+      $request->setUserDefinedRanking(array('tieValue' => 0.1, 'rankField' => $fields));
     }
   }
   // Otherwise, use the ranking setting.
@@ -229,7 +229,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
   // Apply custom boosts if any.
   $boosts = variable_get('ting_boost_fields', array());
   if ($boosts) {
-    $request->userDefinedBoost = $boosts;
+    $request->setUserDefinedBoost($boosts);
   }
 
   $searchResult = ting_execute($request);
