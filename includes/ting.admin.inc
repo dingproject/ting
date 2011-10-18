@@ -62,7 +62,7 @@ function ting_admin_settings_form($form_state) {
     '#title' => t('Enable logging'),
     '#default_value' => variable_get('ting_enable_logging', false),
   );
-  
+
   $form['addi'] = array(
     '#type' => 'fieldset',
     '#title' => t('Additional Information settings'),
@@ -102,7 +102,7 @@ function ting_admin_settings_form($form_state) {
     '#title' => t('Enable logging'),
     '#default_value' => variable_get('addi_enable_logging', false),
   );
-  
+
   return system_settings_form($form);
 }
 

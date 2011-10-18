@@ -204,7 +204,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
     }
 
     if (!empty($fields)) {
-      // Add the default anyIndex ranks. Without these, the result set 
+      // Add the default anyIndex ranks. Without these, the result set
       // will be mangled.
       $fields[] = array(
         'fieldName' => 'cql.anyIndexes',
