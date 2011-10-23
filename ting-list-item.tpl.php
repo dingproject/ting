@@ -2,21 +2,10 @@
 /**
  * @file
  * Display a ting objects as part of a list.
- *
- * Available variables:
- * - $object: The thing..
- * - $local_id: The local id if the thing.
- * - $type: Type of the thing.
- * - $image: Image.
- * - $date: The date of the thing.
- * - $creator: Primary author.
- * - $additional_creators: Other authors.
- * - $language: The language of the item.
- * - $more_link: Link to details page.
  */
 ?>
 <!-- ting-list-item.tpl -->
-<div id="ting-item-<?php print $local_id; ?>" class="ting-item clearfix">
+<div id="ting-item-<?php print $ting_local_id; ?>" class="ting-item clearfix">
 
   <div class="content clearfix">
     <div class="picture">
@@ -26,23 +15,23 @@
     </div>
 
     <div class="info">
-      <span class='date'><?php print $date; ?></span>
+      <span class='date'><?php print $ting_publication_date; ?></span>
       <h3><?php print $title; ?></h3>
 
-      <?php if ($creator) { ?>
+      <?php if (!empty($ting_creators_links)) { ?>
         <em><?php echo t('by'); ?></em>
-        <?php print $creator ?>
+        <?php print array_shift($ting_creators_links) ?>
       <?php } ?>
 
-      <div class='language'><?php echo t('Language') . ': ' . $language; ?></div>
+      <div class='language'><?php echo t('Language') . ': ' . $ting_language; ?></div>
       <?php
-      foreach ($additional_creators as $creator) {
-        print "<p>" . $creator . "</p>";
+      foreach ($ting_creators_links as $creator_link) {
+        print "<p>" . $creator_link . "</p>";
       }
       ?>
 
       <div class="more">
-        <?php print $more_link; ?>
+        <?php print l(t('More information'), $ting_url, array('attributes' => array('class' => 'more-link'))); ?>
       </div>
       <?php if (isset($additional_content)) { print drupal_render($additional_content); } ?>
     </div>

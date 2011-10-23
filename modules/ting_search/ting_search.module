@@ -27,7 +27,8 @@ function ting_search_theme() {
     ),
     'ting_search_collection' => array(
       'arguments' => array('collection' => NULL),
-      'template' => 'ting_search_collection'
+      'template' => 'ting_search_collection',
+      'file' => drupal_get_path('module', 'ting') . '/ting.theme.inc',
     ),
     'ting_facet_browser' => array(
       'arguments' => array('result' => NULL),
@@ -234,16 +235,66 @@ function ting_search_form_submit($form, &$form_state) {
 }
 
 /**
+ * Second preprocessing for Ting collections in search results.
+ */
+function ting_search_preprocess_ting_search_collection(&$vars) {
+  // Loop through all levels of ting details to create the item lists
+  // We do this here instead of in template_preprocess_ting_search_collection()
+  // to let other modules preprocess the ting_details structure before it is
+  // rendered.
+  foreach ($vars['ting_details']  as $title => &$var_name) {
+    if (!empty($vars[$var_name])) {
+      $var = $vars[$var_name];
+      if (!is_array($var)) {
+        $var = array($var);
+      }
+      $var_name = array('class' => _ting_property_classes($var_name),
+                        'data' => theme('item_list', $var, $title, 'span'));
+      $var = theme('item_list', $var, $title, 'span');
+    } else {
+      unset($vars['ting_details'][$title]);
+    }
+  }
+  $vars['ting_details'] = theme('item_list', $vars['ting_details'], NULL, 'div', array('class' => 'ting-properties'));
+}
+
+/**
  * Template preprocessor for Ting collections in search results.
  */
-function template_preprocess_ting_search_collection(&$variables) {
+function template_preprocess_ting_search_collection(&$vars) {
+  $collection = $vars['collection'];
+
+  // Extract information about the collection into variable scope
+  $vars = array_merge($vars, ting_collection_preprocess($collection));
+
+  // Build search collection details
+  // Save preprocessing for ting_search_preprocess_ting_search_collection()
+  // to allow other modules to alter this array before rendering it.
+  $vars['ting_details'] = array( t('Series') => 'ting_series',
+                                 t('Conductor') => 'ting_conductor',
+                                 t('Orchestra') => 'ting_orchestra',
+                                 t('Classiciation') => 'ting_classification',
+                                 t('Subjects') => 'ting_subjects',
+  );
+
+  // Get the picture if we have a valid object.
+  if ($collection->objects[0] instanceOf TingClientObject) {
+    $image_url = ting_covers_collection_url($collection->objects[0], '80_x');
+    if ($image_url) {
+      $alt_text = (!empty($vars['ting_creators'])) ? implode(', ', $vars['ting_creators']) . ' / ' : '';
+      $alt_text .= $vars['ting_title'];
+      $variables['picture'] = l(theme('image', $image_url, $alt_text, $alt_text, null, false), $vars['ting_creators'], array('html' => true));
+    }
+  }
+
   // Mapping type names to local ids.
   $type_map = array();
-  foreach ($variables['collection']->objects as $object) {
-    if (!isset($type_map[$object->type]  )) {
-      $type_map[$object->type] = array();
+  foreach ($collection->objects as $object) {
+    $object_vars = ting_object_preprocess($object);
+    if (!isset($type_map[$object_vars['ting_type']])) {
+      $type_map[$object_vars['ting_type']] = array();
     }
-    $type_map[$object->type][] = $object;
+    $type_map[$object_vars['ting_type']][] = $object;
   }
 
   $links = array();
@@ -253,7 +304,8 @@ function template_preprocess_ting_search_collection(&$variables) {
     foreach ($objects as $object) {
       // TODO: Really, this should go into ting_availability.
       if (ting_object_is($object, 'limited_availability')) {
-        $classes .= ' ting-object-' . $object->localId;
+        $object_vars = ting_object_preprocess($object);
+        $classes .= ' ting-object-' . $object_vars['ting_local_id'];
         $title = NULL;
       }
       else {
@@ -272,14 +324,5 @@ function template_preprocess_ting_search_collection(&$variables) {
     );
   }
 
-  $variables['type_list'] = theme('item_list', $links, NULL, 'ul', array('class' => 'ting-search-collection-types'));
-
-  $alt_text=$variables['collection']->objects[0]->creators_string.' / '.$variables['collection']->objects[0]->title;
-  // Get the picture if we have a valid object.
-  if ($variables['collection']->objects[0] instanceOf TingClientObject) {
-    $image_url = ting_covers_collection_url($variables['collection']->objects[0], '80_x');
-    if ($image_url) {
-      $variables['picture'] = l(theme('image', $image_url, $alt_text, $alt_text, null, false), $variables['collection']->url, array('html' => true));
-    }
-  }
+  $vars['type_list'] = theme('item_list', $links, NULL, 'ul', array('class' => 'ting-search-collection-types'));
 }

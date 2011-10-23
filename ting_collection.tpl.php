@@ -3,41 +3,27 @@
  * @file ting_object.tpl.php
  *
  * Template to render a collection objects from the Ting database.
- *
- * Available variables:
- * - $collection: The TingClientObjectCollection instance we're rendering.
- * - $sorted_collection: Array of TingClientObject instances sorted by type.
- * - $ting_list: Rendered ting objects.
  */
 ?>
 <div class="ting-overview clearfix">
-  <h1><?php print check_plain($collection->title); ?></h1>
-  <?php if ($collection->creators) { ?>
+  <h1><?php print $ting_title ?></h1>
+  <?php if (sizeof($ting_creators_links) == 1) { ?>
   <div class='creator'>
     <span class='byline'><?php echo ucfirst(t('by')); ?></span>
-    <?php
-    $creators = array();
-    foreach ($collection->creators as $i => $creator) {
-      $creators[] = l($creator, 'ting/search/' . $creator, array('attributes' => array('class' => 'author')));
-    }
-    print implode(', ', $creators);
-    ?>
-    <span class='date'>(<?php print $collection->date; ?>)</span>
+    <?php print implode(', ', $ting_creators_links); ?>
+    <span class='date'>(<?php print $ting_date; ?>)</span>
   </div>
   <?php } ?>
 
-  <p><?php print check_plain($collection->abstract); ?></p>
+  <?php if (isset($ting_volumne_title)) { ?>
+   <p class="volume-title"><?php print $ting_volumne_title; ?></p>
+  <?php } ?>
 
-  <div class='terms'>
-    <span class='title'><?php echo t('Terms:'); ?></span>
-    <?php
-    $subjects = array();
-    foreach ($collection->subjects as $subject) {
-      $subjects[] = "<span class='term'>". l($subject, 'ting/search/'. $subject) ."</span>";
-    }
-    print implode(', ', $subjects);
-    ?>
-  </div>
+  <p class="abstract"><?php print $ting_abstract; ?></p>
+
+  <div class="ting-details clearfix">
+    <?php print $ting_details; ?>
+ </div>
 
   <?php  if (count($sorted_collection) > 1) { ?>
     <div class='material-links'>
