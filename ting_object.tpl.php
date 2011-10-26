@@ -28,12 +28,6 @@
 
     <div class="right-column left">
       <h2><?php print $title; ?></h2>
-      <?php
-      $titles = array();
-      foreach (array_diff_key($object->record['dc:title'], array('' => 1)) as $type => $dc_title) {
-        $titles = array_merge($titles, $dc_title);
-      }
-      ?>
       <?php if ($other_titles) { ?>
         <h2><?php print $other_titles; ?></h2>
       <?php } ?>

@@ -21,17 +21,25 @@ function ting_admin_settings_form($form_state) {
     '#description' => t('The 6-digit code representing the library organization'),
     '#default_value' => variable_get('ting_agency', ''),
   );
+  $form['ting']['ting_profile'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Sources profile'),
+    '#description' => t('The name of the sources profile to be used when searching. Default is opac.
+    										 Note that the name must be exactly as defined in !vip_link', array('!vip_link' => l(t('DBCs VIP database'), 'http://vip.dbc.dk'))),
+    '#default_value' => variable_get('ting_profile', 'opac'),
+  );
+
   $form['ting']['ting_search_url'] = array(
     '#type' => 'textfield',
     '#title' => t('Search service URL'),
-    '#description' => t('URL to the Ting search webservice, e.g. http://opensearch.addi.dk/0.14/'),
+    '#description' => t('URL to the Ting search webservice, e.g. http://opensearch.addi.dk/2.0/'),
     '#required' => TRUE,
     '#default_value' => variable_get('ting_search_url', ''),
   );
   $form['ting']['ting_scan_url'] = array(
     '#type' => 'textfield',
     '#title' => t('Scan service URL'),
-    '#description' => t('URL to the Ting scan webservice, e.g. http://openscan.addi.dk/1.5/'),
+    '#description' => t('URL to the Ting scan webservice, e.g. http://openscan.addi.dk/2.0/'),
     '#required' => TRUE,
     '#default_value' => variable_get('ting_scan_url', ''),
   );
@@ -54,7 +62,7 @@ function ting_admin_settings_form($form_state) {
     '#title' => t('Enable logging'),
     '#default_value' => variable_get('ting_enable_logging', false),
   );
-  
+
   $form['addi'] = array(
     '#type' => 'fieldset',
     '#title' => t('Additional Information settings'),
@@ -94,7 +102,7 @@ function ting_admin_settings_form($form_state) {
     '#title' => t('Enable logging'),
     '#default_value' => variable_get('addi_enable_logging', false),
   );
-  
+
   return system_settings_form($form);
 }
 

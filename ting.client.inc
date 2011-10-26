@@ -24,7 +24,11 @@ function ting_get_object_by_id($object_id, $enrich = FALSE) {
   else {
     $request = ting_get_request_factory()->getObjectRequest();
     $request->setObjectId($object_id);
+
+    // Add agency and profile
     $request = ting_add_agency($request);
+    $request = ting_add_profile($request);
+
     if ($enrich) {
       $request = ting_add_relations($request);
     }
@@ -59,7 +63,11 @@ function ting_get_object_by_local_id($local_id, $enrich = FALSE) {
   if (empty($local_id)) { return FALSE; }
   $request = ting_get_request_factory()->getObjectRequest();
   $request->setLocalId($local_id);
+
+  // Add agency and profile
   $request = ting_add_agency($request);
+  $request = ting_add_profile($request);
+
   if ($enrich) {
     $request = ting_add_relations($request);
   }
@@ -96,7 +104,11 @@ function ting_get_collection_by_id($object_id, $enrich = FALSE) {
   else {
     $request = ting_get_request_factory()->getCollectionRequest();
     $request->setObjectId($object_id);
+
+    // Add agency and profile
     $request = ting_add_agency($request);
+    $request = ting_add_profile($request);
+
     $collection = ting_execute($request);
 
     if ($collection) {
@@ -167,7 +179,6 @@ function ting_search_sort_options() {
 function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = array()) {
   $request = ting_get_request_factory()->getSearchRequest();
   $request->setQuery($query);
-  $request = ting_add_agency($request);
   $request->setStart($resultsPerPage * ($page - 1) + 1);
   $request->setNumResults($resultsPerPage);
 
@@ -176,6 +187,10 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
   $request->setRank((isset($options['rank']) && $options['rank']) ? $options['rank'] : 'rank_general');
   $request->setSort((isset($options['sort']) && $options['sort']) ? $options['sort'] : NULL);
   $request->setAllObjects(isset($options['allObjects']) ? $options['allObjects'] : FALSE);
+
+  // Add agency and profile
+  $request = ting_add_agency($request);
+  $request = ting_add_profile($request);
 
   // Apply custom ranking if enabled.
   if (variable_get('ting_ranking_custom', FALSE)) {
@@ -189,7 +204,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
     }
 
     if (!empty($fields)) {
-      // Add the default anyIndex ranks. Without these, the result set 
+      // Add the default anyIndex ranks. Without these, the result set
       // will be mangled.
       $fields[] = array(
         'fieldName' => 'cql.anyIndexes',
@@ -203,7 +218,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
         'weight' => 1,
       );
 
-      $request->userDefinedRanking = array('tieValue' => 0.1, 'rankField' => $fields);
+      $request->setUserDefinedRanking(array('tieValue' => 0.1, 'rankField' => $fields));
     }
   }
   // Otherwise, use the ranking setting.
@@ -214,7 +229,7 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
   // Apply custom boosts if any.
   $boosts = variable_get('ting_boost_fields', array());
   if ($boosts) {
-    $request->userDefinedBoost = $boosts;
+    $request->setUserDefinedBoost($boosts);
   }
 
   $searchResult = ting_execute($request);
@@ -502,6 +517,14 @@ function ting_add_agency(TingClientRequest $request) {
   if ($agency = variable_get('ting_agency', false)) {
     $request->setAgency($agency);
   }
+  return $request;
+}
+
+function ting_add_profile(TingClientRequest $request) {
+  if ($profile = variable_get('ting_profile', 'opac')) {
+    $request->setProfile($profile);
+  }
+
   return $request;
 }
 
