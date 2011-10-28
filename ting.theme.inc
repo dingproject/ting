@@ -484,9 +484,11 @@ function ting_object_preprocess(TingClientObject $object) {
         if (!isset($property['namespaces']) || in_array($namespace, $property['namespaces'])) {
           // If the property is multivalue...
           if (!empty($property['multiple'])) {
-            // Create arrays to hold values and links
-            $vars[$var_name] = array();
-            if (!empty($property['links'])) {
+            // Create arrays to hold values and links if they have not been defined
+            if (!isset($vars[$var_name])) {
+              $vars[$var_name] = array();
+            }
+            if (!empty($property['links']) && !isset($vars[$var_name])) {
               $vars[$var_name_links] = array();
             }
 
