@@ -189,7 +189,7 @@ function template_preprocess_ting_object(&$vars) {
                    ),
                    array(
                      'title' => NULL,
-                   	 'class' => 'additional-details clearfix',
+                      'class' => 'additional-details clearfix',
                      'data' => array(
                        t('Original title') => 'ting_source',
                        t('Coauthor') => 'ting_coauthor',
@@ -219,7 +219,7 @@ function template_preprocess_ting_object(&$vars) {
                    ),
                    array(
                      'title' => NULL,
-                   	 'class' => 'descrition clearfix',
+                      'class' => 'descrition clearfix',
                      'data' => array(
                        t('Description') => 'ting_description')
                      ),
@@ -360,14 +360,14 @@ function ting_object_preprocess(TingClientObject $object) {
   //          to search results for each value.
   $properties = array(
     array('name' => 'title',
-    			'entry' => 'dc:title',
+          'entry' => 'dc:title',
           'namespaces' => array(''),),
     // Title appears twice as we prefer the full title
     array('name' => 'title',
-    			'entry' => 'dc:title',
+          'entry' => 'dc:title',
           'namespaces' => array('dkdcplus:full'),),
     array('name' => 'volumne_title',
-    			'entry' => 'dc:title',
+          'entry' => 'dc:title',
           'namespaces' => array('oss:full'),),
     array('name' => 'publication_date',
           'entry' => 'dc:date',
@@ -417,11 +417,11 @@ function ting_object_preprocess(TingClientObject $object) {
     array('name' => 'replaces',
           'entry' => 'dc:relation',
           'namespaces' => array('replaces'),
-    			'links' => TRUE),
+          'links' => TRUE),
     array('name' => 'replaced_by',
           'entry' => 'dc:relation',
           'namespaces' => array('isReplacedBy'),
-    			'links' => TRUE),
+          'links' => TRUE),
     array('name' => 'subtitles',
           'entry' => 'dc:language',
           'namespaces' => array('oss:subtitles'),
