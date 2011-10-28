@@ -283,7 +283,7 @@ function template_preprocess_ting_search_collection(&$vars) {
     if ($image_url) {
       $alt_text = (!empty($vars['ting_creators'])) ? implode(', ', $vars['ting_creators']) . ' / ' : '';
       $alt_text .= $vars['ting_title'];
-      $variables['picture'] = l(theme('image', $image_url, $alt_text, $alt_text, null, false), $vars['ting_creators'], array('html' => true));
+      $vars['picture'] = l(theme('image', $image_url, $alt_text, $alt_text, null, false), $vars['ting_creators'], array('html' => true));
     }
   }
 
