@@ -444,13 +444,14 @@ function ting_object_preprocess(TingClientObject $object) {
 
   // Add creators
   // They only vary by name and namespace so they get special handling
-  $creator_properties = array('creators' =>  array('dkdcplus:aut', 'dkdcplus:cmp', 'dkdcplus:drt'),
-  														'translators' => array('dkdcplus:trl'),
-  													 	'photographers' => array('dkdcplus:pht'),
-  													  'musicians' => array('dkdcplus:mus'),
-  													  'readers' => array('dkdcplus:dkind'),
-  													  'illustrators' => array('dkdcplus:ill'),
-  														'scriptwriter' => array('dkdcplus:aus'),
+  $creator_properties = array('creators' =>  array('dkdcplus:aut', 'dkdcplus:cmp', 'dkdcplus:drt',
+                                                   'oss:aut' /* Added for backwards compatability with DKABM 1.1 */),
+                              'translators' => array('dkdcplus:trl'),
+                              'photographers' => array('dkdcplus:pht'),
+                              'musicians' => array('dkdcplus:mus'),
+                              'readers' => array('dkdcplus:dkind'),
+                              'illustrators' => array('dkdcplus:ill'),
+                              'scriptwriter' => array('dkdcplus:aus'),
                               'actors' => array('dkdcplus:act'),
                               'editor' => array('dkdcplus:edt'));
 
@@ -511,6 +512,13 @@ function ting_object_preprocess(TingClientObject $object) {
             break;
           }
         }
+      }
+    }
+
+    // Remove any duplicate values
+    foreach (array($var_name, $var_name_links) as $var) {
+      if (is_array($vars[$var])) {
+        $vars[$var] = array_unique($vars[$var]);
       }
     }
   }
