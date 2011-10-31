@@ -346,6 +346,11 @@ function theme_ting_ranking_field($element) {
  * @param TingClientObject $object
  */
 function ting_object_preprocess(TingClientObject $object) {
+  // Key values
+  $vars = array('ting_local_id' => $object->localId,
+                'ting_id' => $object->id,
+                'ting_url' => url('ting/object/' . $object->id, array('absolute' => TRUE)));
+
   // Definitions of all the record properties we want to extract
   // Each definition consists of:
   // - name: The programatic name of the property. This is used to determined
@@ -463,10 +468,6 @@ function ting_object_preprocess(TingClientObject $object) {
                           'links' => TRUE,
     );
   }
-
-  $vars = array('ting_local_id' => $object->localId,
-                'ting_id' => $object->id,
-                'ting_url' => url('ting/object/'.$object->id, array('absolute' => TRUE)));
 
   // Extract all the properties into variables
   foreach ($properties as $property) {
