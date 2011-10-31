@@ -540,6 +540,11 @@ function ting_collection_preprocess(TingClientObjectCollection $collection) {
   // most of the variable values
   $vars = ting_object_preprocess($collection->objects[0]);
 
+  // Override url if collection contains multiple objects
+  if (sizeof($collection->objects) > 1) {
+    $vars['ting_url'] = url('ting/collection/'. $collection->objects[0]->id, array('absolute' => TRUE));
+  }
+
   // Define aggregate values
   $aggregate_properties = array('subjects', 'type');
 
