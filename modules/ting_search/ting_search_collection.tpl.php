@@ -18,7 +18,7 @@
       </div>
 
       <h3>
-        <?php print l($ting_title, $ting_url, array('attributes' => array('class' =>'title'))) ;?>
+        <?php print l($ting_title, $ting_url, array('html' => TRUE, 'attributes' => array('class' =>'title'))) ;?>
       </h3>
 
       <div class="meta">
