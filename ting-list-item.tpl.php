@@ -16,7 +16,7 @@
 
     <div class="info">
       <span class='date'><?php print $ting_publication_date; ?></span>
-      <h3><?php print $title; ?></h3>
+      <h3><?php print $ting_title; ?></h3>
 
       <?php if (!empty($ting_creators_links)) { ?>
         <em><?php echo t('by'); ?></em>
