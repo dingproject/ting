@@ -337,8 +337,11 @@ function ting_object_is($object, $class) {
  */
 function ting_ting_object_is($object, $class) {
   // Known online types.
-  if ($class == 'online' and in_array(drupal_strtolower($object->type), array('lydbog (online)', 'netmusik (album)', 'netdokument'))) {
-    return TRUE;
+  if ($class == 'online') {
+    $online_types = array('lydbog (online)', 'lydbog (net)', 'netmusik (album)', 'netdokument');
+    if (in_array(drupal_strtolower($object->type), $online_types)) {
+      return TRUE;
+    }
   }
 }
 
