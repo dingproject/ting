@@ -391,7 +391,7 @@ function ting_object_preprocess(TingClientObject $object) {
           'multiple' => TRUE,
           'links' => TRUE),
     array('name' => 'series',
-          'entry' => 'dc:description',
+          'entry' => 'dc:title',
           'namespaces' => array('dkdcplus:series'),
           'links' => TRUE),
     array('name' => 'conductor',
