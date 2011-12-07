@@ -25,8 +25,10 @@
 
       <div class='language'><?php echo t('Language') . ': ' . $ting_language; ?></div>
       <?php
-      foreach ($ting_creators_links as $creator_link) {
-        print "<p>" . $creator_link . "</p>";
+      if (!empty($ting_creators_links)) {
+        foreach ($ting_creators_links as $creator_link) {
+          print "<p>" . $creator_link . "</p>";
+        }
       }
       ?>
 
