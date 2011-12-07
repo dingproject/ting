@@ -5,15 +5,13 @@
  */
 function theme_ting_thing($type, $object, $query_args = NULL) {
   static $displayed_relation_types = array(
-    'isAuthorDescriptionOf',
-    'hasAuthorDescription',
-    'hasReview',
-    'isReviewOf',
-    'hasAnalysis',
-    'isAnalysisOf',
-    'isSubjectDescriptionOf',
-    'hasSubjectDescription',
-    'hasFulltext',
+    'dbcaddi:hasCreatorDescription',
+    'dbcaddi:hasReview',
+    'dbcaddi:isReviewOf',
+    'dbcaddi:hasAnalysis',
+    'dbcaddi:isAnalysisOf',
+    'dbcaddi:hasSubjectDescription',
+    'dbcaddi:hasFulltext',
   );
   module_invoke_all('ting_add_js', "ting_${type}_view");
 
@@ -26,11 +24,6 @@ function theme_ting_thing($type, $object, $query_args = NULL) {
   if (sizeof($object->relations)) {
     $relations = array();
     foreach ($object->relations as $relation) {
-      // Remove relations that's not from the local agency.
-      if ($relation->ownerId != $object->ownerId) {
-        continue;
-      }
-
       if (in_array($relation->relationType, $displayed_relation_types)) {
         $relations[] = $relation;
       }
@@ -363,6 +356,7 @@ function ting_object_preprocess(TingClientObject $object) {
   //             a valid namespace is used.
   // - links: If set to true an additional variable is set containing link(s)
   //          to search results for each value.
+  // - html: Whether to allow escape any HTML content contained within the field
   $properties = array(
     array('name' => 'title',
           'entry' => 'dc:title',
@@ -379,7 +373,8 @@ function ting_object_preprocess(TingClientObject $object) {
           'namespaces' => array('')),
     array('name' => 'abstract',
           'entry' => 'dcterms:abstract',
-          'namespaces' => array('')),
+          'namespaces' => array(''),
+          'html' => TRUE),
     array('name' => 'subjects',
           'entry' => 'dc:subject',
           'namespaces' => array('oss:genre', 'dkdcplus:DBCF', 'dkdcplus:DBCS', 'dkdcplus:DBCM', 'dkdcplus:DBCO', 'dkdcplus:DBCN'),
