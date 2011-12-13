@@ -295,6 +295,8 @@ function template_preprocess_ting_list_item(&$vars) {
     $vars['image'] = theme('image', $image_url, '', '', null, false);
   }
 
+  $vars['more_link'] = l(t('More information'), $object->url, array('attributes' => array('class' => 'more-link')));
+
   // Let other modules add buttons.
   $vars['buttons'] = module_invoke_all('ting_object_buttons', $object);
 }

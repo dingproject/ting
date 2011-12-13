@@ -38,7 +38,7 @@
       <?php }?>
 
       <div class="more">
-        <?php print l(t('More information'), $ting_url, array('attributes' => array('class' => 'more-link'))); ?>
+        <?php print $more_link; ?>
       </div>
 
       <?php if (isset($additional_content)) { print drupal_render($additional_content); } ?>
