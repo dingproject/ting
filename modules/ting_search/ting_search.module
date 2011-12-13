@@ -270,11 +270,10 @@ function template_preprocess_ting_search_collection(&$vars) {
   // Build search collection details
   // Save preprocessing for ting_search_preprocess_ting_search_collection()
   // to allow other modules to alter this array before rendering it.
-  $vars['ting_details'] = array( t('Series') => 'ting_series',
-                                 t('Conductor') => 'ting_conductor',
-                                 t('Orchestra') => 'ting_orchestra',
-                                 t('Classiciation') => 'ting_classification',
-                                 t('Subjects') => 'ting_subjects',
+  $vars['ting_details'] = array( t('Series') => 'ting_series_links',
+                                 t('Classiciation') => 'ting_classification_links',
+                                 t('Listing') => 'ting_listing_links',
+                                 t('Subjects') => 'ting_subjects_links',
   );
 
   // Get the picture if we have a valid object.

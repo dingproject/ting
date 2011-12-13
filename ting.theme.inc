@@ -64,10 +64,9 @@ function template_preprocess_ting_collection(&$vars) {
   // Build collection details
   // Save preprocessing for ting_preprocess_ting_collection() to allow other
   // modules to alter this array before rendering it.
-  $vars['ting_details'] = array( t('Series') => 'ting_series',
-                                 t('Conductor') => 'ting_conductor',
-                                 t('Orchestra') => 'ting_orchestra',
+  $vars['ting_details'] = array( t('Series') => 'ting_series_links',
                                  t('Classiciation') => 'ting_classification_links',
+                                 t('Listing') => 'ting_listing_links',
                                  t('Subjects') => 'ting_subjects_links',
   );
 
@@ -180,10 +179,8 @@ function template_preprocess_ting_object(&$vars) {
                     'title' => NULL,
                     'class' => 'details clearfix',
                     'data' => array(
-                       t('Series') => 'ting_series',
-                       t('Conductor') => 'ting_conductor',
-                       t('Orchestra') => 'ting_orchestra',
                        t('Classiciation') => 'ting_classification_links',
+                       t('Listing') => 'ting_listing_links',
                        t('Subjects') => 'ting_subjects_links',
                      ),
                    ),
@@ -192,29 +189,33 @@ function template_preprocess_ting_object(&$vars) {
                       'class' => 'additional-details clearfix',
                      'data' => array(
                        t('Original title') => 'ting_source',
-                       t('Coauthor') => 'ting_coauthor',
-                       t('Translator') => 'ting_translators',
-                       t('Photographer') => 'ting_photographers',
-                       t('Musician') => 'ting_musicians',
-                       t('Reader') => 'ting_readers',
-                       t('Illustrator') => 'ting_illustrators',
-                       t('Scriptwriter') => 'ting_scriptwriter',
+                       t('Contributors') => 'ting_contributors',
+                       t('Coauthors') => 'ting_coauthor',
+                       t('Writer') => 'ting_writer',
+                       t('Translators') => 'ting_translators',
+                       t('Photographers') => 'ting_photographers',
+                       t('Musicians') => 'ting_musicians',
+                       t('Readers') => 'ting_readers',
+                       t('Illustrators') => 'ting_illustrators',
+                       t('Scriptwriters') => 'ting_scriptwriters',
                        t('Actors') => 'ting_actors',
-                       t('Editor') => 'ting_editor',
+                       t('Editors') => 'ting_editors',
+                       t('Coeditors') => 'ting_coeditors',
                        t('Type') => 'ting_type',
                        t('Language') => 'ting_language',
                        t('Edition') => 'ting_edition',
                        t('Extent') => 'ting_extent',
-                       t('Audience') => 'ting_audience',
+                       t('Audience') => 'ting_audience_age',
+                       t('Media council') => 'ting_audience_media_council',
                        t('PEGI') => 'ting_pegi_rating',
-                       t('Replaces') => 'ting_replaces',
-                       t('Replaced by') => 'ting_replaced_by',
+                       t('Related') => 'ting_related',
                        t('Subtitles') => 'ting_subtitles',
                        t('Publisher') => 'ting_publisher',
                        t('ISBN') => 'ting_isbn',
                        t('ISSN') => 'ting_isssn',
+                       t('URI') => 'ting_uri',
+                       t('ISMN') => 'ting_ismn',
                        t('Record label') => 'ting_record_label',
-                       t('URL') => 'ting_uri',
                      ),
                    ),
                    array(
@@ -352,167 +353,241 @@ function ting_object_preprocess(TingClientObject $object) {
                 'ting_url' => url('ting/object/' . $object->id, array('absolute' => TRUE)));
 
   // Definitions of all the record properties we want to extract
+  // Keys are the programatic names of properties. This is used to determined
+  // variable names when extracting the values.
   // Each definition consists of:
-  // - name: The programatic name of the property. This is used to determined
-  //         variable names when extracting the values
   // - entry: The position in the object record where the value is located
   // - namespaces: An array of the allowed namespaces from which to extract
   //               values. If this is omitted then all namespaces are used.
+  // - !namespaces: An array of namespaces to ignore. If this is omitted then
+  //                all namespaces are allowed.
   // - multiple: If set to true the extracted value is an array of all
   //             extracted values. Otherwise only the first value from
   //             a valid namespace is used.
   // - links: If set to true an additional variable is set containing link(s)
   //          to search results for each value.
+  // - link_facet: If set this facet will be used when creating links instead of
+  //               broad searches
+  // - html: Whether to allow escape any HTML content contained within the field
+  // Each property may contain multiple definitions. Handling depends on the
+  // multiple value.
   $properties = array(
-    array('name' => 'title',
-          'entry' => 'dc:title',
-          'namespaces' => array(''),),
-    // Title appears twice as we prefer the full title
-    array('name' => 'title',
-          'entry' => 'dc:title',
-          'namespaces' => array('dkdcplus:full'),),
-    array('name' => 'volumne_title',
-          'entry' => 'dc:title',
-          'namespaces' => array('oss:full'),),
-    array('name' => 'publication_date',
-          'entry' => 'dc:date',
-          'namespaces' => array('')),
-    array('name' => 'abstract',
-          'entry' => 'dcterms:abstract',
-          'namespaces' => array('')),
-    array('name' => 'subjects',
-          'entry' => 'dc:subject',
-          'namespaces' => array('oss:genre', 'dkdcplus:DBCF', 'dkdcplus:DBCS', 'dkdcplus:DBCM', 'dkdcplus:DBCO', 'dkdcplus:DBCN'),
-          'multiple' => TRUE,
-          'links' => TRUE),
-    array('name' => 'classification',
-          'entry' => 'dc:subject',
-          'namespaces' => array('dkdcplus:DK5', 'dkdcplus:DK5-Text'),
-          'multiple' => TRUE,
-          'links' => TRUE),
-    array('name' => 'series',
-          'entry' => 'dc:title',
-          'namespaces' => array('dkdcplus:series'),
-          'links' => TRUE),
-    array('name' => 'conductor',
-          'entry' => 'dc:creator',
-          'namespaces' => array('oss:cnd'),
-          'links' => TRUE),
-    array('name' => 'orchestra',
-          'entry' => 'dc:contributor',
-          'namespaces' => array('oss:mus'),
-          'links' => TRUE),
-    array('name' => 'source',
-          'entry' => 'dc:source',
-          'links' => TRUE),
-    array('name' => 'type',
-          'entry' => 'dc:type'),
-    array('name' => 'language',
-          'entry' => 'dc:language'),
-    array('name' => 'edition',
-          'entry' => 'dkdcplus:version',),
-    array('name' => 'extent',
-          'entry' => 'dcterms:extent'),
-    array('name' => 'audience',
-          'entry' => 'dcterms:audience',
-          'multiple' => TRUE),
-    array('name' => 'pegi_rating',
-          'entry' => 'dc:description',
-          'namespaces' => array('oss:pegi')),
-    array('name' => 'replaces',
-          'entry' => 'dc:relation',
-          'namespaces' => array('replaces'),
-          'links' => TRUE),
-    array('name' => 'replaced_by',
-          'entry' => 'dc:relation',
-          'namespaces' => array('isReplacedBy'),
-          'links' => TRUE),
-    array('name' => 'subtitles',
-          'entry' => 'dc:language',
-          'namespaces' => array('oss:subtitles'),
-          'multiple' => TRUE),
-    array('name' => 'publisher',
-          'entry' => 'dc:publisher',),
-    array('name' => 'isbn',
-          'entry' => 'dc:identifier',
-          'namespaces' => array('dkdcplus:ISBN'),),
-    array('name' => 'issn',
-          'entry' => 'dc:identifier',
-          'namespaces' => array('dkdcplus:ISSN'),),
-    array('name' => 'record_label',
-          'entry' => 'dc:identifier',),
-    array('name' => 'uri',
-          'entry' => 'ac:location',),
-    array('name' => 'description',
-          'entry' => 'dc:description',),
+    'title' => array(
+      'entry' => 'dc:title',
+      'namespaces' => array(''),
+    ),
+    'title_full' => array(
+      'entry' => 'dc:title',
+      'namespaces' => array('dkdcplus:full'),
+    ),
+    'volumne_title' => array(
+      'entry' => 'dc:title',
+      'namespaces' => array('oss:full'),
+    ),
+    'creators' => array(
+      'entry' => 'dc:creator',
+      '!namespaces' => array('oss:sort'),
+      'multiple' => TRUE,
+      'links' => TRUE,
+      'link_facet' => 'facet.creator',
+    ),
+    'publication_date' => array(
+      'entry' => 'dc:date',
+      'namespaces' => array(''),
+    ),
+    'abstract' => array(
+      'entry' => 'dcterms:abstract',
+      'namespaces' => array(''),
+      'html' => TRUE,
+    ),
+    'description' => array(
+      'entry' => 'dc:description',
+      'namespaces' => array(''),
+    ),
+    'subjects' => array(
+      'entry' => 'dc:subject',
+      'namespaces' => array('dkdcplus:genre', 'dkdcplus:DBCF', 'dkdcplus:DBCS', 'dkdcplus:DBCM', 'dkdcplus:DBCO', 'dkdcplus:DBCN', 'dcterms:spatial', 'dcterms:temporal',
+                            'oss:genre' /* Included for backwards compatability with DKABM 1.x' */),
+      'multiple' => TRUE,
+      'links' => TRUE,
+    ),
+    'classification' => array(
+      'entry' => 'dc:subject',
+      'namespaces' => array('dkdcplus:DK5'),
+      'multiple' => TRUE,
+      'links' => TRUE,
+    ),
+    'listing' => array(
+      'entry' => 'dc:subject',
+      'namespaces' => array('dkdcplus:DK5-Text'),
+      'multiple' => TRUE,
+      'links' => TRUE,
+    ),
+    'series' => array(
+      array(
+        'entry' => 'dc:title',
+        'namespaces' => array('dkdcplus:series'),
+        'multiple' => TRUE,
+      ),
+      array(
+        'entry' => 'dc:description',
+        'namespaces' => array('dkdcplus:series'),
+        'multiple' => TRUE,
+      ),
+    ),
+    'source' => array(
+      'entry' => 'dc:source',
+      'links' => TRUE,
+    ),
+    'type' => array(
+      'entry' => 'dc:type'
+    ),
+    'language' => array(
+      'entry' => 'dc:language',
+      'namespaces' => array(''),
+    ),
+    'language_iso639_2' => array(
+      'entry' => 'dc:language',
+      'namespaces' => array('dcterms:ISO639-2'),
+    ),
+    'edition' => array(
+      'entry' => 'dkdcplus:version',
+    ),
+    'extent' => array(
+      'entry' => 'dcterms:extent'
+    ),
+    'record_label' => array(
+      'entry' => 'dc:identifier',
+      'namespaces' => array(''),
+    ),
+    'audience_age' => array(
+      'entry' => 'dcterms:audience',
+      'namespaces' => array('dkdcplus:age'),
+      'multiple' => TRUE
+    ),
+    'audience_media_council' => array(
+      'entry' => 'dcterms:audience',
+      'namespaces' => array('dkdcplus:medieraad'),
+      'multiple' => TRUE
+    ),
+    'pegi_rating' => array(
+      'entry' => 'dcterms:audience',
+      'namespaces' => array('dkdcplus:pegi')
+    ),
+    'related' => array(
+      'entry' => 'dc:relation',
+      'namespaces' => array('dcterms:isPartOf', 'dcterms:hasPart', 'dcterms:isReplacedBy', 'dcterms:replaces', 'dcterms:references'),
+      'links' => TRUE
+    ),
+    'subtitles' => array(
+      'entry' => 'dc:language',
+      'namespaces' => array('dkdcplus:subtitles',
+                            'oss:subtitles'  /* Included for backwards compatability with DKABM 1.x' */),
+      'multiple' => TRUE
+    ),
+    'publisher' => array(
+      'entry' => 'dc:publisher',
+    ),
+    'isbn' => array(
+      'entry' => 'dc:identifier',
+      'namespaces' => array('dkdcplus:ISBN'),
+    ),
+    'issn' => array(
+      'entry' => 'dc:identifier',
+      'namespaces' => array('dkdcplus:ISSN'),
+    ),
+    'uri' => array(
+      'entry' => 'dc:identifier',
+      'namespaces' => array('dkdcplus:URI')
+    ),
+    'ismn' => array(
+      'entry' => 'dc:identifier',
+      'namespaces' => array('dkdcplus:ISMN')
+    ),
   );
 
-  // Add creators
+  // Add contributors
   // They only vary by name and namespace so they get special handling
-  $creator_properties = array('creators' =>  array('dkdcplus:aut', 'dkdcplus:cmp', 'dkdcplus:drt',
-                                                   'oss:aut' /* Added for backwards compatability with DKABM 1.1 */),
-                              'translators' => array('dkdcplus:trl'),
-                              'photographers' => array('dkdcplus:pht'),
-                              'musicians' => array('dkdcplus:mus'),
-                              'readers' => array('dkdcplus:dkind'),
+  $contrib_properties = array('actors' => array('dkdcplus:act'),
+                              'coauthor' => array('dkdcplus:dkmed'),
+                              'coeditors' => array('dkdcplus:dkmdt'),
+                              'conductors'=> array('oss:cnd'),
+                              'draftsmen' => array('dkdcplus:drm'),
+                              'editors' => array('dkdcplus:edt'),
                               'illustrators' => array('dkdcplus:ill'),
-                              'scriptwriter' => array('dkdcplus:aus'),
-                              'actors' => array('dkdcplus:act'),
-                              'editor' => array('dkdcplus:edt'));
+                              'interviewee' => array('dkdcplus:ive'),
+                              'musicians' => array('dkdcplus:mus'),
+                              'orchestras' => array('oss:mus'),
+                              'photographers' => array('dkdcplus:pht'),
+                              'readers' => array('dkdcplus:dkind'),
+                              'scriptwriters' => array('dkdcplus:aus'),
+                              'translators' => array('dkdcplus:trl'),
+                              'writers' => array('dkdcplus:dktek'),
+                              'contributors' => NULL, // All contributors. Any contributor with a recognized function will be removed later on
+  );
 
-  foreach ($creator_properties as $name => $namespaces) {
-    $properties[] = array('name' => $name,
-                          'entry' => 'dc:creator',
-                          'namespaces' => $namespaces,
-                          'multiple' => TRUE,
-                          'links' => TRUE,
-    );
+  foreach ($contrib_properties as $name => $namespaces) {
+    $properties[$name] = array( 'entry' => 'dc:contributor',
+                                'namespaces' => $namespaces,
+                                'multiple' => TRUE,
+                                'links' => TRUE);
   }
 
   // Extract all the properties into variables
-  foreach ($properties as $property) {
+
+  foreach ($properties as $name => $definitions) {
     // Generate names for the $vars array
     // Names for the foo property will be ting_creators and ting_creators_links
-    $var_name = 'ting_' . $property['name'];
-    $var_name_links = $var_name . '_' . ((!empty($property['multiple'])) ? 'links' : 'link');
+    $var_name = 'ting_' . $name;
+    $var_name_links = $var_name . '_' . ((!empty($definitions['multiple'])) ? 'links' : 'link');
 
-    // Check  if the property is set
-    if (!empty($object->record[$property['entry']])) {
-      // Values are grouped by namespace. Loop through all of them.
-      foreach ($object->record[$property['entry']] as $namespace => $values) {
-        // Only look for values in the specified namespaces. If no namespaces have been
-        // defined the go through all of them.
-        if (!isset($property['namespaces']) || in_array($namespace, $property['namespaces'])) {
-          // If the property is multivalue...
-          if (!empty($property['multiple'])) {
-            // Create arrays to hold values and links if they have not been defined
-            if (!isset($vars[$var_name])) {
-              $vars[$var_name] = array();
-            }
-            if (!empty($property['links']) && !isset($vars[$var_name])) {
-              $vars[$var_name_links] = array();
-            }
+    // Convert single definitions to an array of definitions
+    if (!isset($definitions[0])) {
+      $definitions = array($definitions);
+    }
 
-            // Add the values
-            foreach ($values as $value) {
-              $vars[$var_name][] = check_plain($value);
-              if (!empty($property['links'])) {
-                // Add a link
-                $vars[$var_name_links][] = l($value, 'ting/search/' . check_plain($value), array('attributes' => array('class' => _ting_property_classes($property['name'], $namespace, 'ting'))));
+    // Loop through all definitions
+    foreach ($definitions as $definition) {
+      if (!empty($object->record[$definition['entry']])) {
+        // Values are grouped by namespace. Loop through all of them.
+        foreach ($object->record[$definition['entry']] as $namespace => $values) {
+          // Only look for values in the specified namespaces. If no namespaces have been
+          // defined the go through all of them.
+          if ((!isset($definition['namespaces']) || in_array($namespace, $definition['namespaces'])) &&
+              (!isset($definition['!namespaces']) || !in_array($namespace, $definition['!namespaces']))) {
+            // If the property is multivalue...
+            if (!empty($definition['multiple'])) {
+              // Create arrays to hold values and links if they have not been defined
+              if (!isset($vars[$var_name])) {
+                $vars[$var_name] = array();
               }
-            }
-          } else {
-            // We have a single value so get the first entry
-            $value = array_shift($values);
-            $vars[$var_name] = check_plain($value);
+              if (!empty($definition['links']) && !isset($vars[$var_name])) {
+                $vars[$var_name_links] = array();
+              }
 
-            if (!empty($property['links'])) {
-              // Add a link
-              $vars[$var_name_links] = l($value, 'ting/search/' . check_plain($value), array('attributes' => array('class' => _ting_property_classes($property['name'], $namespace, 'ting'))));
-            }
+              // Add the values
+              foreach ($values as $value) {
+                $vars[$var_name][] = check_plain($value);
+                if (!empty($definition['links'])) {
+                  $facet = (!empty($definition['link_facet'])) ? $definition['link_facet'] : NULL;
+                  // Add a link
+                  $vars[$var_name_links][] = _ting_property_value_link($value, $name, $namespace, $facet);
+                }
+              }
+            } else {
+              // We have a single value so get the first entry
+              $value = array_shift($values);
+              $vars[$var_name] = check_plain($value);
 
-            // We have our single value so no need to look further
-            break;
+              if (!empty($definition['links'])) {
+                $facet = (!empty($definition['link_facet'])) ? $definition['link_facet'] : NULL;
+                // Add a link
+                $vars[$var_name_links] = _ting_property_value_link($value, $name, $namespace, $facet);
+              }
+
+              // We have our single value so no need to look further
+              break 2;
+            }
           }
         }
       }
@@ -520,9 +595,86 @@ function ting_object_preprocess(TingClientObject $object) {
 
     // Remove any duplicate values
     foreach (array($var_name, $var_name_links) as $var) {
-      if (is_array($vars[$var])) {
+      if (isset($vars[$var]) && is_array($vars[$var])) {
         $vars[$var] = array_unique($vars[$var]);
       }
+    }
+  }
+
+  // Property post processing
+
+  // Remove full title if same as normal title
+  if ($vars['ting_title'] == $vars['ting_title_full']) {
+    unset($vars['ting_title_full']);
+  }
+
+  // Filter contributors listed in other functions
+  $contrib_var_names = array('ting_contributors', 'ting_contributors_links');
+  // Loop through all contributor type properties...
+  foreach ($contrib_properties as $name => $namespace) {
+    // ... and all permutations of the individual property
+    $var_names = array('ting_' . $name, 'ting_' . $name . '_links');
+    foreach ($var_names as $var_name) {
+      // If the property is set and not a contributor variable name in it self...
+      if (isset($vars[$var_name]) && !in_array($var_name, $contrib_var_names)) {
+        // ... loop through all values
+        foreach ($vars[$var_name] as $value) {
+          // If the value is also contained within the general contributor values...
+          foreach ($contrib_var_names as $contrib_var_name) {
+            $key = array_search($value, $vars[$contrib_var_name]);
+            if ($key !== FALSE) {
+              // ... then remove it
+              unset($vars[$contrib_var_name][$key]);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Process series information
+  // This could be handled more elegantly if we had better structured data.
+  // For now we have to work with what we got to convert titles to links
+  // Series information appear in the following formats:
+  // - Samhørende: [title 1] ; [title 2] ; [title 3]
+  // - [volumne number]. del af: [title]
+  // - [title] : [volumne number]
+  if (isset($vars['ting_series'])) {
+    $vars['ting_series_links'] = array();
+    foreach ($vars['ting_series'] as $series) {
+      // Any text appearing before series titles
+      $prefix = '';
+      // Series titles.
+      // This will already have been passed through check_plain so we decode
+      // it to avoid double encoding.
+      $titles = htmlspecialchars_decode($series);
+      // Check for prefixes in the series information
+      $prefixes = array('Samhørende:', 'del af:');
+      foreach ($prefixes as $p) {
+        // If prefix is found then split titles and prefix
+        if (($pos = stripos($series, $p)) !== FALSE) {
+          $split = drupal_strlen($p) + $pos;
+          $prefix = drupal_substr($series, 0, $split);
+          $titles = drupal_substr($series, $split + 1);
+
+          break;
+        }
+      }
+
+      // Multiple titles are separated by ' ; '. Explode to iterate over them
+      $titles = explode(' ; ', $titles);
+      foreach ($titles as &$title) {
+        $title = trim($title);
+        // Some title elements are actually volumne numbers. Do not convert these to links
+        if (!is_numeric($title)) {
+          $title = _ting_property_value_link($title, 'dc:title', 'dkdcplus:series');
+        }
+      }
+      // Reassemple titles
+      $titles = implode(' ; ', $titles);
+
+      // Create a link string
+      $vars['ting_series_links'][] = (!empty($prefix) ? check_plain($prefix) . ' ' : '') . $titles;
     }
   }
 
@@ -598,6 +750,25 @@ function ting_collection_preprocess(TingClientObjectCollection $collection) {
   }
 
   return $vars;
+}
+
+/**
+ * Utility function to generate a link for a Ting object property.
+ *
+ * @param string $value The property valye
+ * @param string $name The name of the property
+ * @param string $namespace The namespace of the property
+ * @param string $facet A facet to use when creating the link
+ */
+function _ting_property_value_link($value, $name, $namespace = NULL, $facet = NULL) {
+  // TODO: This creates a hard dependency to ting_search.
+  // Could this be decoupled using a hook or the like?
+  $path = 'ting/search/' . (($facet) ? $facet . '=' : '' ) . '"' . $value . '"';
+  $options = array(
+              'attributes' => array(
+                'class' => _ting_property_classes($name, $namespace, 'ting'))
+             );
+  return l($value, $path, $options);
 }
 
 /**
