@@ -9,9 +9,9 @@
 
   <div class="content clearfix">
     <div class="picture">
-      <?php if ($image) { ?>
-        <?php print $image; ?>
-      <?php } ?>
+      <?php if ($image) {
+        print $image;
+      } ?>
     </div>
 
     <div class="info">
@@ -24,13 +24,11 @@
       <?php } ?>
 
       <div class='language'><?php echo t('Language') . ': ' . $ting_language; ?></div>
-      <?php
-      if (!empty($ting_creators_links)) {
-        foreach ($ting_creators_links as $creator_link) {
-          print "<p>" . $creator_link . "</p>";
-        }
-      }
-      ?>
+      <?php if (!empty($ting_creators_links)) {
+          foreach ($ting_creators_links as $creator_link) {
+            print "<p>" . $creator_link . "</p>";
+          }
+      } ?>
 
       <?php if (isset($ting_title_full)) { ?>
         <p class="title-info">
@@ -42,6 +40,7 @@
       <div class="more">
         <?php print l(t('More information'), $ting_url, array('attributes' => array('class' => 'more-link'))); ?>
       </div>
+
       <?php if (isset($additional_content)) { print drupal_render($additional_content); } ?>
     </div>
 
