@@ -38,6 +38,13 @@
 
       <p class="abstract"><?php print $ting_abstract; ?></p>
 
+      <?php if (isset($ting_series_links)) { ?>
+        <p class="series">
+         <span class="label"><?php print t('Series:')?></span>
+          <?php print theme('item_list', $ting_series_links, NULL, 'span'); ?>
+        </p>
+      <?php } ?>
+
       <?php if (isset($additional_main_content)) { print drupal_render($additional_main_content); } ?>
     </div>
 
