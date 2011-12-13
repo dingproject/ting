@@ -32,6 +32,13 @@
       }
       ?>
 
+      <?php if (isset($ting_title_full)) { ?>
+        <p class="title-info">
+           <span class="label"><?php print t('Additional title information:')?></span>
+          <?php print $ting_title_full; ?>
+        </p>
+      <?php }?>
+
       <div class="more">
         <?php print l(t('More information'), $ting_url, array('attributes' => array('class' => 'more-link'))); ?>
       </div>

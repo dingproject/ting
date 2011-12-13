@@ -34,11 +34,12 @@
         <?php endif; ?>
       </div>
 
-
-      <?php if (isset($ting_volumne_title)) { ?>
-       <p class="volume-title"><?php print $ting_volumne_title; ?></p>
-      <?php } ?>
-
+      <?php if (isset($ting_title_full)) { ?>
+        <p class="title-info">
+           <span class="label"><?php print t('Additional title information:')?></span>
+          <?php print $ting_title_full; ?>
+        </p>
+      <?php }?>
 
       <?php if ($ting_abstract) : ?>
         <p class="abstract">

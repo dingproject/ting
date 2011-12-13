@@ -15,10 +15,6 @@
   </div>
   <?php } ?>
 
-  <?php if (isset($ting_volumne_title)) { ?>
-   <p class="volume-title"><?php print $ting_volumne_title; ?></p>
-  <?php } ?>
-
   <p class="abstract"><?php print $ting_abstract; ?></p>
 
   <div class="ting-details clearfix">
