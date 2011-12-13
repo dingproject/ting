@@ -11,7 +11,7 @@
   <div class='creator'>
     <span class='byline'><?php echo ucfirst(t('by')); ?></span>
     <?php print implode(', ', $ting_creators_links); ?>
-    <span class='date'>(<?php print $ting_date; ?>)</span>
+    <span class='date'>(<?php print $ting_publication_date; ?>)</span>
   </div>
   <?php } ?>
 
