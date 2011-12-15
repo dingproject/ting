@@ -649,15 +649,15 @@ function ting_object_preprocess(TingClientObject $object) {
       // Series titles.
       // This will already have been passed through check_plain so we decode
       // it to avoid double encoding.
-      $titles = htmlspecialchars_decode($series);
+      $titles = htmlspecialchars_decode($series, ENT_QUOTES);
       // Check for prefixes in the series information
       $prefixes = array('Samhørende:', 'del af:');
       foreach ($prefixes as $p) {
         // If prefix is found then split titles and prefix
-        if (($pos = stripos($series, $p)) !== FALSE) {
+        if (($pos = stripos($titles, $p)) !== FALSE) {
           $split = drupal_strlen($p) + $pos;
-          $prefix = drupal_substr($series, 0, $split);
-          $titles = drupal_substr($series, $split + 1);
+          $prefix = drupal_substr($titles, 0, $split);
+          $titles = drupal_substr($titles, $split + 1);
 
           break;
         }
@@ -668,7 +668,7 @@ function ting_object_preprocess(TingClientObject $object) {
       foreach ($titles as &$title) {
         $title = trim($title);
         // Some title elements are actually volumne numbers. Do not convert these to links
-        if (!is_numeric($title)) {
+        if (!preg_match('/(nr.)? \d+/i', $title)) {
           $title = _ting_property_value_link($title, 'dc:title', 'dkdcplus:series');
         }
       }
