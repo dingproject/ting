@@ -107,36 +107,44 @@ function ting_theme() {
   return array(
     'ting_thing' => array(
       'arguments' => array('type' => 'object', 'object' => NULL, 'query_args' => NULL),
+      'file' => 'ting.theme.inc',
     ),
     'ting_list' => array(
       'arguments' => array('ting_list' => NULL, 'sorted' => FALSE),
       'template' => 'ting-list',
+      'file' => 'ting.theme.inc',
     ),
     'ting_list_item' => array(
       'arguments' => array('object' => NULL),
       'template' => 'ting-list-item',
+      'file' => 'ting.theme.inc',
     ),
     'ting_tabs' => array(
       'arguments' => array('tabs' => NULL, 'wrapper_id' => NULL),
       'template' => 'ting-tabs',
+      'file' => 'ting.theme.inc',
     ),
     'ting_collection' => array(
       'arguments' => array('collection' => NULL, 'query_args' => NULL),
       'template' => 'ting_collection',
+      'file' => 'ting.theme.inc',
     ),
     'ting_object' => array(
       'arguments' => array('object' => NULL),
       'template' => 'ting_object',
+      'file' => 'ting.theme.inc',
     ),
     'ting_object_title' => array(
       'arguments' => array('object' => NULL, 'display_image' => NULL),
       'template' => 'ting-object-title',
+      'file' => 'ting.theme.inc',
     ),
     'ting_ranking_field' => array(
       'arguments' => array('element' => NULL),
     ),
     'ting_boost_field' => array(
       'arguments' => array('element' => NULL),
+      'file' => 'ting.theme.inc',
     ),
   );
 }
@@ -283,236 +291,6 @@ function ting_enrich_object(&$object) {
 }
 
 /**
- * Theme something from Ting.
- */
-function theme_ting_thing($type, $object, $query_args = NULL) {
-  static $displayed_relation_types = array(
-    'isAuthorDescriptionOf',
-    'hasAuthorDescription',
-    'hasReview',
-    'isReviewOf',
-    'hasAnalysis',
-    'isAnalysisOf',
-    'isSubjectDescriptionOf',
-    'hasSubjectDescription',
-    'hasFulltext',
-  );
-  module_invoke_all('ting_add_js', "ting_${type}_view");
-
-  $tabs = array();
-  $tabs['main'] = array(
-    'title' => t('Materials'),
-    'content' => theme("ting_$type", $object, $query_args),
-  );
-
-  if (sizeof($object->relations)) {
-    $relations = array();
-    foreach ($object->relations as $relation) {
-      // Remove relations that's not from the local agency.
-      if ($relation->ownerId != $object->ownerId) {
-        continue;
-      }
-
-      if (in_array($relation->relationType, $displayed_relation_types)) {
-        $relations[] = $relation;
-      }
-    }
-    if ($relations) {
-      $tabs['related'] = array(
-        'title' => t('Related'),
-        'content' => theme('ting_list', $object->relations),
-      );
-    }
-  }
-
-  drupal_alter('ting_tabs', $tabs, $type, $object);
-
-  return theme('ting_tabs', $tabs, $type == 'collection' ? 'ting-collection' : 'ting-object');
-}
-
-/**
- * Template preprocessor for ting-list.
- */
-function template_preprocess_ting_list(&$vars) {
-  if (!$vars['sorted']) {
-    $sorted = array();
-    foreach ($vars['ting_list'] as $object) {
-      $sorted[$object->type][] = $object;
-    }
-    ksort($sorted);
-    $vars['ting_list'] = $sorted;
-  }
-  foreach ($vars['ting_list'] as $type => $object_list) {
-    $vars['ting_list'][$type] = "";
-    foreach ($object_list as $object) {
-      $vars['ting_list'][$type] .= theme('ting_list_item', $object);
-    }
-  }
-}
-
-/**
- * Template preprocessor for ting-list-item.
- */
-function template_preprocess_ting_list_item(&$vars) {
-  $object = $vars['object'];
-  $vars['local_id'] = check_plain($object->localId);
-
-  $image_url = ting_covers_object_url($object, '80_x');
-  if ($image_url) {
-    $vars['image'] = theme('image', $image_url, '', '', null, false);
-  }
-
-  $vars['date'] = check_plain($object->record['dc:date'][''][0]);
-  $vars['title'] = l($object->title, $object->url, array('attributes' => array('class' => 'alternative')));
-  $creators = $object->creators;
-  $first_creator = array_shift($creators);
-  $vars['creator'] = l($first_creator, 'ting/search/'. $first_creator, array('attributes' => array('class' => 'author alternative')));
-  $vars['additional_creators'] = array_filter($creators);
-  $vars['language'] = check_plain($object->language);
-
-  $vars['more_link'] = l(t('More information'), $object->url, array('attributes' => array('class' => 'more-link')));
-  $vars['type'] = check_plain($object->type);
-
-  // Let other modules add buttons.
-  $vars['buttons'] = module_invoke_all('ting_object_buttons', $object);
-}
-
-/**
- * Template preprocessor for ting tabs.
- */
-function template_preprocess_ting_tabs(&$vars) {
-  // jQuery UI tabs
-  jquery_ui_add('ui.tabs');
-  jquery_ui_theme_load();
-
-  drupal_add_js(drupal_get_path('module', 'ting') . '/js/ting.js', 'module');
-
-  $tab_labels = array();
-  $tab_content = array();
-  foreach ($vars['tabs'] as $id => $tab) {
-    $id = form_clean_id($id);
-    // Cannot use l/url, they can't generate a link with only a fragment. Also
-    // we don't want any 'active' classes.
-    $tab_labels[] = array(
-      'data' => "<a href='#$id'>" . check_plain($tab['title']) . "</a>",
-    );
-    $tab_content[$id] = $tab['content'];
-  }
-
-  $vars['tabs_labels'] = theme('item_list', $tab_labels);
-  $vars['tabs_content'] = $tab_content;
-}
-
-/**
- * Template preprocessor for collections of ting objects.
- */
-function template_preprocess_ting_collection(&$variables) {
-  // Preprocess the collection object here!
-
-  $collection = $variables["collection"];
-
-  // Allow modules to add action buttons to collection objects
-  $variables['buttons'] = array();
-  foreach ($collection->objects as $object) {
-    $variables['buttons'][$object->id] = module_invoke_all('ting_object_buttons', $object);
-  }
-
-  $sorted = array();
-  $object_list = array();
-
-  // If we know what query lead to the collection then we can use this for sorting
-  if ($query_args = $variables['query_args']) {
-    if ($entry = $query_args['entry']) {
-      // Build the query for the collection in the search result
-      $query = '';
-
-      //Wrap base query
-      $query .= (isset($query_args['query'])) ? '('.$query_args['query'].')' : '';
-
-      //Extend query with selected facets
-      if (isset($query_args['facets'])) {
-        foreach ($query_args['facets'] as $name => $value) {
-          $facetArray[] = $name.'="'.$value.'"';
-        }
-        $query .= ' AND '.implode(' AND ', $facetArray);
-      }
-
-      // Get the corresponding entry in the search result
-      $result = ting_do_search($query, $entry, 1, array('facets' => array()));
-
-      //Determine the order of object types based on the order of objects
-      //in the search result
-      if ($search_collection = array_shift($result->collections)) {
-        foreach ($search_collection->objects as $object) {
-          $sorted[$object->type] = array();
-        }
-      }
-
-      //Put all objects from original collection into the ordered object type buckets.
-      //Types not referenced in the search result placed last
-      foreach ($collection->objects as $object) {
-        $sorted[$object->type][] = $object;
-      }
-    }
-  }
-
-  //Default to standard sorting
-  if (sizeof($sorted) == 0) {
-    foreach ($collection->objects as $object) {
-      $sorted[$object->type][] = $object;
-    }
-    // By coincidence, the default type, "Bog", appears alphabetically first.
-    ksort($sorted);
-  }
-
-  $variables["sorted_collection"] = $sorted;
-  $variables['ting_list'] = theme('ting_list', $sorted, TRUE);
-}
-
-/**
- * Template preprocessor for ting objects.
- */
-function template_preprocess_ting_object(&$variables) {
-  $object = $variables['object'];
-  // Allow modules to add action buttons to objects
-  $variables['buttons'] = module_invoke_all('ting_object_buttons', $object);
-
-  $image_url = ting_covers_object_url($object, '180_x');
-  if ($image_url) {
-    $variables['image'] = theme('image', $image_url, '', '', NULL, FALSE);
-  }
-
-  $titles = $object->record['dc:title'];
-  $title = $titles[''][0];
-  unset($titles['']);
-  if (isset($titles['dkdcplus:full'])) {
-    $title = $titles['dkdcplus:full'][0];
-    unset($titles['dkdcplus:full']);
-  }
-  $variables['title'] = check_plain($title);
-
-  $titles = array_values(array_map('array_shift', $titles));
-  $variables['other_titles'] = check_plain(implode(', ', $titles));
-  $variables['alternative_titles'] = array();
-  if ($object->record['dcterms:alternative']['']) {
-    $titles = array_values($object->record['dcterms:alternative']['']);
-    $variables['alternative_titles'] = array_map('check_plain', $titles);
-  }
-
-  $creators = array();
-  foreach ($object->creators as $i => $creator) {
-    $creators[] = l($creator, 'ting/search/' . $creator, array('attributes' => array('class' => 'author')));
-  }
-  $variables['creators'] = implode(', ', $creators);
-
-  if (!empty($object->date)) {
-    $variables['date'] = check_plain($object->date);
-  }
-
-  $variables['abstract'] = check_plain($object->record['dcterms:abstract'][''][0]);
-}
-
-/**
  * Parse a string containing search query arguments into an array
  * @return array Array of search query arguments
  */
@@ -559,8 +337,11 @@ function ting_object_is($object, $class) {
  */
 function ting_ting_object_is($object, $class) {
   // Known online types.
-  if ($class == 'online' and in_array(drupal_strtolower($object->type), array('lydbog (online)', 'netmusik (album)', 'netdokument'))) {
-    return TRUE;
+  if ($class == 'online') {
+    $online_types = array('lydbog (online)', 'lydbog (net)', 'netmusik (album)', 'netdokument');
+    if (in_array(drupal_strtolower($object->type), $online_types)) {
+      return TRUE;
+    }
   }
 }
 
@@ -606,12 +387,6 @@ function ting_ranking_field_element_process($element, $form_state) {
   return $element;
 }
 
-/**
- * Theme function to format the custom form element ting_ranking_field.
- */
-function theme_ting_ranking_field($element) {
-  return theme('form_element', $element, '<div class="ranking-field-instance clear-block">'. $element['#children'] .'</div>');
-}
 
 /**
  * Processor for the ting_boost_field form element.
@@ -620,7 +395,7 @@ function ting_boost_field_element_process($element, $form_state) {
   $element['#tree'] = TRUE;
   $element['#prefix'] = '<div class="ting-boost-field-element clearfix">';
   $element['#suffix'] = '</div>';
-  
+
   $element['field_name'] = array(
     '#title' => t('Field name'),
     '#type' => 'select',
@@ -652,12 +427,3 @@ function ting_boost_field_element_process($element, $form_state) {
 
   return $element;
 }
-
-/**
- * Theme function to format the custom form element ting_boost_field.
- */
-function theme_ting_boost_field($element) {
-  return theme('form_element', $element, '<div class="boost-field-instance clear-block">'. $element['#children'] .'</div>');
-}
-
-

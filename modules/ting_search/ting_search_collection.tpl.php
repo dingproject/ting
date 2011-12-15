@@ -18,40 +18,38 @@
       </div>
 
       <h3>
-        <?php print l($collection->title, $collection->url, array('attributes' => array('class' =>'title'))) ;?>
+        <?php print l($ting_title, $ting_url, array('html' => TRUE, 'attributes' => array('class' =>'title'))) ;?>
       </h3>
 
       <div class="meta">
-        <?php if ($collection->creators_string) : ?>
+        <?php if ($ting_creators) : ?>
           <span class="creator">
-            <?php echo t('By %creator_name%', array('%creator_name%' => $collection->creators_string)) ?>
+            <?php echo t('By %creator_name%', array('%creator_name%' => implode(', ', $ting_creators))) ?>
           </span>
         <?php endif; ?>
-        <?php if ($collection->date) : ?>
+        <?php if ($ting_publication_date) : ?>
           <span class="publication_date">
-            <?php echo t('(%publication_date%)', array('%publication_date%' => $collection->date)) /* TODO: Improve date handling, localizations etc. */ ?>
+            <?php echo t('(%publication_date%)', array('%publication_date%' => $ting_publication_date)) /* TODO: Improve date handling, localizations etc. */ ?>
           </span>
         <?php endif; ?>
       </div>
 
-      <?php if ($collection->abstract) : ?>
-      <div class="abstract">
-        <p>
-          <?php print check_plain($collection->abstract); ?>
+      <?php if (isset($ting_title_full)) { ?>
+        <p class="title-info">
+           <span class="label"><?php print t('Additional title information:')?></span>
+          <?php print $ting_title_full; ?>
         </p>
-      </div>
+      <?php }?>
+
+      <?php if ($ting_abstract) : ?>
+        <p class="abstract">
+          <?php print $ting_abstract; ?>
+        </p>
       <?php endif; ?>
 
-      <?php if ($collection->subjects) : ?>
-        <div class="subjects">
-          <h4><?php echo t('Subjects:') ?></h4>
-          <ul>
-            <?php foreach ($collection->subjects as $subject) : ?>
-              <li><?php echo $subject ?></li>
-            <?php endforeach; ?>
-          </ul>
-        </div>
-      <?php endif; ?>
+      <div class="ting-details">
+        <?php print $ting_details; ?>
+      </div>
 
     </div>
   </li>
