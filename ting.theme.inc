@@ -5,15 +5,13 @@
  */
 function theme_ting_thing($type, $object, $query_args = NULL) {
   static $displayed_relation_types = array(
-    'isAuthorDescriptionOf',
-    'hasAuthorDescription',
-    'hasReview',
-    'isReviewOf',
-    'hasAnalysis',
-    'isAnalysisOf',
-    'isSubjectDescriptionOf',
-    'hasSubjectDescription',
-    'hasFulltext',
+    'dbcaddi:hasCreatorDescription',
+    'dbcaddi:hasReview',
+    'dbcaddi:isReviewOf',
+    'dbcaddi:hasAnalysis',
+    'dbcaddi:isAnalysisOf',
+    'dbcaddi:hasSubjectDescription',
+    'dbcaddi:hasFulltext',
   );
   module_invoke_all('ting_add_js', "ting_${type}_view");
 
@@ -26,11 +24,6 @@ function theme_ting_thing($type, $object, $query_args = NULL) {
   if (sizeof($object->relations)) {
     $relations = array();
     foreach ($object->relations as $relation) {
-      // Remove relations that's not from the local agency.
-      if ($relation->ownerId != $object->ownerId) {
-        continue;
-      }
-
       if (in_array($relation->relationType, $displayed_relation_types)) {
         $relations[] = $relation;
       }
