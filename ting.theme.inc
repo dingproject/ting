@@ -472,18 +472,22 @@ function ting_object_preprocess(TingClientObject $object) {
     'related' => array(
       array(
         'entry' => 'dcterms:hasPart',
+        'namespaces' => array('', 'dkdcplus:track'),
         'multiple' => TRUE,
         'links' => TRUE),
       array(
         'entry' => 'dcterms:isPartOf',
+        'namespaces' => array('', 'dkdcplus:albumId', 'dkdcplus:albumTitle', 'dkdcplus:ISBN', 'dkdcplus:ISSN'),
         'multiple' => TRUE,
         'links' => TRUE),
       array(
         'entry' => 'dcterms:isReplacedBy',
+        'namespaces' => array(''),
         'multiple' => TRUE,
         'links' => TRUE),
       array(
         'entry' => 'dcterms:replaces',
+        'namespaces' => array(''),
         'multiple' => TRUE,
         'links' => TRUE),
       array(
