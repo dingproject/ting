@@ -472,8 +472,14 @@ function ting_object_preprocess(TingClientObject $object) {
     'related' => array(
       array(
         'entry' => 'dcterms:hasPart',
+        'namespaces' => array(''),
+        'multiple' => TRUE,
+        'links' => TRUE),
+      array(
+        'entry' => 'dcterms:hasPart',
         'namespaces' => array('', 'dkdcplus:track'),
         'multiple' => TRUE,
+        'html' => TRUE, // Track names for streaming music may be wrapped in direct links. Do no escape these.
         'links' => TRUE),
       array(
         'entry' => 'dcterms:isPartOf',
@@ -584,7 +590,7 @@ function ting_object_preprocess(TingClientObject $object) {
 
               // Add the values
               foreach ($values as $value) {
-                $vars[$var_name][] = check_plain($value);
+                $vars[$var_name][] = (!empty($definition['html'])) ? $value : check_plain($value);
                 if (!empty($definition['links'])) {
                   $facet = (!empty($definition['link_facet'])) ? $definition['link_facet'] : NULL;
                   // Add a link
@@ -594,7 +600,7 @@ function ting_object_preprocess(TingClientObject $object) {
             } else {
               // We have a single value so get the first entry
               $value = array_shift($values);
-              $vars[$var_name] = check_plain($value);
+              $vars[$var_name] = (!empty($definition['html'])) ? $value : check_plain($value);
 
               if (!empty($definition['links'])) {
                 $facet = (!empty($definition['link_facet'])) ? $definition['link_facet'] : NULL;
