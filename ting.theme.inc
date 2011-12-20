@@ -470,9 +470,27 @@ function ting_object_preprocess(TingClientObject $object) {
       'namespaces' => array('dkdcplus:pegi')
     ),
     'related' => array(
-      'entry' => 'dc:relation',
-      'namespaces' => array('dcterms:isPartOf', 'dcterms:hasPart', 'dcterms:isReplacedBy', 'dcterms:replaces', 'dcterms:references'),
-      'links' => TRUE
+      array(
+        'entry' => 'dcterms:hasPart',
+        'multiple' => TRUE,
+        'links' => TRUE),
+      array(
+        'entry' => 'dcterms:isPartOf',
+        'multiple' => TRUE,
+        'links' => TRUE),
+      array(
+        'entry' => 'dcterms:isReplacedBy',
+        'multiple' => TRUE,
+        'links' => TRUE),
+      array(
+        'entry' => 'dcterms:replaces',
+        'multiple' => TRUE,
+        'links' => TRUE),
+      array(
+        'entry' => 'dcterms:references',
+        'namespaces' => array('dkdcplus:ISBN'),
+        'multiple' => TRUE,
+        'links' => TRUE),
     ),
     'subtitles' => array(
       'entry' => 'dc:language',
