@@ -238,7 +238,10 @@ function ting_ting_object_buttons($object) {
   if (!empty($object->localId)) {
     if (!empty($object->online_url) &&
       ting_object_is($object, 'online')) {
-      if (in_array(drupal_strtolower($object->type), array('lydbog (online)', 'netmusik (album)'))) {
+      // TODO: Consider new ting object class: audible
+      if (in_array(drupal_strtolower($object->type), array('lydbog (net)', 'musik (net)',
+                                                           'lydbog (online)', 'netmusik (album)' /* Included to ensure backwards compatability with DKABM 1.x */
+                                                     ))) {
         $text = t('Hear online');
       }
       else {
@@ -338,7 +341,8 @@ function ting_object_is($object, $class) {
 function ting_ting_object_is($object, $class) {
   // Known online types.
   if ($class == 'online') {
-    $online_types = array('lydbog (online)', 'lydbog (net)', 'netmusik (album)', 'netdokument');
+    $online_types = array('avis (net)', 'film (net)', 'lydbog (net)', 'musik (net)', 'periodikum (net)', 'pc-spil (net)', 'tidsskrift (net)', 'netdokument',
+                          'lydbog (online)', 'netmusik (album)' /* Included to ensure backwards compatability with DKABM 1.x */);
     if (in_array(drupal_strtolower($object->type), $online_types)) {
       return TRUE;
     }
