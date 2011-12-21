@@ -181,7 +181,7 @@ function template_preprocess_ting_object(&$vars) {
                      'title' => NULL,
                       'class' => 'additional-details clearfix',
                      'data' => array(
-                       t('Original title') => 'ting_source',
+                       t('Original title') => 'ting_source_title',
                        t('Contributors') => 'ting_contributors',
                        t('Coauthors') => 'ting_coauthor',
                        t('Writer') => 'ting_writer',
@@ -375,6 +375,9 @@ function ting_object_preprocess(TingClientObject $object) {
       'entry' => 'dc:title',
       'namespaces' => array('dkdcplus:full'),
     ),
+    'source_title' => array(
+      'entry' => 'dc:source',
+    ),
     'volumne_title' => array(
       'entry' => 'dc:title',
       'namespaces' => array('oss:full'),
@@ -431,8 +434,7 @@ function ting_object_preprocess(TingClientObject $object) {
       ),
     ),
     'source' => array(
-      'entry' => 'dc:source',
-      'links' => TRUE,
+      'entry' => 'ac:source',
     ),
     'type' => array(
       'entry' => 'dc:type'
