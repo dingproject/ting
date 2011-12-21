@@ -123,10 +123,17 @@ function ting_availability_item_details_page($provider_id) {
  */
 function ting_availability_ting_object_is($object, $class) {
   if ($class == 'limited_availability') {
+    // Online objects are never of limited availability. Ding should provide
+    // users with direct access to these if possible.
     if (ting_object_is($object, 'online')) {
       return FALSE;
     }
-    return TRUE;
+
+    // Objects which belong to the library holdings are always of limited availability.
+    $vars = ting_object_preprocess($object);
+    if (in_array(strtolower($vars['ting_source']), array('bibliotekets materialer'))) {
+      return TRUE;
+    }
   }
 }
 
@@ -172,10 +179,10 @@ function ting_availability_preprocess_ting_list_item(&$vars) {
  */
 function theme_ting_availability_box($object) {
   return '<div class="ding-box-wide ting-availability">
-  					<h3>' .
+            <h3>' .
               t('%title is available at the following libraries:', array('%title' => check_plain($object->title))) .
             '</h3>' .
-          	'<ul class="library-list">' .
+            '<ul class="library-list">' .
               '<li class="ting-status waiting even">' . t('waiting for data') .'</li>' .
             '</ul>' .
          '</div>';
