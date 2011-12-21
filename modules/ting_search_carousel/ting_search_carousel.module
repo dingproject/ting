@@ -206,7 +206,7 @@ function ting_search_carousel_imagecache_default_presets() {
         'action' => 'canvasactions_definecanvas',
         'data' =>
         array (
-          'ecaxt' =>
+          'exact' =>
           array (
             'width' => '112',
             'height' => '140',
