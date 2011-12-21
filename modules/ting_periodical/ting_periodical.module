@@ -115,12 +115,17 @@ function template_preprocess_ting_periodical_issues(&$vars) {
  * Implementation of hook_ting_object_is().
  */
 function ting_periodical_ting_object_is($object, $class) {
-  // Also override availability information for the main object.
-  if ($class == 'periodical' || $class == 'limited_availability') {
+  if ($class == 'periodical') {
+    // Register certain types as periodicals
     if (in_array(drupal_strtolower($object->type), array('tidsskrift', 'periodikum', 'årbog'))) {
-      return $class == 'periodical' ? TRUE : FALSE;
+      return TRUE;
     }
-    return $class == 'periodical' ? FALSE : TRUE;
+  } elseif ($class = 'limited_availability') {
+    // The main object for a periodical never has limited avaibility.
+    // Periodical availability is handled separatly for the individual issues is this module.
+    if (ting_object_is($object, 'periodical')) {
+      return FALSE;
+    }
   } elseif ($class == 'reservable' || $class == 'cartable') {
     if (in_array(drupal_strtolower($object->type), array('årbog'))) {
       return FALSE;

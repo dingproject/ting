@@ -123,10 +123,17 @@ function ting_availability_item_details_page($provider_id) {
  */
 function ting_availability_ting_object_is($object, $class) {
   if ($class == 'limited_availability') {
+    // Online objects are never of limited availability. Ding should provide
+    // users with direct access to these if possible.
     if (ting_object_is($object, 'online')) {
       return FALSE;
     }
-    return TRUE;
+
+    // Objects which belong to the library holdings are always of limited availability.
+    $vars = ting_object_preprocess($object);
+    if (in_array(strtolower($vars['ting_source']), array('bibliotekets materialer'))) {
+      return TRUE;
+    }
   }
 }
 
