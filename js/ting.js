@@ -33,8 +33,8 @@ Drupal.ting.toggleDetails = function () {
     // Hide additional details by default
     .hide()
     // Add controls to show/hide additional details...
-    .before('<a href="#">' + Drupal.t('Show details') + '</a>')
-    .before('<a style="display:none;" href="#">' + Drupal.t('Hide details') + '</a>')
+    .before('<a href="#" class="show-details">' + Drupal.t('Show details') + '</a>')
+    .before('<a href="#" class="hide-details">' + Drupal.t('Hide details') + '</a>')
     // ... and make them work
     .siblings('a').click(function(e) {
       $(this)
@@ -42,4 +42,7 @@ Drupal.ting.toggleDetails = function () {
         .siblings().toggle()
       e.preventDefault();
     });
+    
+    $('a.hide-details').css('display', 'none');
+    
 }
