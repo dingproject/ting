@@ -27,7 +27,7 @@ function ting_search_result_ctools_content_types() {
 function ting_search_result_content_type_render($subtype, $conf, $panel_args, $context) {
   $block = new stdClass();
 
-  $keys = trim($context->data);
+  $keys = urldecode(trim($context->data));
   if (strlen($keys) > 0) {
     // Add links to feeds.
     drupal_set_html_head(
