@@ -60,6 +60,16 @@ function ting_reference_menu() {
     'type' => MENU_CALLBACK,
     'file' => 'ting_reference.pages.inc',
   );
+  
+  $items['ting_reference/view/js'] = array(
+    'title' => 'Ting reference object loading',
+    'description' => 'Returns HTML for the list of referenced objects',
+    'access arguments' => array('search content'),
+    'page callback' => 'ting_reference_view_js',
+    'type' => MENU_CALLBACK,
+    'file' => 'ting_reference.pages.inc',
+  );
+
 
   return $items;
 }
@@ -196,19 +206,22 @@ function theme_ting_reference_formatter_ajax($element) {
     return;
   }
 
-  static $ting_reference_objects = array();
-  $ting_reference_objects[$element['#item']['ting_object_id']] = array(
+  // Create data array.
+  $data[$element['#item']['ting_object_id']] = array(
     'ting_ref_type' => $element['#item']['ting_ref_type'],
     'description' => $element['#item']['description'],
   );
   
-  // Parse element information into JavaScript.
-  drupal_add_js(array('tingReferenceAjax' => $ting_reference_objects), 'setting');
+  // Parse element information into JavaScript. If not encode with the extra 
+  // json layer the array will be repeated into it self when accessed in 
+  // Drupal.settings.tingReferenceAjax.
+  drupal_add_js(array('tingReferenceAjax' => drupal_to_js($data)), 'setting');
   
   // Add JavaScript.
   drupal_add_js(drupal_get_path('module', 'ting_reference') .'/js/ting_reference_ajax.js', 'module');
   
-  return '<span class="object-id-' . $element['#item']['ting_object_id'] . '"></span>';
+  // Have to return something to make the content render in panels.
+  return '&nbsp;';
 }
 
 /**
