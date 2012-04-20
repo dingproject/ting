@@ -400,6 +400,7 @@ function ting_object_preprocess(TingClientObject $object) {
     ),
     'description' => array(
       'entry' => 'dc:description',
+      'multiple' => TRUE,
       'namespaces' => array(''),
     ),
     'subjects' => array(
