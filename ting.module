@@ -146,6 +146,14 @@ function ting_theme() {
       'arguments' => array('element' => NULL),
       'file' => 'ting.theme.inc',
     ),
+    'ting_details' => array(
+      'arguments' => array('details' => NULL),
+      'file' => 'ting.theme.inc',
+    ),
+    'ting_details_group' => array(
+      'arguments' => array('title' => NULL, 'group' => NULL),
+      'file' => 'ting.theme.inc',
+    ),
   );
 }
 

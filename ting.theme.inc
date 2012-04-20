@@ -231,26 +231,58 @@ function template_preprocess_ting_object(&$vars) {
  * Second level preprocessor for ting objects.
  */
 function ting_preprocess_ting_object(&$vars) {
-  // Loop through all levels of ting details to create the item lists
+  // Preprocess ting_details for the ting_details theming function.
+  // Loop through all levels of ting details to collect the items that should be
+  // rendered.
   // We do this here instead of in template_preprocess_ting_object() to let
-  // other modules preprocess the ting_details structure before it is rendered
-  foreach ($vars['ting_details'] as $detail_group_title => &$detail_group) {
-    foreach ($detail_group['data'] as $title => &$var_name) {
+  // other modules preprocess the ting_details structure before it is rendered.
+  $processed = array();
+  foreach ($vars['ting_details'] as $group) {
+    foreach ($group['data'] as $title => $var_name) {
       if (!empty($vars[$var_name])) {
         $var = $vars[$var_name];
         if (!is_array($var)) {
           $var = array($var);
         }
-        $var_name = array('class' => _ting_property_classes($var_name),
-                          'data' => theme('item_list', $var, $title, 'span'));
+        $group['data'][$title] = array(
+          'class' => _ting_property_classes($var_name),
+          'data' => $var,
+        );
       } else {
-        unset($detail_group['data'][$title]);
+        unset($group['data'][$title]);
       }
     }
-    $detail_group['data'] = theme('item_list', $detail_group['data'], $detail_group['title'], 'div', array('class' => 'ting-properties'));
+    $processed[] = $group;
   }
+  $vars['ting_details'] = theme('ting_details', $processed);
+}
 
-  $vars['ting_details'] = theme('item_list', $vars['ting_details'],  NULL, 'div');
+/**
+ * Theme ting_details.
+ */
+function theme_ting_details($details) {
+  $groups = array();
+  foreach ($details as $group) {
+    $groups[] = array(
+      'class' => $group['class'],
+      'data' => theme('ting_details_group', $group['title'], $group['data']),
+    );
+  }
+  return theme('item_list', $groups, NULL, 'ul');
+}
+
+/**
+ * Theme ting_details group.
+ */
+function theme_ting_details_group($title, $data) {
+  $items = array();
+  foreach ($data as $item_title => $item) {
+    $items[] = array(
+      'class' => $item['class'],
+      'data' => theme('item_list', $item['data'], $item_title, 'ul'),
+    );
+  }
+  return theme('item_list', $items, $title, 'ul', array('class' => 'ting-properties'));
 }
 
 /**
