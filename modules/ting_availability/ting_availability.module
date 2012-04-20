@@ -180,7 +180,7 @@ function ting_availability_preprocess_ting_list_item(&$vars) {
 function theme_ting_availability_box($object) {
   return '<div class="ding-box-wide ting-availability">
             <h3>' .
-              t('%title is available at the following libraries:', array('%title' => check_plain($object->title))) .
+              t('%title is available at the following libraries:', array('%title' => $object->title)) .
             '</h3>' .
             '<ul class="library-list">' .
               '<li class="ting-status waiting even">' . t('waiting for data') .'</li>' .
