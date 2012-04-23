@@ -93,6 +93,14 @@ function ting_reference_view_js() {
     foreach ($rows as $row) {
       $element = json_decode($row);
       $id = key($element);
+      
+      // Handle special case where only the description is avaliable. This should
+      // not happen, but it have been seen on ding sites.
+      if (empty($id)) {
+        $output .= '<li><div class="record"><h3>' . t('Object not found.') . '</h3><p class="abstract">' . $element['#item']['description'] . '</p></div></li>';
+        continue;
+      }      
+      
       $collection = _ting_reference_get_collection($element->{$id}->ting_ref_type, $id, $element->{$id}->description);
       if (!$collection) {
         watchdog('ting_reference', 'Object with id (%id) not found', array('%id' => $id), WATCHDOG_WARNING);
