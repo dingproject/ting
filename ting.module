@@ -341,7 +341,7 @@ function ting_object_is($object, $class) {
 function ting_ting_object_is($object, $class) {
   // Known online types.
   if ($class == 'online') {
-    $online_types = array('avis (net)', 'film (net)', 'lydbog (net)', 'musik (net)', 'periodikum (net)', 'pc-spil (net)', 'tidsskrift (net)', 'netdokument',
+    $online_types = array('avis (net)', 'film (net)', 'lydbog (net)', 'musik (net)', 'ebog', 'periodikum (net)', 'pc-spil (net)', 'tidsskrift (net)', 'netdokument',
                           'lydbog (online)', 'netmusik (album)' /* Included to ensure backwards compatability with DKABM 1.x */);
     if (in_array(drupal_strtolower($object->type), $online_types)) {
       return TRUE;
