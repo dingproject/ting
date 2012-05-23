@@ -70,3 +70,11 @@ function ting_reference_update_6001(&$sandbox) {
   return $ret;
 }
 
+/**
+ * Remove ting refereneces from the database where object id is null.
+ */
+function ting_reference_update_6002() {
+  $ret = array();
+  $ret[] = db_query('DELETE FROM {content_field_ting_refs} WHERE field_ting_refs_ting_object_id IS NULL');
+  return $ret;
+}
