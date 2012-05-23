@@ -162,7 +162,7 @@ function theme_ting_reference_formatter_default($element) {
   // Handle special case where only the description is avaliable. This should
   // not happen, but it have been seen on ding sites.
   if (empty($element['#item']['ting_object_id'])) {
-    watchdog('ting_refernce', 'Ting references found without id on page: %url', array('%url' => drupal_get_path_alias($_GET['q'])), WATCHDOG_WARNING);
+    watchdog('ting_refernce', 'Ting references found without id on node %id', array('%id' => $element['node']->nid), WATCHDOG_WARNING);
     return;
   }
 
