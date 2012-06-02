@@ -4,7 +4,7 @@
  */
 Drupal.behaviors.tingReferenceAjax = function(context) {
   // Insert spinner to show users that data is being loaded.
-  $('.field-ting-refs span').after('<div id="ting-search-spinner"><h4>' + Drupal.t('Loading…') + '</h4><div class="spinner"></div></div>');
+  $('.field-ting-refs span').after();
   
   // This is a hack to get around the old 1.2.6 jquery limitations in the ajax 
   // post method.
@@ -16,15 +16,23 @@ Drupal.behaviors.tingReferenceAjax = function(context) {
 
   // Inserts the HTML return by the Ajax call below.
   function success(data, textStatus, jqXHR) {
-    // Hide the list.
-    $('.field-ting-refs').hide();
+    // Fill in data based on field name and node id.
+    for (var nid in data) {
+      for (var field_name in data[nid]) {
+        // Find the element to place the result into.
+        var field = $('.ting-reference-ajax-node-' + nid + '-' + field_name);
 
-    // Remove spinner.
-    $('#ting-search-spinner').remove();    
+        // Hide the list.
+        field.hide();
 
-    // Show the list with the new items.
-    $('.field-ting-refs span').after(data);
-    $('.field-ting-refs').fadeIn(500);    
+        // Remove spinner.
+        $('#ting-search-spinner', field).remove();
+
+        // Insert the generated HTML.
+        field.html(data[nid][field_name]);
+        field.fadeIn(500);
+      }
+    }
   };
 
   // Call the backend to get referenced ting objects as rendered HTML. 
@@ -33,6 +41,6 @@ Drupal.behaviors.tingReferenceAjax = function(context) {
     url: '/ting_reference/view/js',
     data: data,
     success: success,
-    dataType: 'html'
+    dataType: 'json'
   });
 }

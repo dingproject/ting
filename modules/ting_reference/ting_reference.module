@@ -206,14 +206,20 @@ function theme_ting_reference_formatter_ajax($element) {
     return;
   }
 
+  // Find variables used to identify this formatter.
+  $nid = $element['#node']->nid;
+  $field_name = $element['#field_name'];
+
   // Create data array.
   $data = array(
     $element['#item']['ting_object_id'] => array(
+      'nid' => $nid,
+      'field' => $field_name,
       'ting_ref_type' => $element['#item']['ting_ref_type'],
       'description' => $element['#item']['description'],
     )
   );
-  
+
   // Parse element information into JavaScript. If not encode with the extra 
   // json layer the array will be repeated into it self when accessed in 
   // Drupal.settings.tingReferenceAjax.
@@ -221,9 +227,18 @@ function theme_ting_reference_formatter_ajax($element) {
   
   // Add JavaScript.
   drupal_add_js(drupal_get_path('module', 'ting_reference') .'/js/ting_reference_ajax.js', 'module');
-  
-  // Have to return something to make the content render in panels.
-  return '&nbsp;';
+
+  // Return div to find the right place to load the references (but only once).
+  static $ting_reference_inserted = array();
+  if (!isset($ting_reference_inserted[$nid][$field_name])) {
+    $ting_reference_inserted[$nid][$field_name] = TRUE;
+    return '<div class="ting-reference-ajax ting-reference-ajax-node-' . $nid . '-' . $field_name . '">
+              <div id="ting-search-spinner">
+                <h4>' . t('Loading…') . '</h4>
+                <div class="spinner"></div>
+              </div>
+            </div>';
+  }
 }
 
 /**
