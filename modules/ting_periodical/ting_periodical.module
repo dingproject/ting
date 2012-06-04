@@ -120,7 +120,7 @@ function ting_periodical_ting_object_is($object, $class) {
     if (in_array(drupal_strtolower($object->type), array('tidsskrift', 'periodikum', 'årbog'))) {
       return TRUE;
     }
-  } elseif ($class = 'limited_availability') {
+  } elseif ($class == 'limited_availability') {
     // The main object for a periodical never has limited avaibility.
     // Periodical availability is handled separatly for the individual issues is this module.
     if (ting_object_is($object, 'periodical')) {
