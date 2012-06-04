@@ -232,12 +232,12 @@ function theme_ting_reference_formatter_ajax($element) {
   static $ting_reference_inserted = array();
   if (!isset($ting_reference_inserted[$nid][$field_name])) {
     $ting_reference_inserted[$nid][$field_name] = TRUE;
-    return '<div class="ting-reference-ajax ting-reference-ajax-node-' . $nid . '-' . $field_name . '">
-              <div id="ting-search-spinner">
-                <h4>' . t('Loading…') . '</h4>
-                <div class="spinner"></div>
-              </div>
-            </div>';
+
+    // Add spinner.
+    drupal_add_css(drupal_get_path('module', 'ting_reference') .'/css/ting_reference.css', 'module');
+
+    // Return placeholder.
+    return '<div class="ting-reference-ajax ting-reference-ajax-node-' . $nid . '-' . $field_name . '"></div>';
   }
 }
 
