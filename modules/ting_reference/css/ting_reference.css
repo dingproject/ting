@@ -1,7 +1,18 @@
-html.js  .form-item input.ac_loading { background-position: 100% -13px; }
+html.js .form-item input.ac_loading { background-position: 100% -13px; }
 
 div.ting-reference-type-radio div.form-item { float: left; margin-right: 2em ! important; }
 
 div.ting-reference-preview { white-space: normal; }
 
 
+.ting-reference-ajax-spinner {
+  text-align: center;
+}
+
+.ting-reference-ajax-spinner div {
+  background: url("../images/ajax-loader.gif") no-repeat scroll 0 0 transparent;
+  height: 19px;
+  margin-top: 10px;
+  width: 220px;
+  margin: auto;
+}

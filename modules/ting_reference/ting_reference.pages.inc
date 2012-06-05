@@ -77,3 +77,42 @@ function ting_reference_collection_js($ref_type, $object_id) {
   $output = theme('ting_reference_preview', $collection);
   drupal_json($output);
 }
+
+/**
+ * Javascript calback that generates Ting collections as HTML based on the 
+ * object information posted in rows parameter.
+ */
+function ting_reference_view_js() {
+  $output = array();
+  
+  // Test that rows was posted with object information.
+  if (isset($_POST['rows'])) {
+    $rows = $_POST['rows'];
+
+    // Loop over the rows and get the render HTML for each collection.
+    foreach ($rows as $row) {
+      $element = json_decode($row);
+      $id = key($element);
+      
+      // Get the colloection.
+      $collection = _ting_reference_get_collection($element->{$id}->ting_ref_type, $id, $element->{$id}->description);
+      if (!$collection) {
+        watchdog('ting_reference', 'Object with id (%id) not found', array('%id' => $id), WATCHDOG_WARNING);
+      }
+
+      // Theme the result and place it in the output array.
+      if (!isset($output[$element->{$id}->nid][$element->{$id}->field])) {
+        $output[$element->{$id}->nid][$element->{$id}->field] = theme('ting_search_collection', $collection);
+      }
+      else {
+        $output[$element->{$id}->nid][$element->{$id}->field] .= theme('ting_search_collection', $collection);
+      }
+    }
+  }
+  else {
+    watchdog('ting_reference', 'No rows found in ajax callback', array(), WATCHDOG_WARNING);
+  }
+  
+  // Return the generated HTML as JSON.
+  drupal_json($output);
+}
