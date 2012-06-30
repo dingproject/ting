@@ -78,6 +78,17 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
         // Message is overwritten by the data attribute.
         title = (data) ? data.title :  Drupal.t('An error occurred.');
         message = (data) ? data.message :  Drupal.t('An error occurred.');
+
+        // If an e-book is available as alternative material, we want to
+        // show that as an additional option.
+        var eBookElem = $('.material-type-list .material-type-ebog');
+        if (eBookElem.length > 0) {
+          message = message + '<p>' +
+              Drupal.t('The material you have reserved is also available as e-book. You can find more information <a href="@url">here</a>.', {
+                '@url': eBookElem.find('a').attr('href')
+              }) + '</p>';
+        }
+
         self.options.buttons(buttons, self.clickEvent, data);
         self.generateDialog(title, message, buttons);
       }
