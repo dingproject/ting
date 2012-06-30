@@ -269,7 +269,8 @@ function ting_preprocess_ting_object(&$vars) {
     $processed[] = $group;
   }
 
-  // If there are any hasDescriptionFromPublisher relations, replace the
+  // If there are any hasDescriptionFromPublisher relations, load tthem
+  // as docbook and display it as additional content.
   // normal abstract with it.
   if (sizeof($vars['object']->relations)) {
     foreach ($vars['object']->relations as $relation) {
@@ -285,6 +286,16 @@ function ting_preprocess_ting_object(&$vars) {
             $vars['additional_main_content'][]['#children'] = theme('ting_fulltext', ting_fulltext_parse($docxml));
           }
         }
+      }
+    }
+  }
+
+  // If there are any hasDescriptionFromPublisher relations, replace the
+  // normal abstract with it.
+  if (sizeof($vars['object']->relations)) {
+    foreach ($vars['object']->relations as $relation) {
+      if (strpos($relation->relationType, 'hasDescriptionFromPublisher') !== FALSE && !empty($relation->abstract)) {
+        $vars['ting_abstract'] = $relation->abstract;
       }
     }
   }
