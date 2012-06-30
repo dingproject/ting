@@ -5,34 +5,32 @@
 Drupal.tingButtons = {};
 
 Drupal.tingButtons.dialogButton = function (selector, options) {
+  "use strict";
+
   var self = this;
 
-  self.defaults = { 'buttons': function() {},
-                    'allowPropagation': false,
-                    'allowDefault': false };
+  self.defaults = {
+    'buttons': function() {},
+    'allowPropagation': false,
+    'allowDefault': false
+  };
   self.options = $.extend(self.defaults, options);
   self.selector = selector;
 
-  /**
-   * Set up routines.
-   */
+  // Set up routines.
   self.init = function () {
     $(self.selector).click(self.buttonClick);
   };
 
-  /**
-   * AJAX error handler.
-   */
+  // AJAX error handler.
   self.ajaxErrorCallback = function (jqXHR, textStatus, errorThrown) {
     var title = jqXHR.status + ' ' + jqXHR.statusText,
         message = Drupal.t('An error occurred. Please try again, or contact support if the problem persists.');
-    
+
     self.generateDialog(title, message, self.defaultButtons());
   };
 
-  /**
-   * AJAX success handler.
-   */
+  // AJAX success handler.
   self.ajaxSuccessCallback = function (data, textStatus, jqXHR) {
     var buttons = self.defaultButtons(), message, title;
 
@@ -43,9 +41,7 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
     self.generateDialog(title, message, buttons);
   };
 
-  /**
-   * Button click handler.
-   */
+  // Button click handler.
   self.buttonClick = function (event) {
     self.clickEvent = event;
     if (!$(this).hasClass('disabled')) {
@@ -57,8 +53,8 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
         error: self.ajaxErrorCallback,
         success: self.ajaxSuccessCallback
       });
-    } //Do nothing if the user clicks on a disabled button
-    
+    } // Do nothing if the user clicks on a disabled button.
+
     // By default we prevent the browser from following the link and
     // and stop propagation as this used to be default behavior.
     // Now this can be changed through configuration.
@@ -70,9 +66,7 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
     }
   };
 
-  /**
-   * Generate the default buttons.
-   */
+  // Generate the default buttons.
   self.defaultButtons = function () {
     var buttons = {};
     buttons[Drupal.t('Close')] = function () {
@@ -80,9 +74,7 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
     };
   };
 
-  /**
-   * Generate the jQuery UI dialog response.
-   */
+  // Generate the jQuery UI dialog response.
   self.generateDialog = function (title, message, buttons) {
     $('<div>' + message + '</div>')
       .dialog({
