@@ -61,25 +61,12 @@
     <?php print $ting_details; ?>
   </div>
 
-  <?php
-  $collection = ting_get_collection_by_id($object->id);
-
-  if ($collection instanceof TingClientObjectCollection && is_array($collection->types)):
-    // Do we have more than only this one type?
-    if (count($collection->types) > 1):
-      print '<div class="ding-box-wide object-otherversions">';
-      print '<h3>' . t('Also available as: ') . '</h3>';
-      print '<ul>';
-      foreach ($collection->types as $type):
-        if ($type != $object->type):
-          $material_links[] = '<li class="category">' . l($type, $collection->url, array('fragment' => $type)) . '</li>';
-        endif;
-      endforeach;
-      print implode(' ', $material_links);
-      print '</ul>';
-      print '</div>';
-    endif;
-  endif; ?>
+  <?php if (!empty($alternate_material_types)): ?>
+    <div class="ding-box-wide object-otherversions">
+      <h3><?php echo t('Also available as: ') ?></h3>
+      <?php echo $alternate_material_types; ?>
+    </div>
+  <?php endif; ?>
 
   <?php if (isset($additional_content)):
     print drupal_render($additional_content);
