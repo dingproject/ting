@@ -22,48 +22,20 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
     $(self.selector).click(self.buttonClick);
   };
 
-  // AJAX error handler.
-  self.ajaxErrorCallback = function (jqXHR, textStatus, errorThrown) {
-    var title = jqXHR.status + ' ' + jqXHR.statusText,
-        message = Drupal.t('An error occurred. Please try again, or contact support if the problem persists.');
-
-    self.generateDialog(title, message, self.defaultButtons());
-  };
-
-  // AJAX success handler.
-  self.ajaxSuccessCallback = function (data, textStatus, jqXHR) {
-    var buttons = self.defaultButtons(), message, title;
-
-    // Message is overwritten by the data attribute.
-    title = (data) ? data.title :  Drupal.t('An error occurred.');
-    message = (data) ? data.message :  Drupal.t('An error occurred.');
-    self.options.buttons(buttons, self.clickEvent, data);
-    self.generateDialog(title, message, buttons);
-  };
-
   // Button click handler.
   self.buttonClick = function (event) {
     self.clickEvent = event;
+
+    // Do nothing if the user clicks on a disabled button.
     if (!$(this).hasClass('disabled')) {
-      $.ajax({
-        url: this.href,
-        dataType: 'json',
-        type: 'POST',
-        cache: false,
-        error: self.ajaxErrorCallback,
-        success: self.ajaxSuccessCallback
-      });
-    } // Do nothing if the user clicks on a disabled button.
+      self.sendRequest(this.href);
+    }
 
     // By default we prevent the browser from following the link and
     // and stop propagation as this used to be default behavior.
     // Now this can be changed through configuration.
-    if (!self.options.allowPropagation) {
-      event.stopPropagation();
-    }
-    if(!self.options.allowDefault) {
-      event.preventDefault();
-    }
+    if (!self.options.allowPropagation) { event.stopPropagation(); }
+    if (!self.options.allowDefault) { event.preventDefault(); }
   };
 
   // Generate the default buttons.
@@ -85,6 +57,31 @@ Drupal.tingButtons.dialogButton = function (selector, options) {
           $(this).dialog('destroy').remove();
         }
       });
+  };
+
+  // Send the request to the server.
+  self.sendRequest = function (url) {
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: 'POST',
+      cache: false,
+      error: function (jqXHR) {
+        var title = jqXHR.status + ' ' + jqXHR.statusText,
+            message = Drupal.t('An error occurred. Please try again, or contact support if the problem persists.');
+
+        self.generateDialog(title, message, self.defaultButtons());
+      },
+      success: function (data) {
+        var buttons = self.defaultButtons(), message, title;
+
+        // Message is overwritten by the data attribute.
+        title = (data) ? data.title :  Drupal.t('An error occurred.');
+        message = (data) ? data.message :  Drupal.t('An error occurred.');
+        self.options.buttons(buttons, self.clickEvent, data);
+        self.generateDialog(title, message, buttons);
+      }
+    });
   };
 
   self.init();
