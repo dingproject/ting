@@ -314,8 +314,8 @@ function ting_preprocess_ting_object(&$vars) {
         $material_types[] = $type;
         if ($type != $vars['object']->type) {
           // Clean up the type name, so we can use it as a CSS class.
-          $type_id = preg_replace('/[^a-z]/', '-', drupal_strtolower($type));
-          $type_id = preg_replace('/--+/', '-', $type_id);
+          $type_id = preg_replace('/[^a-z]/',  '-', drupal_strtolower($type));
+          $type_id = preg_replace('/--+/',  '-', $type_id);
           $type_id = trim($type_id, '-');
 
           $material_links['category material-type-' . $type_id] = array(
