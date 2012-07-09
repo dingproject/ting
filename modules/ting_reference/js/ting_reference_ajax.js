@@ -1,17 +1,26 @@
-
 /**
  * Loads reference objects as HTML.
  */
 Drupal.behaviors.tingReferenceAjax = function(context) {
-  // Insert spinner(s) to show users that data is being loaded.
-  $('.field-ting-refs span').after('<div class="ting-reference-ajax-spinner"><h4>' + Drupal.t('Loading…') + '</h4><div></div></div>');
-  
-  // This is a hack to get around the old 1.2.6 jquery limitations in the ajax 
+  var nids = {};
+
+  // This is a hack to get around the old 1.2.6 jquery limitations in the ajax
   // post method.
-  var rawdata = Drupal.settings.tingReferenceAjax;
+  var rawJSONdata = Drupal.settings.tingReferenceAjax;
   var data = {};
-  for (var i = 0; i < rawdata.length; i++) {
-    data['rows['+i+']'] = rawdata[i];
+  for (var i = 0; i < rawJSONdata.length; i++) {
+    data['rows['+i+']'] = rawJSONdata[i];
+
+    // Build array used to place spinner(s) on the page.
+    var rawData = eval( "(" + rawJSONdata[i] + ")" );
+    for(var key in rawData) {
+      nids[rawData[key].nid] = rawData[key].field;
+    }
+  }
+
+  for (var nid in nids) {
+    // Insert spinner(s) to show users that data is being loaded.
+    $('.ting-reference-ajax-node-' + nid + '-' + nids[nid]).append('<div class="ting-reference-ajax-spinner"><h4>' + Drupal.t('Loading…') + '</h4><div></div></div>');
   }
 
   // Inserts the HTML return by the Ajax call below.
@@ -35,7 +44,7 @@ Drupal.behaviors.tingReferenceAjax = function(context) {
     }
   };
 
-  // Call the backend to get referenced ting objects as rendered HTML. 
+  // Call the backend to get referenced ting objects as rendered HTML.
   $.ajax({
     type: 'POST',
     url: '/ting_reference/view/js',
