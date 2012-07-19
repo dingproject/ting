@@ -2,7 +2,7 @@
  * Loads reference objects as HTML.
  */
 Drupal.behaviors.tingReferenceAjax = function(context) {
-  var nids = {};
+  var fields = {};
 
   // This is a hack to get around the old 1.2.6 jquery limitations in the ajax
   // post method.
@@ -14,13 +14,13 @@ Drupal.behaviors.tingReferenceAjax = function(context) {
     // Build array used to place spinner(s) on the page.
     var rawData = eval( "(" + rawJSONdata[i] + ")" );
     for(var key in rawData) {
-      nids[rawData[key].nid] = rawData[key].field;
+      fields[rawData[key].nid] = rawData[key].field;
     }
   }
 
-  for (var nid in nids) {
+  for (var nid in fields) {
     // Insert spinner(s) to show users that data is being loaded.
-    $('.ting-reference-ajax-node-' + nid + '-' + nids[nid]).append('<div class="ting-reference-ajax-spinner"><h4>' + Drupal.t('Loading…') + '</h4><div></div></div>');
+    $('.ting-reference-ajax-node-' + nid + '-' + fields[nid]).append('<div class="ting-reference-ajax-spinner"><h4>' + Drupal.t('Loading…') + '</h4><div></div></div>');
   }
 
   // Inserts the HTML return by the Ajax call below.
