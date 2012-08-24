@@ -417,10 +417,26 @@ function ting_add_object_info(TingClientObject $object) {
   $object->url = url('ting/object/'.$object->id, array('absolute' => TRUE));
 
   if (function_exists('ting_proxy_rewrite_download_url')) {
-    if ($object->record['dc:identifier']['dcterms:URI']) {
-      foreach ($object->record['dc:identifier']['dcterms:URI'] as $url) {
-        $object->online_url = ting_proxy_rewrite_download_url($url);
+    if ($object->relationsData) {
+      foreach ($object->relationsData as $data) {
+        if ($data->relationType == 'dbcaddi:hasOnlineAccess') {
+          // Remove non-usefull prefix.
+          $relationUri = preg_replace('/^\[URL\]/', '', $data->relationUri);
+          // Check for correct url - some uri is only an id.
+          if (stripos($relationUri, 'http') === 0) {
+            $onlineurl = $relationUri;
+            break;
       }
+        }
+      }
+    }
+    // Fallback to dcterms:URI.
+    if (empty($onlineurl) && $object->record['dc:identifier']['dcterms:URI']) {
+      // Take the last URI - compability with earlier version.
+      $onlineurl = end($object->record['dc:identifier']['dcterms:URI']);
+    }    
+    if (!empty($onlineurl)) {
+      $object->online_url = ting_proxy_rewrite_download_url($onlineurl);
     }
   }
 
