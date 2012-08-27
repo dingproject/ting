@@ -8,8 +8,8 @@ Drupal.behaviors.tingReferenceAjax = function(context) {
   // post method.
   var rawJSONdata = Drupal.settings.tingReferenceAjax;
     // some times there is only one
-  if ( typeof(rawJSONdata) == 'string'){
-     rawJSONdata = new Array(rawJSONdata);
+  if (typeof(rawJSONdata) == 'string') {
+    rawJSONdata = new Array(rawJSONdata);
   }
   var data = {};
   for (var i = 0; i < rawJSONdata.length; i++) {
