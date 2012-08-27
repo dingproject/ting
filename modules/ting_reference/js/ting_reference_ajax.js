@@ -7,6 +7,10 @@ Drupal.behaviors.tingReferenceAjax = function(context) {
   // This is a hack to get around the old 1.2.6 jquery limitations in the ajax
   // post method.
   var rawJSONdata = Drupal.settings.tingReferenceAjax;
+    // some times there is only one
+  if ( typeof(rawJSONdata) == 'string'){
+     rawJSONdata = new Array(rawJSONdata);
+  }
   var data = {};
   for (var i = 0; i < rawJSONdata.length; i++) {
     data['rows['+i+']'] = rawJSONdata[i];
