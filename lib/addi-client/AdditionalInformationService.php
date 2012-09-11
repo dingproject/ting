@@ -10,6 +10,7 @@ class AdditionalInformationService {
   protected $username;
   protected $group;
   protected $password;
+  protected $legacyMode = FALSE;
 
   /**
    * Instantiate the addi client.
@@ -19,6 +20,11 @@ class AdditionalInformationService {
     $this->username = $username;
     $this->group = $group;
     $this->password = $password;
+
+    // If we're speaking to the old addi web service, enable legacy mode.
+    if (!strpos($this->wsdlUrl, 'moreinfo.addi.dk')) {
+      $this->legacyMode = TRUE;
+    }
   }
 
   /**
@@ -73,7 +79,7 @@ class AdditionalInformationService {
       'authenticationPassword' => $this->password,
     );
 
-    if (preg_match('/moreinfo.addi.dk/', $this->wsdlUrl)) {
+    if (!$this->legacyMode) {
       // New moreinfo service.
       $client = new SoapClient($this->wsdlUrl . '/moreinfo.wsdl');
       $method = 'moreInfo';
@@ -111,7 +117,7 @@ class AdditionalInformationService {
    * Extract the data we need from the server response.
    */
   protected function extractAdditionalInformation($id_type, $response) {
-    if (preg_match('/moreinfo.addi.dk/', $this->wsdlUrl)) {
+    if (!$this->legacyMode) {
       // New moreinfo service.
       $image_prop = 'coverImage';
     }
