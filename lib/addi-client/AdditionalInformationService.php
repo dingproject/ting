@@ -4,9 +4,6 @@
  * AdditionalInformationService class.
  */
 
-require_once dirname(__FILE__) . '/AdditionalInformationServiceException.php';
-require_once dirname(__FILE__) . '/AdditionalInformation.php';
-
 class AdditionalInformationService {
 
   protected $wsdlUrl;
