@@ -1,5 +1,5 @@
 /**
- * @file
+* @file
  * Javascript helpers for Ting buttons.
  */
 Drupal.tingButtons = {};

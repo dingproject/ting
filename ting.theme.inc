@@ -149,13 +149,13 @@ function ting_preprocess_ting_collection($vars) {
 function template_preprocess_ting_object(&$vars) {
   $object = $vars['object'];
 
-  // Extract information about the object into variable scope
+  // Extract information about the object into variable scope.
   $vars = array_merge($vars, ting_object_preprocess($vars['object']));
 
-  // Allow modules to add action buttons to objects
+  // Allow modules to add action buttons to objects.
   $vars['buttons'] = module_invoke_all('ting_object_buttons', $object);
 
-  // Determine the cover url
+  // Determine the cover url.
   $image_url = ting_covers_object_url($object, '180_x');
   if ($image_url) {
     $vars['image'] = theme('image', $image_url, '', '', NULL, FALSE);
@@ -248,13 +248,74 @@ function ting_preprocess_ting_object(&$vars) {
           'class' => _ting_property_classes($var_name),
           'data' => $var,
         );
-      } else {
+      }
+      else {
         unset($group['data'][$title]);
       }
     }
     $processed[] = $group;
   }
+
+  dpm($vars['object']);
+
+  // If there are any hasDescriptionFromPublisher relations, replace the
+  // normal abstract with it.
+  if (sizeof($vars['object']->relations)) {
+    foreach ($vars['object']->relations as $relation) {
+      if (strpos($relation->relationType, 'hasDescriptionFromPublisher') !== FALSE && !empty($relation->abstract)) {
+        $vars['ting_abstract'] = $relation->abstract;
+
+        dpm($relation);
+
+        // Load full text version of description if available.
+        if (in_array('docbook', $relation->formatsAvailable) && function_exists('ting_fulltext_object_load')) {
+
+          $description = ting_fulltext_object_load($relation->id, FALSE, 'docbook');
+          dpm($relation);
+          dpm($description);
+        }
+      }
+    }
+  }
+
   $vars['ting_details'] = theme('ting_details', $processed);
+
+  // Generate a list of links to materials of other types in the same //
+  // collection.
+  $collection = ting_get_collection_by_id($vars['object']->id);
+  $material_links = array();
+  $material_types = array();
+  if ($collection instanceof TingClientObjectCollection && is_array($collection->types)) {
+    // Do we have more than only this one type?
+    if (count($collection->types) > 1) {
+      foreach ($collection->types as $type) {
+        $material_types[] = $type;
+        if ($type != $vars['object']->type) {
+          // Clean up the type name, so we can use it as a CSS class.
+          $type_id = preg_replace('/[^a-z]/', '-', drupal_strtolower($type));
+          $type_id = preg_replace('/--+/', '-', $type_id);
+          $type_id = trim($type_id, '-');
+
+          $material_links['category material-type-' . $type_id] = array(
+            'title' => $type,
+            'href' => $collection->url,
+          );
+        }
+      }
+    }
+  }
+
+  if (!empty($material_links)) {
+    $vars['alternate_material_types'] = theme('links', $material_links, array(
+      'class' => 'material-type-list',
+    ));
+  }
+
+  // Expose the available material types as a JavaScript variable, so we
+  // can use it in scripts.
+  drupal_add_js(array(
+    'ting' => array('materialTypes' => array($vars['object']->localId => $material_types)),
+  ), 'setting');
 }
 
 /**

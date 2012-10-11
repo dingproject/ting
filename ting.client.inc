@@ -11,23 +11,29 @@
  *   Ting object ID.
  * @param bool $enrich
  *   Whether to enrich the object with additional information, covers etc.
+ * @param string $object_format
+ *   Which object format to request from Ting.
  *
  * @return mixed
  *   Object, if found - boolean FALSE if not.
  */
-function ting_get_object_by_id($object_id, $enrich = FALSE) {
+function ting_get_object_by_id($object_id, $enrich = FALSE, $object_format = 'dkabm') {
   if (empty($object_id)) {
     return FALSE;
   }
 
   static $cache = array();
+  $cache_key = implode(':', array($object_id, $enrich, $format));
 
-  if (isset($cache[$object_id])) {
-    $object = $cache[$object_id];
+  if (isset($cache[$cache_key])) {
+    $object = $cache[$cache_key];
   }
   else {
     $request = ting_get_request_factory()->getObjectRequest();
     $request->setObjectId($object_id);
+
+    // Set the object format.
+    $request->setObjectFormat($object_format);
 
     // Add agency and profile.
     $request = ting_add_agency($request);
@@ -36,6 +42,7 @@ function ting_get_object_by_id($object_id, $enrich = FALSE) {
     if ($enrich) {
       $request = ting_add_relations($request);
     }
+
     $object = ting_execute($request);
 
     if ($object) {
@@ -48,7 +55,7 @@ function ting_get_object_by_id($object_id, $enrich = FALSE) {
     $object->enriched = TRUE;
   }
 
-  $cache[$object_id] = $object;
+  $cache[$cache_key] = $object;
 
   return $object;
 }
@@ -65,11 +72,14 @@ function ting_get_object_by_id($object_id, $enrich = FALSE) {
  *   TingClientObject if found, FALSE if not.
  */
 function ting_get_object_by_local_id($local_id, $enrich = FALSE) {
-  if (empty($local_id)) { return FALSE; }
+  if (empty($local_id)) {
+    return FALSE;
+  }
+
   $request = ting_get_request_factory()->getObjectRequest();
   $request->setLocalId($local_id);
 
-  // Add agency and profile
+  // Add agency and profile.
   $request = ting_add_agency($request);
   $request = ting_add_profile($request);
 
@@ -90,28 +100,32 @@ function ting_get_object_by_local_id($local_id, $enrich = FALSE) {
  * Display a Ting collection of objects.
  *
  * @param string $collection_id
- *    Ting collection ID.
+ *   Ting collection ID.
  * @param bool $enrich
- *    Whether to enrich objects in the collection with additional information, covers etc.
+ *   Whether to enrich objects in the collection with additional
+ *   information - covers, etc.
+ *
  * @return mixed
- *    Collection object, if found - boolean FALSE if not.
+ *   Collection object, if found - boolean FALSE if not.
  */
-function ting_get_collection_by_id($object_id, $enrich = FALSE) {
-  // If passed object_id is empty, save ourselves the trouble of trying
+function ting_get_collection_by_id($collection_id, $enrich = FALSE) {
+  // If passed collection_id is empty, save ourselves the trouble of trying
   // to load the Ting client, do a request, etc. Big speedup for empty
   // Ting reference fields.
-  if (empty($object_id)) { return FALSE; }
+  if (empty($collection_id)) {
+    return FALSE;
+  }
 
   static $cache = array();
 
-  if (isset($cache[$object_id])) {
-    $collection = $cache[$object_id];
+  if (isset($cache[$collection_id])) {
+    $collection = $cache[$collection_id];
   }
   else {
     $request = ting_get_request_factory()->getCollectionRequest();
-    $request->setObjectId($object_id);
+    $request->setObjectId($collection_id);
 
-    // Add agency and profile
+    // Add agency and profile.
     $request = ting_add_agency($request);
     $request = ting_add_profile($request);
 
@@ -127,7 +141,7 @@ function ting_get_collection_by_id($object_id, $enrich = FALSE) {
     $collection->enriched = TRUE;
   }
 
-  $cache[$object_id] = $collection;
+  $cache[$collection_id] = $collection;
 
   return $collection;
 }
@@ -135,7 +149,7 @@ function ting_get_collection_by_id($object_id, $enrich = FALSE) {
 /**
  * Return the possible sort keys and their corresponding labels.
  *
- * @return
+ * @return array
  *   A key/value array of sort keys and labels.
  */
 function ting_search_rank_options() {
@@ -149,7 +163,7 @@ function ting_search_rank_options() {
 /**
  * Return the possible sort keys and their corresponding labels.
  *
- * @return
+ * @return array
  *   A key/value array of sort keys and labels.
  */
 function ting_search_sort_options() {
@@ -165,22 +179,28 @@ function ting_search_sort_options() {
 }
 
 /**
- * Performs a search agains the
+ * Performs a search against OpenSearch.
  *
  * @param string $query
- *    The search query
+ *   The search query
  * @param int $page
- *    The page number to retrieve search results for
+ *   The page number to retrieve search results for
  * @param int $resultsPerPage
- *    The number of results to include per page
+ *   The number of results to include per page
  * @param array $options
- *    Options to pass to the search. Possible options are:
- *    - facets: Array of facet names for which to return results. Default: facet.subject, facet.creator, facet.type, facet.date, facet.language
+ *   Options to pass to the search. Possible options are:
+ *    - facets: Array of facet names for which to return results.
+ *      Default: facet.subject, facet.creator, facet.type, facet.date,
+ *      facet.language
  *    - numFacets: The number of terms to include with each facet. Default: 10
- *    - enrich: Whether to include additional information and cover images with each object. Default: false
- *    - sort: The key to sort the results by. Default: "" (corresponds to relevance). The possible values are defined by the sortType type in the XSD.
+ *    - enrich: Whether to include additional information and cover
+ *      images with each object. Default: false
+ *    - sort: The key to sort the results by. Default: "" (corresponds
+ *      to relevance). The possible values are defined by the sortType
+ *      type in the XSD.
+ *
  * @return TingClientSearchResult
- *    The search result
+ *   The search result
  */
 function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = array()) {
   $request = ting_get_request_factory()->getSearchRequest();

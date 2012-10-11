@@ -1,7 +1,6 @@
 <?php
 /**
- * @file ting_object.tpl.php
- *
+ * @file
  * Template to render a collection objects from the Ting database.
  */
 ?>
