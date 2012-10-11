@@ -8,14 +8,18 @@
  * Load an object from Ting by ID.
  *
  * @param string $object_id
- *    Ting object ID.
+ *   Ting object ID.
  * @param bool $enrich
- *    Whether to enrich the object with additional information, covers etc.
+ *   Whether to enrich the object with additional information, covers etc.
+ *
  * @return mixed
- *    Object, if found - boolean FALSE if not.
+ *   Object, if found - boolean FALSE if not.
  */
 function ting_get_object_by_id($object_id, $enrich = FALSE) {
-  if (empty($object_id)) { return FALSE; }
+  if (empty($object_id)) {
+    return FALSE;
+  }
+
   static $cache = array();
 
   if (isset($cache[$object_id])) {
@@ -25,7 +29,7 @@ function ting_get_object_by_id($object_id, $enrich = FALSE) {
     $request = ting_get_request_factory()->getObjectRequest();
     $request->setObjectId($object_id);
 
-    // Add agency and profile
+    // Add agency and profile.
     $request = ting_add_agency($request);
     $request = ting_add_profile($request);
 
@@ -53,11 +57,12 @@ function ting_get_object_by_id($object_id, $enrich = FALSE) {
  * Load an object from Ting by local ID (faust number).
  *
  * @param string $local_id
- *    Local identifier
+ *   Local identifier
  * @param bool $enrich
- *    Whether to enrich the object with additional information, covers etc.
+ *   Whether to enrich the object with additional information, covers etc.
+ *
  * @return mixed
- *    TingClientObject if found, FALSE if not.
+ *   TingClientObject if found, FALSE if not.
  */
 function ting_get_object_by_local_id($local_id, $enrich = FALSE) {
   if (empty($local_id)) { return FALSE; }
@@ -77,6 +82,7 @@ function ting_get_object_by_local_id($local_id, $enrich = FALSE) {
     $object = ting_add_object_info($object);
     $object = ($enrich) ? array_shift(ting_add_additional_info(array($object))) : $object;
   }
+
   return ($object) ? $object : FALSE;
 }
 

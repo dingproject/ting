@@ -1,7 +1,11 @@
 <?php
+/**
+ * @file
+ * Page callback for the search autocomplete module.
+ */
 
 /**
- * JSON callback to Ting search autocomplete
+ * JSON callback to Ting search autocomplete.
  */
 function ting_search_autocomplete_js() {
   $items = array();
@@ -18,18 +22,23 @@ function ting_search_autocomplete_js() {
 
       $terms = array();
 
-      $scanResults = ting_do_scan($query, 10);
-      foreach ($scanResults->terms as $term) {
+      // Get spelling corrections and put them in the term array.
+      $scan_results = ting_do_scan($query, 10);
+      foreach ($scan_results->terms as $term) {
         $term->score = $term->count;
         $terms[strtolower($term->name)] = $term;
       }
 
+      // Get suggestions and put them in the term array.
       $suggestions = ting_get_spell_suggestions($query);
       if (is_array($suggestions)) {
         foreach ($suggestions as $suggestion) {
+
+          // Not sure why we run scan on the suggested words again?
+          // FIXME: Document this.
           if (!isset($terms[strtolower($suggestion->word)])) {
-            $suggestScan = ting_do_scan($suggestion->word, 1);
-            if (($term = array_shift($suggestScan->terms)) &&
+            $suggest_scan = ting_do_scan($suggestion->word, 1);
+            if (!empty($suggest_scan->terms) && $term = array_shift($suggest_scan->terms) &&
                 (strtolower($suggestion->word) == strtolower($term->name))) {
               $term->score = $term->count * $suggestion->weight;
               $terms[$term->name] = $term;
@@ -39,13 +48,13 @@ function ting_search_autocomplete_js() {
       }
 
       uasort($terms, 'ting_search_autocomplete_term_sort');
-      $terms = array_reverse($terms);
 
       $items = array();
       foreach ($terms as $term) {
-        $items[$term->name] = t('!ord !resultater',
-                                array('!ord' => '<span class="term">' . $term->name . '</span>',
-                                      '!resultater' => '<span class="count">' . format_plural($term->count, t('(1 resultat)'), t('(@count resultater)')))) . '</span>';
+        $items[$term->name] = t('!ord !resultater', array(
+          '!ord' => '<span class="term">' . $term->name . '</span>',
+          '!resultater' => '<span class="count">' .  format_plural($term->count, t('(1 resultat)'), t('(@count resultater)')) . '</span>',
+        ));
       }
 
       $items = array_slice($items, 0, 10);
@@ -60,12 +69,15 @@ function ting_search_autocomplete_js() {
   exit;
 }
 
+/**
+ * Sorting callback to sort suggestions by score.
+ */
 function ting_search_autocomplete_term_sort($t1, $t2) {
   if ($t1->score > $t2->score) {
-    return 1;
+    return -1;
   }
   elseif ($t2->score > $t1->score) {
-    return -1;
+    return 1;
   }
   else {
     return 0;
