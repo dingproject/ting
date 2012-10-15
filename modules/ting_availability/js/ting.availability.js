@@ -97,8 +97,8 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
       // - The carting button is toggled based on whether the item
       //   is reservable or not. This it harmful to sites which
       //   offer other options besides reservation from the cart.
-      .find('.ting-status ul.buttons > li > a.reserve-now,' +
-            '.ting-status ul.buttons > li.add-to-cart > a')
+      .find('.ting-object-buttons .reserve-now,' +
+            '.ting-object-buttons .add-to-cart > a')
         .addClass('disabled');
     }
     else if (itemData.available_from) {
