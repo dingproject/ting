@@ -395,7 +395,7 @@ function _ting_reference_get_collection($ref_type, $object_id, $description = FA
   }
   // For now we reuse the existing search result template and just replace the
   // description with the one supplied by the editor.
-  if ($description) {
+  if ($collection && $description) {
     $collection->abstract = $description;
   }
   return $collection;
