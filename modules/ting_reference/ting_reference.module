@@ -235,7 +235,7 @@ function theme_ting_reference_formatter_ajax($element) {
   // Parse element information into JavaScript. If not encode with the extra 
   // json layer the array will be repeated into it self when accessed in 
   // Drupal.settings.tingReferenceAjax.
-  drupal_add_js(array('tingReferenceAjax' => drupal_to_js($data)), 'setting');
+  drupal_add_js(array('tingReferenceAjax' => array(drupal_to_js($data))), 'setting');
   
   // Add JavaScript.
   drupal_add_js(drupal_get_path('module', 'ting_reference') .'/js/ting_reference_ajax.js', 'module');
