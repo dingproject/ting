@@ -4,6 +4,8 @@
  */
 
 Drupal.behaviors.tingAvailabilityTingObjectView = function () {
+  "use strict";
+
   // Use get_details to load detailed data for each item on the page.
   Drupal.tingAvailability.get_details(function (data, textStatus) {
     // Update the standard status messages.
