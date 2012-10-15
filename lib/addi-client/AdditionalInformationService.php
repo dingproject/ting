@@ -1,65 +1,85 @@
 <?php
-
-require_once(dirname(__FILE__).'/AdditionalInformationServiceException.php');
-require_once(dirname(__FILE__).'/AdditionalInformation.php');
+/**
+ * @file
+ * AdditionalInformationService class.
+ */
 
 class AdditionalInformationService {
 
-	private $wsdlUrl;
-	private $username;
-	private $group;
-	private $password;
+  protected $wsdlUrl;
+  protected $username;
+  protected $group;
+  protected $password;
+  protected $legacyMode = FALSE;
 
-	public function __construct($wsdlUrl, $username, $group, $password)
-	{
-		$this->wsdlUrl = $wsdlUrl;
-		$this->username = $username;
-		$this->group = $group;
-		$this->password = $password;
-	}
+  /**
+   * Instantiate the addi client.
+   */
+  public function __construct($wsdl_url, $username, $group, $password) {
+    $this->wsdlUrl = $wsdl_url;
+    $this->username = $username;
+    $this->group = $group;
+    $this->password = $password;
 
-	public function getByIsbn($isbn)
-	{
-		$isbn = str_replace('-', '', $isbn);
+    // If we're speaking to the old addi web service, enable legacy mode.
+    if (!strpos($this->wsdlUrl, 'moreinfo.addi.dk')) {
+      $this->legacyMode = TRUE;
+    }
+  }
+
+  /**
+   * Get information by ISBN.
+   */
+  public function getByIsbn($isbn) {
+    $isbn = str_replace('-', '', $isbn);
 
     $identifiers = $this->collectIdentifiers('isbn', $isbn);
     $response = $this->sendRequest($identifiers);
     return $this->extractAdditionalInformation('isbn', $response);
-	}
+  }
 
-  public function getByFaustNumber($faustNumber)
-  {
-    $identifiers = $this->collectIdentifiers('faust', $faustNumber);
+  /**
+   * Get information by FAUST number.
+   */
+  public function getByFaustNumber($faust_number) {
+    $identifiers = $this->collectIdentifiers('faust', $faust_number);
     $response = $this->sendRequest($identifiers);
     return $this->extractAdditionalInformation('faust', $response);
   }
 
-  protected function collectIdentifiers($idName, $ids)
-  {
-    if (!is_array($ids))
-    {
+  /**
+   * Expand the provided IDs into the array structure used in sendRequest.
+   */
+  protected function collectIdentifiers($id_type, $ids) {
+    if (!is_array($ids)) {
       $ids = array($ids);
     }
+
     $identifiers = array();
-    foreach ($ids as $i)
-    {
-      $identifiers[] = array($idName => $i);
+    foreach ($ids as $i) {
+      $identifiers[] = array($id_type => $i);
     }
+
     return $identifiers;
   }
 
-  protected function sendRequest($identifiers)
-  {
-  	$ids = array();
-  	foreach ($identifiers as $i)
-  	{
-  		$ids = array_merge($ids, array_values($i));
-  	}
+  /**
+   * Send request to the addi server, returning the data response.
+   */
+  protected function sendRequest($identifiers) {
+    $ids = array();
 
-    $authInfo = array('authenticationUser' => $this->username,
-                      'authenticationGroup' => $this->group,
-                      'authenticationPassword' => $this->password);
-    if (preg_match('/moreinfo.addi.dk/', $this->wsdlUrl)) {
+    foreach ($identifiers as $i) {
+      $ids = array_merge($ids, array_values($i));
+    }
+
+    $auth_info = array(
+      'authenticationUser' => $this->username,
+      'authenticationGroup' => $this->group,
+      'authenticationPassword' => $this->password,
+    );
+
+    if (!$this->legacyMode) {
       // New moreinfo service.
       $client = new SoapClient($this->wsdlUrl . '/moreinfo.wsdl');
       $method = 'moreInfo';
@@ -69,75 +89,75 @@ class AdditionalInformationService {
       $client = new SoapClient($this->wsdlUrl);
       $method = 'additionalInformation';
     }
-    $startTime = explode(' ', microtime());
+
+    $start_time = explode(' ', microtime());
     $response = $client->$method(array(
-                          'authentication' => $authInfo,
+                          'authentication' => $auth_info,
                           'identifier' => $identifiers));
-    $stopTime = explode(' ', microtime());
-    $time = floatval(($stopTime[1]+$stopTime[0]) - ($startTime[1]+$startTime[0]));
+    $stop_time = explode(' ', microtime());
+    $time = floatval(($stop_time[1] + $stop_time[0]) - ($start_time[1] + $start_time[0]));
 
-    //Drupal specific code - consider moving this elsewhere
-    if (variable_get('addi_enable_logging', false)) {
-	    watchdog('addi', 'Completed request ('.round($time, 3).'s): Ids: %ids', array('%ids' => implode(', ', $ids)), WATCHDOG_DEBUG, 'http://'.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
+    // Drupal specific code - consider moving this elsewhere.
+    if (variable_get('addi_enable_logging', FALSE)) {
+      watchdog('addi', 'Completed request (' . round($time, 3) . 's): Ids: %ids', array('%ids' => implode(', ', $ids)), WATCHDOG_DEBUG, 'http://' . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
     }
 
-    if ($response->requestStatus->statusEnum != 'ok')
-    {
-      throw new AdditionalInformationServiceException($response->requestStatus->statusEnum.': '.$response->requestStatus->errorText);
+    if ($response->requestStatus->statusEnum != 'ok') {
+      throw new AdditionalInformationServiceException($response->requestStatus->statusEnum . ': ' . $response->requestStatus->errorText);
     }
 
-    if (!is_array($response->identifierInformation))
-    {
+    if (!is_array($response->identifierInformation)) {
       $response->identifierInformation = array($response->identifierInformation);
     }
 
     return $response;
   }
 
-  protected function extractAdditionalInformation($idName, $response)
-  {
-    if (preg_match('/moreinfo.addi.dk/', $this->wsdlUrl)) {
+  /**
+   * Extract the data we need from the server response.
+   */
+  protected function extractAdditionalInformation($id_type, $response) {
+    if (!$this->legacyMode) {
       // New moreinfo service.
-      $imageProp = 'coverImage';
+      $image_prop = 'coverImage';
     }
     else {
       // Legacy additionalInformation service.
-      $imageProp = 'image';
+      $image_prop = 'image';
     }
 
-    $additionalInformations = array();
+    // We get a response for each ID we inquired on.
+    $responses = array();
 
-    foreach($response->identifierInformation as $info)
-    {
-      $thumbnailUrl = $detailUrl = NULL;
+    foreach ($response->identifierInformation as $info) {
+      $thumbnail_url = $detail_url = NULL;
       if (isset($info->identifierKnown) &&
-          $info->identifierKnown)
-      {
-        if (!is_array($info->$imageProp))
-        {
-          $info->$imageProp = array($info->$imageProp);
+          $info->identifierKnown) {
+        if (!is_array($info->$image_prop)) {
+          $info->$image_prop = array($info->$image_prop);
         }
 
-        foreach ($info->$imageProp as $image)
-        {
+        foreach ($info->$image_prop as $image) {
           switch ($image->imageSize) {
             case 'thumbnail':
-              $thumbnailUrl = $image->_;
+              $thumbnail_url = $image->_;
               break;
+
             case 'detail':
-              $detailUrl = $image->_;
+              $detail_url = $image->_;
               break;
+
             default:
-            	// Do nothing other image sizes may appear but ignore them for now
+              // Do nothing other image sizes may appear but ignore them
+              // for now.
           }
         }
 
-        $additionalInfo = new AdditionalInformation($thumbnailUrl, $detailUrl);
-        $additionalInformations[$info->identifier->$idName] = $additionalInfo;
+        $ai_instance = new AdditionalInformation($thumbnail_url, $detail_url);
+        $responses[$info->identifier->$id_type] = $ai_instance;
       }
     }
 
-    return $additionalInformations;
+    return $responses;
   }
-
 }
