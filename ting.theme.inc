@@ -276,14 +276,14 @@ function ting_preprocess_ting_object(&$vars) {
       if (strpos($relation->relationType, 'hasDescriptionFromPublisher') !== FALSE && !empty($relation->abstract)) {
         $vars['ting_abstract'] = $relation->abstract;
 
-        dpm($relation);
-
         // Load full text version of description if available.
         if (in_array('docbook', $relation->formatsAvailable) && function_exists('ting_fulltext_object_load')) {
+          $docxml = ting_fulltext_object_load($relation->id, FALSE, 'docbook');
 
-          $description = ting_fulltext_object_load($relation->id, FALSE, 'docbook');
-          dpm($relation);
-          dpm($description);
+          if (!empty($docxml)) {
+            module_load_include('parse.inc', 'ting_fulltext');
+            $vars['additional_main_content'][]['#children'] = theme('ting_fulltext', ting_fulltext_parse($docxml));
+          }
         }
       }
     }
