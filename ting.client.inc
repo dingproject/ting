@@ -453,35 +453,37 @@ function ting_add_object_info(TingClientObject $object) {
 /**
  * Add additional information info for cover images.
  *
- * @param object $collection
- * @return object
+ * @param mixed $collection
+ *   Either a TingClientObjectCollection or an array of
+ *   TingClientObjects we want additional info for.
+ *
+ * @return mixed
+ *   The collection passed in, with any additional data attached.
  */
 function ting_add_additional_info($collection) {
-  $faust_numbers = array();
+  $local_ids = array();
 
+  // If we're passed a TingClientObjectCollection, extract the array of
+  // TingClientObjects from it. Otherwise, just make a copy.
   $objects = (isset($collection->objects)) ? $collection->objects : $collection;
 
   foreach ($objects as $object) {
     if ($object->localId) {
-      $faust_numbers[] = $object->localId;
+      $local_ids[] = (object) array(
+        'localIdentifier' => $object->localId,
+        'libraryCode' => $object->ownerId,
+      );
     }
   }
 
-  if (sizeof($faust_numbers) > 0) {
-    foreach (ting_get_additional_info($faust_numbers) as $faust_number => $ai) {
+  if (sizeof($local_ids) > 0) {
+    foreach (ting_get_additional_info($local_ids) as $local_id => $ai) {
       foreach ($objects as &$object) {
-        if ($faust_number == $object->localId) {
+        if ($local_id == $object->localId) {
           $object->additionalInformation = $ai;
         }
       }
     }
-  }
-
-  if (isset($collection->objects)) {
-    $collection->objects = $objects;
-  }
-  else {
-    $collection = $objects;
   }
 
   return $collection;
@@ -490,40 +492,46 @@ function ting_add_additional_info($collection) {
 /**
  * Get additional info for a number of FAUST numbers.
  *
- * @param array $faust_numbers
- *    Array of the FAUST numbers to look up.
+ * @param mixed $local_ids
+ *   Expects either a single object with localIdentifier and
+ *   libraryCode attributes, or an array of such objects.
+ *
  * @return array
- *    Additional info keyed by FAUST number.
+ *   Additional info keyed by local ID number.
  */
-function ting_get_additional_info($faust_numbers) {
-  $addiVariables = array(
+function ting_get_additional_info($local_ids) {
+  $settings = array(
     'wsdlUrl' => 'addi_wsdl_url',
     'username' => 'addi_username',
     'group' => 'addi_group',
     'password' => 'addi_password',
   );
 
-  foreach ($addiVariables as $name => &$setting) {
-    $setting = variable_get($setting, false);
+  foreach ($settings as $name => &$setting) {
+    $setting = variable_get($setting, FALSE);
     if (!$setting) {
-      watchdog('TingClient', 'Additional Information service setting '.$name.' not set', array(), WATCHDOG_WARNING);
-      return $collection;
+      watchdog('TingClient', 'Additional information service setting “@name” not set', array(
+        '@name' => $setting,
+      ), WATCHDOG_WARNING);
+
+      return array();
     }
   }
 
-  extract($addiVariables);
-
-  $additionalInformationService = new AdditionalInformationService($wsdlUrl, $username, $group, $password);
-
+  $service = new AdditionalInformationService($settings['wsdlUrl'], $settings['username'], $settings['group'], $settings['password']);
   try {
-    return $additionalInformationService->getByFaustNumber($faust_numbers);
+    return $service->getByLocalIdentifier($local_ids);
   }
   catch (AdditionalInformationServiceException $e) {
-    watchdog('TingClient', 'Error retrieving additional information and covers: '.$e->getMessage(), $isbns, WATCHDOG_ERROR);
+    watchdog('TingClient', 'Error retrieving additional information and covers: @message', array(
+      '@message' => $e->getMessage(),
+    ), WATCHDOG_ERROR);
   }
   // TODO: SoapFault should probably be catched within the Ting client.
   catch (SoapFault $e) {
-    watchdog('TingClient', 'Error retrieving additional information and covers: '.$e->getMessage(), $isbns, WATCHDOG_ERROR);
+    watchdog('TingClient', 'Error retrieving additional information and covers: @message', array(
+      '@message' => $e->getMessage(),
+    ), WATCHDOG_ERROR);
   }
 
   return array();
