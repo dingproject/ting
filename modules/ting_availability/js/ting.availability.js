@@ -13,6 +13,8 @@ Drupal.tingAvailability = {
  * Helper function to find and store all ting item ids.
  */
 Drupal.tingAvailability.find_ids = function () {
+  "use strict";
+
   $("div.ting-item").each(function () {
     var match = Drupal.tingAvailability.id_matcher.exec(this.id);
 
@@ -26,11 +28,14 @@ Drupal.tingAvailability.find_ids = function () {
  * Get details for all ting items found.
  */
 Drupal.tingAvailability.get_details = function (callback) {
+  "use strict";
+  var ajax_path;
+
   if (Drupal.settings.trampolinePath) {
-    var ajax_path = Drupal.settings.trampolinePath;
+    ajax_path = Drupal.settings.trampolinePath;
   }
   else {
-    var ajax_path = Drupal.settings.basePath;
+    ajax_path = Drupal.settings.basePath;
   }
 
   // If the id_list is empty, try and find ids again.
@@ -50,6 +55,9 @@ Drupal.tingAvailability.get_details = function (callback) {
  * suitable if you have multiple ting items on a page.
  */
 Drupal.tingAvailability.get_availability = function (callback) {
+  "use strict";
+  var ajax_path;
+
   // If the id_list is empty, try and find ids again.
   if (Drupal.tingAvailability.id_list.length === 0) {
     Drupal.tingAvailability.find_ids();
@@ -57,10 +65,10 @@ Drupal.tingAvailability.get_availability = function (callback) {
 
   if (Drupal.tingAvailability.id_list.length > 0) {
     if (Drupal.settings.trampolinePath) {
-      var ajax_path = Drupal.settings.trampolinePath;
+      ajax_path = Drupal.settings.trampolinePath;
     }
     else {
-      var ajax_path = Drupal.settings.basePath;
+      ajax_path = Drupal.settings.basePath;
     }
     $.getJSON(ajax_path + 'ting/availability/item/' + Drupal.tingAvailability.id_list.join(',') + '/details', {}, callback);
   }
@@ -72,6 +80,8 @@ Drupal.tingAvailability.get_availability = function (callback) {
  * Try to find Ting items and stuff availability data into them.
  */
 Drupal.tingAvailability.updateStatus = function (data, textStatus) {
+  "use strict";
+
   $.each(data, function(itemId, itemData) {
     var $item = $('#ting-item-' + itemId);
     if (!itemData.show_reservation_button) {
@@ -87,8 +97,8 @@ Drupal.tingAvailability.updateStatus = function (data, textStatus) {
       // - The carting button is toggled based on whether the item
       //   is reservable or not. This it harmful to sites which
       //   offer other options besides reservation from the cart.
-      .find('.ting-status ul.buttons > li > a.reserve-now,' +
-            '.ting-status ul.buttons > li.add-to-cart > a')
+      .find('.ting-object-buttons .reserve-now,' +
+            '.ting-object-buttons .add-to-cart > a')
         .addClass('disabled');
     }
     else if (itemData.available_from) {
