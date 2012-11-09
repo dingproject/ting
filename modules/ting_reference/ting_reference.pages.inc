@@ -98,6 +98,7 @@ function ting_reference_view_js() {
       $collection = _ting_reference_get_collection($element->{$id}->ting_ref_type, $id, $element->{$id}->description);
       if (!$collection) {
         watchdog('ting_reference', 'Object with id (%id) not found', array('%id' => $id), WATCHDOG_WARNING);
+        continue;
       }
 
       // Theme the result and place it in the output array.
