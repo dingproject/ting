@@ -328,7 +328,7 @@ function ting_admin_boost_add_more_submit($form, &$form_state) {
 }
 
 /**
- * AHAH callback to add another ranking field to the form.
+ * AHAH callback to add another boost field to the form.
  */
 function ting_admin_boost_add_field_ahah() {
   $form_state = array('submitted' => FALSE);
@@ -342,7 +342,7 @@ function ting_admin_boost_add_field_ahah() {
   $delta = max(element_children($form['ting_boost_fields']['fields'])) + 1;
 
   // Added field and update form cache
-  $form['ting_ranking_fields']['fields'][$delta] = array(
+  $form['ting_boost_fields']['fields'][$delta] = array(
     '#type' => 'ting_boost_field',
     '#default_value' => array(),
   );
@@ -359,7 +359,7 @@ function ting_admin_boost_add_field_ahah() {
 
   // Render and return the new field.
   drupal_json(array(
-    'data' => drupal_render($form['ting_ranking_fields'][$delta]),
+    'data' => drupal_render($form['ting_boost_fields']['fields'][$delta]),
     'status' => TRUE));
   exit();
 }
