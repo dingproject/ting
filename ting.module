@@ -158,6 +158,20 @@ function ting_theme() {
 }
 
 /**
+ * Theme function to format the custom form element ting_boost_field.
+ */
+function theme_ting_boost_field($element) {
+  return theme('form_element', $element, '<div class="boost-field-instance clear-block">' . $element['#children'] . '</div>');
+}
+
+/**
+ * Theme function to format the custom form element ting_ranking_field.
+ */
+function theme_ting_ranking_field($element) {
+  return theme('form_element', $element, '<div class="ranking-field-instance clear-block">' . $element['#children'] . '</div>');
+}
+
+/**
  * Implementation of hook_ctools_plugin_api().
  */
 function ting_ctools_plugin_api($module, $api) {

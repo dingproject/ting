@@ -436,21 +436,6 @@ function template_preprocess_ting_tabs(&$vars) {
 }
 
 /**
- * Theme function to format the custom form element ting_boost_field.
- */
-function theme_ting_boost_field($element) {
-  return theme('form_element', $element, '<div class="boost-field-instance clear-block">' . $element['#children'] . '</div>');
-}
-
-
-/**
- * Theme function to format the custom form element ting_ranking_field.
- */
-function theme_ting_ranking_field($element) {
-  return theme('form_element', $element, '<div class="ranking-field-instance clear-block">' . $element['#children'] . '</div>');
-}
-
-/**
  * Core function for extracting information from a Ting object.
  *
  * @param TingClientObject $object
