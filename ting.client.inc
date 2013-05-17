@@ -256,6 +256,9 @@ function ting_do_search($query, $page = 1, $resultsPerPage = 10, $options = arra
   $boosts = variable_get('ting_boost_fields', array());
   if ($boosts) {
     $request->setUserDefinedBoost($boosts);
+
+    // If rank_general is set then boost is not used in the opensearch service.
+    $request->setRank('');
   }
 
   $searchResult = ting_execute($request);
@@ -460,7 +463,7 @@ function ting_add_object_info(TingClientObject $object) {
     if (empty($onlineurl) && $object->record['dc:identifier']['dcterms:URI']) {
       // Take the last URI - compability with earlier version.
       $onlineurl = end($object->record['dc:identifier']['dcterms:URI']);
-    }    
+    }
     if (!empty($onlineurl)) {
       $object->online_url = ting_proxy_rewrite_download_url($onlineurl);
     }
